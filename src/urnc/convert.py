@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
+import nbformat
+import re
+import os
+import sys
+import enum
+import argparse
 
 from traitlets.config import Config
 from nbconvert.preprocessors.base import Preprocessor
 from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
 from nbconvert.exporters.notebook import NotebookExporter
 from nbconvert.writers.files import FilesWriter
-import nbformat
-import re
-import os
-import sys
-import enum
 
 class Keywords(str, enum.Enum):
     EXERCISE_START = '### Exercise'
@@ -115,37 +116,52 @@ class RemoveSolutions(Preprocessor):
 
 
 def main():
-    input_folder = "."
-    if(len(sys.argv) > 1):
-        input_folder = sys.argv[1]
+    parser = argparse.ArgumentParser(description="Convert Notebooks for UR FIDS Courses")
+    parser.add_argument('input', type=str, help="The input folder, it will be searched recursively")
+    parser.add_argument('-i', '--ext', type=str, help="The output file extension, use '' for inplace conversion", default=".out")
+    parser.add_argument('-f', '--force', help="Overwrite existing files", action='store_true')
+
+    args = parser.parse_args()
+    print(args)
 
     paths = []
-    if(os.path.isfile(input_folder)):
-        paths.append(input_folder)
+    if(os.path.isfile(args.input)):
+        paths.append(args.input)
     else:
-        for root, dirs, files in os.walk(input_folder, topdown= True):
+        for root, dirs, files in os.walk(args.input, topdown= True):
             dirs[:] = [d for d in dirs if not d[0] == '.']
             for file in files:
                 if(file.lower().endswith('.ipynb')):
                     paths.append(os.path.join(root, file))
     
     if (len(paths) == 0):
-        print("No Notebooks found in input_folder %s" % input_folder)
+        print("No Notebooks found in input %s" % args.input)
         return
 
     c = Config()
     c.NotebookExporter.preprocessors = [CheckAndAddTags, RemoveSolutions, ClearOutputPreprocessor]
-    c.FilesWriter.build_directory = "exercises"
     converter = NotebookExporter(config = c)
 
     for file in paths:
-        print("Processing %s" % file)
-        notebook = nbformat.read(file, as_version=4)
-        (output, resources) = converter.from_notebook_node(notebook)
-        writer = FilesWriter(config=c)
-        (_, filename) = os.path.split(file)
+        (basepath, filename) = os.path.split(file)
         (basename, _) = os.path.splitext(filename)
-        writer.write(output, resources, notebook_name=basename)
+        out_file = os.path.join(basepath, "%s%s.ipynb" % (basename, args.ext))
+        if(os.path.isfile(out_file)):
+            if(not args.force):
+                print("Skipping %s because %s already exists" % (file, out_file))
+                continue
+            else:
+                print("Overwriting %s" % out_file)
+
+        print("Converting '%s' into '%s'" % (file, out_file))
+        notebook = nbformat.read(file, as_version=4)
+        (output, _) = converter.from_notebook_node(notebook)
+        
+        with open(out_file, "w") as f:
+            f.write(output)
+
+
+
 
 if __name__ == "__main__":
     main()
