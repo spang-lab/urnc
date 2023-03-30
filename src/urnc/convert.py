@@ -13,7 +13,10 @@ from nbconvert.preprocessors.base import Preprocessor
 from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
 from nbconvert.exporters.notebook import NotebookExporter
 
-__version__ = importlib.metadata.version(__package__ or __name__)
+try:
+    __version__ = importlib.metadata.version(__package__ or __name__)
+except:
+    __version__ = "1.0.0"
 
 
 class Keywords(str, enum.Enum):
@@ -70,10 +73,10 @@ def has_header(cell):
 def replace_local_link(cell):
     if(cell.cell_type != 'markdown'):
         return
-    if(not re.search(r'\(#Exercise-.*\)', cell.source)):
+    if(not re.search(r'\(#Exercise-.*\)', cell.source, re.IGNORECASE)):
         return
     print("Detected Link to exercise.")
-    cell.source = re.sub(r'#Exercise-', '#ex-', cell.source)
+    cell.source = re.sub(r'#Exercise-', '#ex-', cell.source, re.IGNORECASE)
 
 def process_comments(cell):
     text = cell.source
