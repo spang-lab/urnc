@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
+
 import nbformat
 import re
 import os
 import sys
 import enum
 import argparse
+import importlib.metadata
 import inspect
 from traitlets.config import Config
 from nbconvert.preprocessors.base import Preprocessor
 from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
 from nbconvert.exporters.notebook import NotebookExporter
+
+__version__ = importlib.metadata.version(__package__ or __name__)
 
 
 class Keywords(str, enum.Enum):
@@ -187,6 +191,7 @@ def main():
     parser.add_argument('-i', '--ext', type=str, help="The output file extension, use '' for inplace conversion", default=".out")
     parser.add_argument('-f', '--force', help="Overwrite existing files", action='store_true')
     parser.add_argument('-v', '--verbose', help='Verbose Log output', action='store_true')
+    parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=__version__))
 
     args = parser.parse_args()
 
@@ -210,6 +215,7 @@ def main():
     c.verbose = args.verbose
     c.NotebookExporter.preprocessors = [CheckAndAddTags, ProcessExercises, RemoveSolutions, ClearOutputPreprocessor]
     converter = NotebookExporter(config = c)
+
 
     for file in paths:
         (basepath, filename) = os.path.split(file)
