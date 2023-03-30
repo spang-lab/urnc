@@ -45,6 +45,7 @@ def has_tag(cell, tag):
             return True
     return False
 
+
 def set_tag(cell, tag):
     if(has_tag(cell, tag)):
        return
@@ -61,6 +62,14 @@ def has_header(cell):
     if(re.search('\n#', cell.source)):
         return True
     return False
+
+def replace_local_link(cell):
+    if(cell.cell_type != 'markdown'):
+        return
+    if(not re.search(r'\(#Exercise-.*\)', cell.source)):
+        return
+    print("Detected Link to exercise.")
+    cell.source = re.sub(r'#Exercise-', '#ex-', cell.source)
 
 def process_comments(cell):
     text = cell.source
@@ -133,6 +142,8 @@ class CheckAndAddTags(Preprocessor):
             if(exercise_id is None):
                 continue
             set_tag(cell, Tags.EXERCISE)
+            cell.metadata.exercise_id = exercise_id
+
             if(re.search(Keywords.SOLUTION, cell.source, re.IGNORECASE) or has_tag(cell, Tags.SOLUTION)):
                 if(verbose):
                     print(" Detected Solution cell %s" % cell_preview(cell))
@@ -158,13 +169,15 @@ class RemoveSolutions(Preprocessor):
 class ProcessExercises(Preprocessor):
     def preprocess(self, notebook, resources):
         for cell in notebook.cells:
+            replace_local_link(cell)
             if(has_tag(cell, Tags.EXERCISE_START)):
+                eid = cell.metadata.exercise_id
                 html = """
+                    <a class="anchor" name="ex-%s"></a>
                     <div class="alert alert-block alert-info">
-                        <b>Tip:</b> Use blue boxes (alert-info) for tips and notes. 
-                        If it’s a note, you don’t have to include the word “Note”.
+                        <h3>Exercise</h3>
                     </div>
-                """
+                """ % (eid)
                 cell.source = inspect.cleandoc(html)
         return notebook, resources
         
@@ -186,7 +199,7 @@ def main():
         for root, dirs, files in os.walk(args.input, topdown= True):
             dirs[:] = [d for d in dirs if not d[0] == '.']
             for file in files:
-                if(file.lower().endswith("%s.ipynb" % args.ext)):
+                if(args.ext != '' and file.lower().endswith("%s.ipynb" % args.ext)):
                    continue
                 if(file.lower().endswith('.ipynb')):
                     paths.append(os.path.join(root, file))
