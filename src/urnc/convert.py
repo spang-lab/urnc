@@ -70,12 +70,13 @@ def has_header(cell):
         return True
     return False
 
-def replace_local_link(cell):
+def replace_local_link(cell, verbose):
     if(cell.cell_type != 'markdown'):
         return
     if(not re.search(r'\(#Exercise-.*\)', cell.source, re.IGNORECASE)):
         return
-    print("Detected Link to exercise.")
+    if (verbose):
+        print("Detected Link to exercise.")
     cell.source = re.sub(r'#Exercise-', '#ex-', cell.source, re.IGNORECASE)
 
 def process_comments(cell):
@@ -175,8 +176,9 @@ class RemoveSolutions(Preprocessor):
 
 class ProcessExercises(Preprocessor):
     def preprocess(self, notebook, resources):
+        verbose = resources['verbose']
         for cell in notebook.cells:
-            replace_local_link(cell)
+            replace_local_link(cell, verbose)
             if(has_tag(cell, Tags.EXERCISE_START)):
                 eid = cell.metadata.exercise_id
                 html = """
