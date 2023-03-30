@@ -174,9 +174,7 @@ class ProcessExercises(Preprocessor):
                 eid = cell.metadata.exercise_id
                 html = """
                     <a class="anchor" name="ex-%s"></a>
-                    <div class="alert alert-block alert-info">
-                        <h3>Exercise</h3>
-                    </div>
+                    <h3>   ✎    Exercise</h3>
                 """ % (eid)
                 cell.source = inspect.cleandoc(html)
         return notebook, resources
