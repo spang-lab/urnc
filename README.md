@@ -34,4 +34,4 @@ Only in [pyprocject.toml](pyproject.toml).
 
 ### When to tag a commit?
 
-Whenever you want the Dockerfile to be rebuilt and pushed. Important: make sure you tag uses the same version as [pyprocject.toml](pyproject.toml).
+Whenever you want the Dockerfile to be rebuilt and pushed. Important: make sure your tag uses the same version as [pyprocject.toml](pyproject.toml).
