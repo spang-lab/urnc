@@ -17,11 +17,13 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "nbconvert >= 7.2.9"
+  "nbconvert >= 7.2.9",
+  "semver >= 3.0.1",
+  "click >= 8.1.3",
 ]
 
 [project.scripts]
-urnc = "urnc.convert:main"
+urnc = "urnc.main:main"
 
 
 [project.urls]
