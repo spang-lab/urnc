@@ -26,7 +26,3 @@ def version(self, action):
 
 
 main.add_command(version)
-
-
-if __name__ == "__main__":
-    main()
