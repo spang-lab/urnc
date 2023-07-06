@@ -63,7 +63,7 @@ def write_pyproject(ctx, data):
 
     path = os.path.join(base_path, filename)
     try:
-        with open(path, "w") as f:
+        with open(path, "wb") as f:
             tomli_w.dump(data, f)
     except Exception as e:
         raise click.FileError(path, str(e))

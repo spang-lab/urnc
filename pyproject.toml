@@ -1,12 +1,14 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = [
+    "setuptools>=61.0",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "urnc"
-version = "0.1.5"
+version = "0.1.6"
 authors = [
-  { name="Michael Huttner", email="michael@mhuttner.com" },
+    { name = "Michael Huttner", email = "michael@mhuttner.com" },
 ]
 description = "A package to convert UR FIDS jupyter notebooks"
 readme = "README.md"
@@ -17,16 +19,15 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "nbconvert >= 7.2.9",
-  "semver >= 3.0.1",
-  "click >= 8.1.3",
-  "GitPython >= 3.1.31",
+    "nbconvert >= 7.2.9",
+    "semver >= 3.0.1",
+    "click >= 8.1.3",
+    "GitPython >= 3.1.31",
 ]
 
 [project.scripts]
 urnc = "urnc.main:main"
 
-
 [project.urls]
-"Homepage" = "https://github.com/spang-lab/urnc"
+Homepage = "https://github.com/spang-lab/urnc"
 "Bug Tracker" = "https://github.com/spang-lab/urnc/issues"
