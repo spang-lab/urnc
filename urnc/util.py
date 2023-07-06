@@ -2,6 +2,7 @@ from logging import root
 import click
 import yaml
 import tomllib
+import tomli_w
 import git
 import os
 
@@ -52,5 +53,17 @@ def read_pyproject(ctx):
         with open(path, "rb") as f:
             config = tomllib.load(f)
             return config
+    except Exception as e:
+        raise click.FileError(path, str(e))
+
+
+def write_pyproject(ctx, data):
+    filename = "pyproject.toml"
+    base_path = get_git_root(ctx)
+
+    path = os.path.join(base_path, filename)
+    try:
+        with open(path, "w") as f:
+            tomli_w.dump(data, f)
     except Exception as e:
         raise click.FileError(path, str(e))
