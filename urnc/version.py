@@ -1,19 +1,32 @@
 import click
+import semver
 
 import urnc.util as util
+
+
+def version_self(ctx):
+    config = util.read_pyproject(ctx)
+    v = config["project"]["version"]
+    print(v)
+    return
 
 
 @click.command()
 @click.option("--self", is_flag=True, help="Echo the version of urnc")
 @click.argument(
-    "action", type=click.Choice(["show", "patch", "minor", "major"]), required=False
+    "action",
+    type=click.Choice(["show", "patch", "minor", "major"]),
+    required=False,
+    default="show",
 )
-def version(self, action):
+@click.pass_context
+def version(ctx, self, action):
     if self:
-        print("1.0.0")
+        version_self(ctx)
         return
-    if action is None:
-        action = "show"
+    config = util.read_config(ctx)
+    v = semver.Version.parse(config["version"])
+    print(v)
 
-    util.get_git_root()
     print(action)
+    print(config)
