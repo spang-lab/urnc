@@ -1,13 +1,7 @@
 import click
 import nbformat
-import re
 import os
-import sys
-import enum
-import inspect
-from traitlets import default
 from traitlets.config import Config
-from nbconvert.preprocessors.base import Preprocessor
 from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
 from nbconvert.exporters.notebook import NotebookExporter
 
