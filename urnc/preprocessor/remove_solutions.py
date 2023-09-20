@@ -1,7 +1,7 @@
 from nbconvert.preprocessors.base import Preprocessor
 
 import urnc.preprocessor.util as util
-from util import Tags, Keywords
+from urnc.preprocessor.util import Tags, Keywords
 import re
 
 

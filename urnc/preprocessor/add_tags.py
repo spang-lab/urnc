@@ -2,7 +2,7 @@ from nbconvert.preprocessors.base import Preprocessor
 
 import re
 import urnc.preprocessor.util as util
-from util import Keywords, Tags
+from urnc.preprocessor.util import Keywords, Tags
 
 
 def critical_error(text):

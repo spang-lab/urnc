@@ -36,9 +36,21 @@ def read_config(ctx):
             "make sure you a in a course directory",
         )
     try:
-        with open(path, "r") as config_file:
-            config = yaml.safe_load(config_file)
+        with open(path, "r") as f:
+            config = yaml.safe_load(f)
             return config
+    except Exception as e:
+        raise click.FileError(path, str(e))
+
+
+def write_config(ctx, data):
+    filename = "config.yaml"
+    base_path = get_git_root(ctx)
+
+    path = os.path.join(base_path, filename)
+    try:
+        with open(path, "w") as f:
+            yaml.dump(data, f)
     except Exception as e:
         raise click.FileError(path, str(e))
 

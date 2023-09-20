@@ -1,15 +1,14 @@
 import click
 import semver
-from traitlets.config import default
 
 import urnc.util as util
 
 
 def bump(version, action):
     v = semver.Version.parse(version)
+    print(f"Current Version: {v}")
     match action:
         case "show":
-            print(f"Current Version: {v}")
             return None
         case "patch":
             return v.bump_patch()
@@ -26,12 +25,13 @@ def version_self(ctx, action):
     new_version = bump(v, action)
     if not new_version:
         return
+    print(f"    New Version: {new_version}")
     config["project"]["version"] = str(new_version)
     util.write_pyproject(ctx, config)
     return
 
 
-@click.command()
+@click.command(help="Manage the semantic version of your course")
 @click.option("--self", is_flag=True, help="Echo the version of urnc")
 @click.argument(
     "action",
@@ -45,8 +45,10 @@ def version(ctx, self, action):
         version_self(ctx, action)
         return
     config = util.read_config(ctx)
-    v = semver.Version.parse(config["version"])
-    print(v)
-
-    print(action)
-    print(config)
+    v = config["version"]
+    new_version = bump(v, action)
+    if not new_version:
+        return
+    print(f"    New Version: {new_version}")
+    config["version"] = str(new_version)
+    util.write_config(ctx, config)

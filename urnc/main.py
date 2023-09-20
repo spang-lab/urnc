@@ -2,11 +2,11 @@
 import click
 import os
 
+from urnc.convert import convert
 from urnc.version import version
-import urnc.preprocessor.util
 
 
-@click.group()
+@click.group(help="urnc manages UR FIDS courses")
 @click.option("-f", "--root", help="The course folder", default=os.getcwd())
 @click.pass_context
 def main(ctx, root):
@@ -16,3 +16,4 @@ def main(ctx, root):
 
 
 main.add_command(version)
+main.add_command(convert)
