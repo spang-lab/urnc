@@ -3,7 +3,7 @@ import re
 
 
 class Keywords(str, enum.Enum):
-    EXERCISE_START = r"^### Exercise `([\w-]+)`"
+    EXERCISE_START = r"^### Exercise `?([\w-]+)`?"
     SOLUTION = "### Solution"
     SKELETON = "### Skeleton"
     SOLUTION_END = "###"

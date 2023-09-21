@@ -1,10 +1,43 @@
-from logging import root
 import click
 import yaml
 import tomllib
 import tomli_w
 import git
 import os
+
+def branch_exists(repo, branch):
+    for ref in repo.references:
+        if(ref.name == branch):
+            return True
+    return False
+
+def update_repo_config(repo, config):
+    config_reader = repo.config_reader()
+    name = config_reader.get_value("user", "name", None)
+    email = config_reader.get_value("user", "email", None)
+    if(name is not None and email is not None):
+        return
+
+    config_writer = repo.config_writer()
+    new_name = get_config_value(config, "student", "git", "user", default="urnc")
+    new_email = get_config_value(config, "student", "git", "email", default="urnc@urnc.com")
+    config_writer.set_value("user", "name", new_name)
+    config_writer.set_value("user", "email", new_email)
+    config_writer.release()
+    
+def get_config_value(config, *args, default = None, required = False):
+    value = config
+    full_key = "config"
+    for key in args:
+        full_key = f"{full_key}.{key}"
+        if key not in value:
+            if required:
+                raise Exception(f"{full_key} is required")
+            return default
+        value = value[key]
+    return value
+
+
 
 
 def get_git_repo(ctx):

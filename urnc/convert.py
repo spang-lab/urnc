@@ -25,6 +25,15 @@ from urnc.preprocessor.remove_solutions import RemoveSolutions
 @click.option("-f", "--force", is_flag=True)
 @click.pass_context
 def convert(ctx, input, output, verbose, force):
+    convert_fn(ctx, input, output, verbose, force)
+
+
+
+
+
+def convert_fn(ctx, input_rel, output_rel, verbose, force):
+    input = os.path.abspath(input_rel)
+    output = os.path.abspath(output_rel)
     paths = []
     folder = input
     if os.path.isfile(input):
@@ -71,3 +80,4 @@ def convert(ctx, input, output, verbose, force):
 
         with open(out_file, "w") as f:
             f.write(output_text)
+
