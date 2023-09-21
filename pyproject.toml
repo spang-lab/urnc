@@ -5,11 +5,13 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-py-modules = ["urnc"]
+py-modules = [
+    "urnc",
+]
 
 [project]
 name = "urnc"
-version = "0.2.6"
+version = "0.2.7"
 authors = [
     { name = "Michael Huttner", email = "michael@mhuttner.com" },
 ]
