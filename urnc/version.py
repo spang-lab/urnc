@@ -1,4 +1,5 @@
 import click
+
 import semver
 
 import urnc.util as util
@@ -32,11 +33,13 @@ def version_self(ctx, action, repo):
     print(f"    New Version: {new_version}")
     config["project"]["version"] = str(new_version)
     util.write_pyproject(ctx, config)
-    message = f"v{new_version}"
     if repo is not None:
+        message = f"v{new_version}"
+        print("Committing new version and tagging the commit...")
         repo.index.add("*")
         repo.index.commit(message)
-        repo.create_tag(message)
+        repo.create_tag(message, "HEAD", message)
+        print("Done.")
 
 
 
@@ -52,6 +55,13 @@ def version_course(ctx, action, repo):
     print(f"    New Version: {new_version}")
     config["version"] = str(new_version)
     util.write_config(ctx, config)
+    if repo is not None:
+        message = f"v{new_version}"
+        print("Committing new version and tagging the commit...")
+        repo.index.add("*")
+        repo.index.commit(message)
+        repo.create_tag(message, "HEAD", message)
+        print("Done.")
 
 
 def get_repo(ctx, action, no_git):
