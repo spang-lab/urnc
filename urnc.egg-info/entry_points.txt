@@ -1,0 +1,2 @@
+[console_scripts]
+urnc = urnc.main:main

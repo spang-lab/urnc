@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: urnc
+Version: 0.1.7
+Summary: A package to convert UR FIDS jupyter notebooks
+Author-email: Michael Huttner <michael@mhuttner.com>
+Project-URL: Homepage, https://github.com/spang-lab/urnc
+Project-URL: Bug Tracker, https://github.com/spang-lab/urnc/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# URNC
+
+UR FIDS notebook converter
+
+
+
+
+
