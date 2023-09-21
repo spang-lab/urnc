@@ -1,4 +1,4 @@
-name: Upload urnc Python Package
+name: Publish urnc 
 
 on:
   push:
