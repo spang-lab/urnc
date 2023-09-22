@@ -22,11 +22,9 @@ class ProcessExercises(Preprocessor):
             replace_local_link(cell, verbose)
             if util.has_tag(cell, util.Tags.EXERCISE_START):
                 eid = cell.metadata.exercise_id
-                html = """
-                    <a class="anchor" name="ex-%s"></a>
-                    <h3>   ✎    Exercise</h3>
-                """ % (
-                    eid
-                )
+                html = f"""
+                    <a class="anchor" name="ex-{eid}"></a>
+                    <h3>   ✎    Exercise {eid}</h3>
+                """
                 cell.source = inspect.cleandoc(html)
         return notebook, resources
