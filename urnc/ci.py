@@ -40,7 +40,6 @@ def ci(ctx):
     util.write_gitignore(repo, config)
     repo.index.add("*")
     repo.index.commit("urnc convert")
-    repo.git.switch(commit)
 
 
 
