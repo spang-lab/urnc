@@ -26,7 +26,6 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
 
   dockerhub:
-    needs: pypi
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:

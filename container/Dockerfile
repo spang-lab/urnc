@@ -13,8 +13,12 @@ RUN apk fix && \
     # pandoc gcc python3-dev build-base linux-headers: dependencies of jupyter-book
 
 RUN pip install --upgrade pip && \
-    pip install jupyter-book urnc
+    pip install jupyter-book
     # jupyter-book: required for converting ipynbs to static websites
 
+WORKDIR /usr/src/app
+ADD .. .
+RUN pip install .
 
-CMD ["urnc", "run"]
+
+CMD ["urnc", "ci"]
