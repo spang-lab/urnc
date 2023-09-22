@@ -1,4 +1,5 @@
 import click
+from git import base
 import nbformat
 import os
 from traitlets.config import Config
@@ -31,14 +32,20 @@ def convert(ctx, input, output, verbose, force):
 
 
 
-def convert_fn(ctx, input_rel, output_rel, verbose, force):
-    input = os.path.abspath(input_rel)
-    output = os.path.abspath(output_rel)
+def convert_fn(ctx, input, output, verbose, force):
+    base = ctx.obj["ROOT"]
+    if(not os.path.isabs(input)):
+        input = os.path.join(base, input)
+        input = os.path.abspath(input)
+    if(not os.path.isabs(output)):
+        output = os.path.join(base, output)
+        output = os.path.abspath(output)
+    print(f"Converting notebooks in {input} to {output}")
     paths = []
     folder = input
     if os.path.isfile(input):
         paths.append(input)
-        folder = "."
+        folder = base
     else:
         for root, dirs, files in os.walk(input, topdown=True):
             dirs[:] = [d for d in dirs if not d[0] == "."]
@@ -60,19 +67,20 @@ def convert_fn(ctx, input_rel, output_rel, verbose, force):
     ]
     converter = NotebookExporter(config=c)
 
+
     for file in paths:
         opath = os.path.relpath(file, folder) 
         out_file = os.path.join(output, opath)
-        (folder, _) = os.path.split(out_file)
-        os.makedirs(folder, exist_ok=True)
+        out_dir = os.path.dirname(out_file)
+        os.makedirs(out_dir, exist_ok=True)
         if os.path.isfile(out_file):
             if not force:
-                print("Skipping %s because %s already exists" % (file, out_file))
+                print(f"Skipping {file} because {out_file} already exists")
                 continue
             else:
-                print("Overwriting %s" % out_file)
+                print(f"Overwriting {out_file}")
 
-        print("Converting '%s' into '%s'" % (file, out_file))
+        print(f"Converting '{file}' into '{out_file}'")
         notebook = nbformat.read(file, as_version=4)
         resources = {}
         resources["verbose"] = verbose
