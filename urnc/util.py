@@ -13,10 +13,12 @@ def branch_exists(repo, branch):
 
 def update_repo_config(repo, config):
     config_reader = repo.config_reader()
-    name = config_reader.get_value("user", "name", None)
-    email = config_reader.get_value("user", "email", None)
-    if(name is not None and email is not None):
-        return
+
+    if config_reader.has_section("user"):
+        name = config_reader.get_value("user", "name", None)
+        email = config_reader.get_value("user", "email", None)
+        if(name is not None and email is not None):
+            return
 
     config_writer = repo.config_writer()
     new_name = get_config_value(config, "student", "git", "user", default="urnc")
