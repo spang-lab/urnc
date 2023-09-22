@@ -33,7 +33,7 @@ def get_config_value(config, *args, default = None, required = False):
 
 def write_gitignore(repo, config):
     exclude = get_config_value(config, "student", "exclude", default=[]) 
-    gitignore_path = os.path.join(repo.working_dir, "..gitignore")
+    gitignore_path = os.path.join(repo.working_dir, ".gitignore")
     with open(gitignore_path, "a") as gitignore:
         for value in exclude:
             gitignore.write(f"{value}\n")
