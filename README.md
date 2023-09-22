@@ -68,12 +68,32 @@ The version is a [semver](https://semver.org). You can also run
 
 This will trigger the ci pipeline of the repo and create a student branch.
 
-## Contribution FAQ
+## Contribution
 
-### Where to increase the version?
+First check that you have the lateste version of this repo
 
-Only in [pyprocject.toml](pyproject.toml).
+```sh
+    git pull
+    urnc version --self
 
-### When to tag a commit?
+```
 
-Whenever you want the Dockerfile to be rebuilt and pushed. Important: make sure your tag uses the same version as [pyproject.toml](pyproject.toml).
+If you want to make changes to `urnc` update the python files in `urnc` and commit the changes.
+Afterwards use
+
+```sh
+    urnc version --self patch
+    # or urnc version --self minor 
+    # or urnc version --self major 
+    git push --follow-tags
+```
+
+To create a tagged commit and trigger the Githup actions.
+
+The `--follow-tags` option is only required if git does not push tags by default.
+We recommend configuring git to push tags automatically
+
+```sh
+    git config --global push.followTags true
+```
+

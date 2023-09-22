@@ -4,10 +4,9 @@ import urnc.util as util
 from urnc.convert import convert_fn
 
 
+
 @click.command(help="Run the urnc ci pipeline, this creates a git branch with the converted files")
 @click.pass_context
-
-
 def ci(ctx):
     config = util.read_config(ctx)
     repo = util.get_git_repo(ctx)
@@ -37,7 +36,7 @@ def ci(ctx):
                verbose=True
     )
     repo.index.add("*")
-    repo.index.commit("Test")
+    repo.index.commit("urnc convert")
     repo.git.switch("main")
 
 

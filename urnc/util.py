@@ -12,14 +12,6 @@ def branch_exists(repo, branch):
     return False
 
 def update_repo_config(repo, config):
-    config_reader = repo.config_reader()
-
-    if config_reader.has_section("user"):
-        name = config_reader.get_value("user", "name", None)
-        email = config_reader.get_value("user", "email", None)
-        if(name is not None and email is not None):
-            return
-
     config_writer = repo.config_writer()
     new_name = get_config_value(config, "student", "git", "user", default="urnc")
     new_email = get_config_value(config, "student", "git", "email", default="urnc@urnc.com")
@@ -86,6 +78,7 @@ def write_config(ctx, data):
     try:
         with open(path, "w") as f:
             yaml.dump(data, f)
+            return path
     except Exception as e:
         raise click.FileError(path, str(e))
 
@@ -112,5 +105,6 @@ def write_pyproject(ctx, data):
     try:
         with open(path, "wb") as f:
             tomli_w.dump(data, f)
+            return path
     except Exception as e:
         raise click.FileError(path, str(e))
