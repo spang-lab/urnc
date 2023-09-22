@@ -17,6 +17,8 @@ def ci(ctx):
 
     branch = util.get_config_value(config, "student", "git", "branch", required=True)
     origin_branch = f"origin/{branch}"
+
+    commit = repo.head.commit
     
     if not util.branch_exists(repo, branch):
         print(f"Creating orphan branch {branch}")
@@ -27,7 +29,7 @@ def ci(ctx):
         repo.git.switch(branch)
         repo.git.reset("--hard", origin_branch)
 
-    repo.git.checkout("main", "--", "*", force=True)
+    repo.git.checkout(commit, "*", force=True)
 
     convert_fn(ctx,
                input=repo.working_dir,
