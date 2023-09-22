@@ -81,7 +81,7 @@ def write_config(ctx, data):
     path = os.path.join(base_path, filename)
     try:
         with open(path, "w") as f:
-            yaml.dump(data, f)
+            yaml.dump(data, f, default_flow_style=False, sort_keys=False)
             return path
     except Exception as e:
         raise click.FileError(path, str(e))
