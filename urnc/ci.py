@@ -27,7 +27,7 @@ def ci(ctx):
         repo.git.switch(branch)
         repo.git.reset("--hard", origin_branch)
 
-    repo.git.checkout("main", "*", force=True)
+    repo.git.checkout("main", "--", "*", force=True)
 
     convert_fn(ctx,
                input=repo.working_dir,
