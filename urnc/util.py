@@ -6,8 +6,9 @@ import git
 import os
 
 def branch_exists(repo, branch):
+    origin_branch = f"origin/{branch}"
     for ref in repo.references:
-        if(ref.name == branch):
+        if(ref.name == branch or ref.name == origin_branch):
             return True
     return False
 
