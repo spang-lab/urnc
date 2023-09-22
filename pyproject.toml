@@ -11,7 +11,7 @@ include = [
 
 [project]
 name = "urnc"
-version = "0.2.14"
+version = "0.2.15"
 authors = [
     { name = "Michael Huttner", email = "michael@mhuttner.com" },
 ]
