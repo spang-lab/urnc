@@ -1,5 +1,4 @@
 import click
-from git import base
 import nbformat
 import os
 from traitlets.config import Config
