@@ -22,4 +22,4 @@ ADD . .
 
 RUN pip3 install .
 
-CMD ["urnc", "/course"]
+CMD ["urnc", "ci"]
