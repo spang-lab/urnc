@@ -38,7 +38,15 @@ def ci(ctx):
                verbose=True
     )
     util.write_gitignore(repo, config)
-    repo.index.add("*")
+    
+    # Remove exclude files from active index
+    cached_files_str = repo.git.ls_files("-ci", "--exclude-standard")
+    if(cached_files_str != ''):
+        cached_files = cached_files_str.split("\n")
+        print(f"Removing excluded files {cached_files}")
+        repo.index.remove(cached_files, working_tree=False)
+        repo.index.write()
+    repo.git.add(all=True)
     repo.index.commit("urnc convert")
     repo.git.push("origin", branch)
 
