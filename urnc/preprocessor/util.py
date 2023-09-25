@@ -43,6 +43,8 @@ def set_tag(cell, tag):
 def has_header(cell):
     if cell.cell_type != "markdown":
         return False
+    if re.search(Keywords.SOLUTION, cell.source):
+        return False 
     if re.search("^#", cell.source):
         return True
     if re.search("\n#", cell.source):
