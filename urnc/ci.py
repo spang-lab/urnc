@@ -35,7 +35,8 @@ def ci(ctx):
                input=repo.working_dir,
                output=repo.working_dir,
                force=True,
-               verbose=True
+               verbose=True,
+               dry_run=False
     )
     util.write_gitignore(repo, config)
     

@@ -23,15 +23,16 @@ from urnc.preprocessor.remove_solutions import RemoveSolutions
 )
 @click.option("-v", "--verbose", is_flag=True)
 @click.option("-f", "--force", is_flag=True)
+@click.option("-n", "--dry-run", is_flag=True)
 @click.pass_context
-def convert(ctx, input, output, verbose, force):
-    convert_fn(ctx, input, output, verbose, force)
+def convert(ctx, input, output, verbose, force, dry_run):
+    convert_fn(ctx, input, output, verbose, force, dry_run)
 
 
 
 
 
-def convert_fn(ctx, input, output, verbose, force):
+def convert_fn(ctx, input, output, verbose, force, dry_run):
     base = ctx.obj["ROOT"]
     if(not os.path.isabs(input)):
         input = os.path.join(base, input)
@@ -85,6 +86,9 @@ def convert_fn(ctx, input, output, verbose, force):
         resources["verbose"] = verbose
         (output_text, _) = converter.from_notebook_node(notebook, resources)
 
+        if(dry_run):
+            print("Skipped writing, dry run.")
+            continue
         with open(out_file, "w") as f:
             f.write(output_text)
 
