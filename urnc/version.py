@@ -7,7 +7,7 @@ import urnc.util as util
 
 def bump(version, action):
     v = semver.Version.parse(version)
-    print(f"Current Version: {v}")
+    print(v)
     match action:
         case "show":
             return None
