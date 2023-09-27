@@ -33,7 +33,7 @@ Edit the course files.
 Check for errors only:
 
 ```sh
-    urnc convert --dry-run --verbose . 
+    urnc check . 
 ```
 
 See how the course will look for a student by converting your notebook files

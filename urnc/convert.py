@@ -1,3 +1,4 @@
+from os.path import abspath
 import click
 import nbformat
 import os
@@ -29,23 +30,38 @@ def convert(ctx, input, output, verbose, force, dry_run):
     convert_fn(ctx, input, output, verbose, force, dry_run)
 
 
+@click.command(help="Check Notebooks for errors")
+@click.argument(
+    "input",
+    type=click.Path(exists=True),
+    default="."
+)
+@click.pass_context
+def check(ctx, input):
+    convert_fn(ctx, input, None, True, False, True)
 
+
+def get_abs_path(ctx, path):
+    if(path is None):
+        return None
+    if(os.path.isabs(path)):
+       return path
+    base:str = ctx.obj["ROOT"] 
+    new_path = os.path.join(base, path)
+    return os.path.abspath(new_path)
 
 
 def convert_fn(ctx, input, output, verbose, force, dry_run):
-    base = ctx.obj["ROOT"]
-    if(not os.path.isabs(input)):
-        input = os.path.join(base, input)
-        input = os.path.abspath(input)
-    if(not os.path.isabs(output)):
-        output = os.path.join(base, output)
-        output = os.path.abspath(output)
+    input = get_abs_path(ctx, input)
+    if(input is None):
+        raise Exception("No input")
+    output = get_abs_path(ctx, output)
     print(f"Converting notebooks in {input} to {output}")
     paths = []
     folder = input
     if os.path.isfile(input):
         paths.append(input)
-        folder = base
+        folder = os.path.dirname(input) 
     else:
         for root, dirs, files in os.walk(input, topdown=True):
             dirs[:] = [d for d in dirs if not d[0] == "."]
@@ -70,24 +86,28 @@ def convert_fn(ctx, input, output, verbose, force, dry_run):
 
     for file in paths:
         opath = os.path.relpath(file, folder) 
-        out_file = os.path.join(output, opath)
-        out_dir = os.path.dirname(out_file)
-        os.makedirs(out_dir, exist_ok=True)
-        if os.path.isfile(out_file):
+        out_file = None
+        out_dir = None
+        if output is not None:
+            out_file = os.path.join(output, opath)
+            out_dir = os.path.dirname(out_file)
+            os.makedirs(out_dir, exist_ok=True)
+        if out_file is None:
+            print(f"Checking {file}")
+        elif os.path.isfile(out_file):
             if not force:
                 print(f"Skipping {file} because {out_file} already exists")
                 continue
             else:
                 print(f"Overwriting {out_file}")
-
-        print(f"Converting '{file}' into '{out_file}'")
+        else:
+            print(f"Converting '{file}' into '{out_file}'")
         notebook = nbformat.read(file, as_version=4)
         resources = {}
         resources["verbose"] = verbose
         (output_text, _) = converter.from_notebook_node(notebook, resources)
 
-        if(dry_run):
-            print("Skipped writing, dry run.")
+        if(out_file is None or dry_run):
             continue
         with open(out_file, "w") as f:
             f.write(output_text)

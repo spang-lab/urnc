@@ -2,7 +2,7 @@
 import click
 import os
 
-from urnc.convert import convert
+from urnc.convert import check, convert
 from urnc.version import version
 from urnc.ci import ci
 
@@ -19,3 +19,4 @@ def main(ctx, root):
 main.add_command(version)
 main.add_command(convert)
 main.add_command(ci)
+main.add_command(check)
