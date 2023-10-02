@@ -44,5 +44,3 @@ def student(ctx):
     repo.git.add(all=True)
     repo.index.commit("urnc test convert")
 
-    print(repo)
-
