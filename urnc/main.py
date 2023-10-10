@@ -6,6 +6,7 @@ from urnc.convert import check, convert
 from urnc.edit import edit
 from urnc.student import student
 from urnc.version import version
+from urnc.pull import pull
 from urnc.ci import ci
 
 
@@ -24,3 +25,4 @@ main.add_command(ci)
 main.add_command(check)
 main.add_command(edit)
 main.add_command(student)
+main.add_command(pull)
