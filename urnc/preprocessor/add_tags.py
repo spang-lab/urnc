@@ -27,6 +27,8 @@ class AddTags(Preprocessor):
         has_solution = False
 
         for cell in notebook.cells:
+            if m := re.match(Keywords.EXERCISE_DEPRECATED, cell.source, re.IGNORECASE):
+                print("'Exercise' as Keyword is deprecated. Use 'Assignment' instead")
             if match := re.search(Keywords.EXERCISE_START, cell.source, re.IGNORECASE):
                 end_exercise(exercise_id, has_solution)
                 has_solution = False
@@ -50,7 +52,8 @@ class AddTags(Preprocessor):
                 cell, Tags.SOLUTION
             ):
                 if verbose:
-                    print(" Detected Solution cell %s" % util.cell_preview(cell))
+                    print(" Detected Solution cell %s" %
+                          util.cell_preview(cell))
                 util.set_tag(cell, Tags.SOLUTION)
                 has_solution = True
         end_exercise(exercise_id, has_solution)

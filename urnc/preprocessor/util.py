@@ -3,7 +3,8 @@ import re
 
 
 class Keywords(str, enum.Enum):
-    EXERCISE_START = r"^### Exercise `?([\w-]+)`?"
+    EXERCISE_DEPRECATED = r"^### Exercise `?([\w-]+)`?"
+    EXERCISE_START = r"^### (?:Exercise|Assignment) `?([\w-]+)`?"
     SOLUTION = "### Solution"
     SKELETON = "### Skeleton"
     SOLUTION_END = "###"
@@ -44,7 +45,7 @@ def has_header(cell):
     if cell.cell_type != "markdown":
         return False
     if re.search(Keywords.SOLUTION, cell.source):
-        return False 
+        return False
     if re.search("^#", cell.source):
         return True
     if re.search("\n#", cell.source):
