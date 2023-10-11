@@ -15,6 +15,17 @@ def branch_exists(repo, branch):
 
 
 def update_repo_config(repo):
+    try:
+        r = repo.config_reader()
+        name = r.get_value("user", "name")
+        email = r.get_value("user", "email")
+        assert (name is not None)
+        assert (email is not None)
+        print(f"Repo user is {name}<{email}>")
+        return
+    except Exception:
+        pass
+
     config_writer = repo.config_writer()
     config_writer.set_value("user", "name", "urnc")
     config_writer.set_value("user", "email", "urnc@spang-lab.de")

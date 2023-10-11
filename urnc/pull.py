@@ -7,9 +7,6 @@ import urnc.util as util
 
 import urnc.logger as log
 
-base_url_admin = "https://git.uni-regensburg.de/fids/"
-base_url = "https://git.uni-regensburg.de/fids-public/"
-
 
 def get_upstream_changes(repo):
     branch_name = repo.active_branch
@@ -22,6 +19,9 @@ def get_upstream_deleted(repo):
     changes = get_upstream_changes(repo)
     files = []
     for change in changes:
+        parts = change.split('\t', 1)
+        if (len(parts) != 2):
+            continue
         [ctype, file] = change.split('\t', 1)
         if (ctype == "D"):
             files.append(file)
@@ -32,7 +32,10 @@ def get_upstream_added(repo):
     changes = get_upstream_changes(repo)
     files = []
     for change in changes:
-        [ctype, file] = change.split('\t', 1)
+        parts = change.split('\t', 1)
+        if (len(parts) != 2):
+            continue
+        [ctype, file] = parts
         if (ctype == "A"):
             files.append(file)
     return files
@@ -40,7 +43,7 @@ def get_upstream_added(repo):
 
 def get_remote_url(isAdmin, course_name, user, token):
     if not isAdmin:
-        return f"https://git.spang-lab.de/{course_name}"
+        return f"https://git.uni-regensburg.de/fids-public/{course_name}"
     return f"https://{user}:{token}@git.uni-regensburg.de/fids/{course_name}"
 
 
@@ -66,6 +69,8 @@ def reset_deleted_files(repo):
     deleted_files = repo.git.ls_files("--deleted").split('\n')
     deleted_upstream = get_upstream_deleted(repo)
     for filename in deleted_files:
+        if (not filename):
+            continue
         if (filename in deleted_upstream):
             repo.git.checkout("HEAD", '--', filename)
         else:
@@ -76,10 +81,7 @@ def reset_deleted_files(repo):
 def merge(repo):
     branch = repo.active_branch
     remote_branch = f"origin/{branch}"
-    repo.git.merge("-c", "user.email=urnc@spang-lab.de",
-                   "-c", "user.name=urnc",
-                   "-Xours",
-                   remote_branch)
+    repo.git.merge("-Xours", remote_branch)
 
 
 @ click.command(help="Pull the course repo")
@@ -129,11 +131,10 @@ def pull(ctx, course_name, output, branch, depth, token, user):
     log.log(f"unstaging all changes")
     repo.git.reset("--mixed")
 
+    util.update_repo_config(repo)
     if repo.is_dirty():
         log.log("Repo is dirty. Commiting....")
         repo.git.commit("-am", "Automatic commit by urnc",
-                        "-c", "user.email=urnc@spang-lab.de",
-                        "-c", "user.name=urnc",
                         "--allow-empty")
         log.log("Created new commit")
 
