@@ -81,4 +81,4 @@ def ci(ctx):
     repo.git.add(all=True)
     repo.index.commit("urnc convert")
     log.log("Pushing to student remote")
-    repo.git.push("-u", remote_name, "main")
+    repo.git.push("-u", remote_name, "HEAD:main")
