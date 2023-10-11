@@ -8,7 +8,7 @@ import urnc.util as util
 import urnc.logger as log
 
 base_url_admin = "https://git.uni-regensburg.de/fids/"
-base_url = "https://git.spang-lab.de/"
+base_url = "https://git.uni-regensburg.de/fids-public/"
 
 
 def get_upstream_changes(repo):
@@ -75,6 +75,11 @@ def reset_deleted_files(repo):
 
 def merge(repo):
     branch = repo.active_branch
+    remote_branch = f"origin/{branch}"
+    repo.git.merge("-c", "user.email=urnc@spang-lab.de",
+                   "-c", "user.name=urnc",
+                   "-Xours",
+                   remote_branch)
 
 
 @ click.command(help="Pull the course repo")
