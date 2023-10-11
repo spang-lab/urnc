@@ -8,7 +8,7 @@ from urnc.convert import convert_fn
 
 def read_environment():
     ci_keys = ["CI_SERVER_PROTOCOL",
-               "CI_SERVER_HOST", "CI_SERVER_HOST"]
+               "CI_SERVER_HOST"]
     env_dict = {}
     for key in ci_keys:
         value = os.getenv(key)
@@ -28,14 +28,14 @@ def get_student_remote(config):
         config, "git", "target_path", required=True)
 
     protocol = env["CI_SERVER_PROTOCOL"]
-    token = env["CI_SERVER_PROTOCOL"]
-    host = env["CI_SERVER_PROTOCOL"]
+    token = env["GROUP_ACCESS_TOKEN"]
+    host = env["CI_SERVER_HOST"]
     git_url = f"{protocol}://{token}@{host}/{target_path}"
     return git_url
 
 
-@click.command(help="Run the urnc ci pipeline, this creates a git branch with the converted files")
-@click.pass_context
+@ click.command(help="Run the urnc ci pipeline, this creates a git branch with the converted files")
+@ click.pass_context
 def ci(ctx):
     log.setup_logger(use_file=False)
     config = util.read_config(ctx)
