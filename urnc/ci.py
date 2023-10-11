@@ -1,37 +1,69 @@
 import os
+import shutil
 import click
+import git
 import urnc.util as util
 import urnc.logger as log
 
 from urnc.convert import convert_fn
 
 
-def read_environment():
-    ci_keys = ["CI_SERVER_PROTOCOL",
-               "CI_SERVER_HOST"]
-    env_dict = {}
-    for key in ci_keys:
-        value = os.getenv(key)
-        if (not value):
-            raise click.UsageError(
-                f"Did not find env variable {key}. This commmand should only run in a gitlab ci")
-        env_dict[key] = value
-    token_key = "GROUP_ACCESS_TOKEN"
-    token = os.getenv(token_key)
-    env_dict[token_key] = token
-    return env_dict
+def clone_student_repo(config):
+    repo_name = "student"
+    # url = get_student_remote(config)
+    url = util.get_config_value(
+        config, "git", "student", required=True)
+    base_path = os.path.dirname(os.getcwd())
+    repo_path = os.path.join(base_path, repo_name)
+    log.log(f"Cloning student repo {url} to {repo_path}")
+    repo = git.Repo.clone_from(url, repo_path)
+    util.update_repo_config(repo)
+    return repo
 
 
-def get_student_remote(config):
-    env = read_environment()
-    target_path = util.get_config_value(
-        config, "git", "target_path", required=True)
+def clear_repo(repo):
+    path = repo.working_dir
+    entries = os.listdir(path)
+    for entry in entries:
+        entry_path = os.path.join(path, entry)
+        if os.path.isfile(entry_path):
+            os.remove(entry_path)
+        if os.path.isdir(entry_path):
+            shutil.rmtree(entry_path)
 
-    protocol = env["CI_SERVER_PROTOCOL"]
-    token = env["GROUP_ACCESS_TOKEN"]
-    host = env["CI_SERVER_HOST"]
-    git_url = f"{protocol}://{token}@{host}/{target_path}"
-    return git_url
+
+def copy_files(repo, student_repo):
+    path = repo.working_dir
+    target_path = student_repo.working_dir
+    entries = os.listdir(path)
+    for entry in entries:
+        entry_path = os.path.join(path, entry)
+        print(entry_path)
+        copy_path = os.path.join(target_path, entry)
+        if os.path.isfile(entry_path):
+            shutil.copy2(entry_path, copy_path)
+        if os.path.isdir(entry_path):
+            shutil.copytree(entry_path, copy_path)
+
+
+def write_gitignore(repo, student_repo, config):
+    main_gitignore = os.path.join(repo.working_dir, ".gitignore")
+    student_gitignore = os.path.join(student_repo.working_dir, ".gitignore")
+    if (os.path.exists(main_gitignore)):
+        shutil.copy(main_gitignore, student_gitignore)
+    exclude = util.get_config_value(config, "git", "exclude", default=[])
+    with open(student_gitignore, "a") as gitignore:
+        for value in exclude:
+            gitignore.write(f"{value}\n")
+
+
+def update_index(repo):
+    cached_files_str = repo.git.ls_files("-ci", "--exclude-standard")
+    if (cached_files_str != ''):
+        cached_files = cached_files_str.split("\n")
+        print(f"Removing excluded files {cached_files}")
+        repo.index.remove(cached_files, working_tree=False)
+        repo.index.write()
 
 
 @ click.command(help="Run the urnc ci pipeline, this creates a git branch with the converted files")
@@ -40,28 +72,17 @@ def ci(ctx):
     log.setup_logger(use_file=False)
     config = util.read_config(ctx)
     repo = util.get_git_repo(ctx)
-    commit = repo.head.commit
     if (repo.is_dirty()):
         raise Exception(f"Repo is not clean. Commit your changes.")
-    util.update_repo_config(repo)
 
-    student_url = get_student_remote(config)
-    log.log(f"Pushing to {student_url}")
-
-    remote_name = "student"
-    if remote_name in repo.remotes:
-        existing_remote = repo.remotes[remote_name]
-        existing_remote.set_url(student_url)
-    else:
-        repo.create_remote(remote_name, student_url)
-
-    student = repo.remote("student")
-    student.fetch()
+    student_repo = clone_student_repo(config)
+    clear_repo(student_repo)
+    copy_files(repo, student_repo)
 
     log.log("Converting files")
     convert_fn(ctx,
                input=repo.working_dir,
-               output=repo.working_dir,
+               output=student_repo.working_dir,
                force=True,
                verbose=True,
                dry_run=False
@@ -69,18 +90,15 @@ def ci(ctx):
     log.log("Notebooks converted")
 
     log.log("Updating .gitignore from config")
-    util.write_gitignore(repo, config)
+    write_gitignore(repo, student_repo, config)
+
     # Remove exclude files from active index
     log.log("Dropping cached files...")
-    cached_files_str = repo.git.ls_files("-ci", "--exclude-standard")
-    if (cached_files_str != ''):
-        cached_files = cached_files_str.split("\n")
-        print(f"Removing excluded files {cached_files}")
-        repo.index.remove(cached_files, working_tree=False)
-        repo.index.write()
+    update_index(student_repo)
+
     log.log("Adding files and commiting")
-    repo.git.add(all=True)
-    repo.index.commit("urnc convert")
-    log.log("Pushing to student remote")
-    repo.git.push("-u", remote_name, "HEAD:refs/heads/main")
-    repo.git.reset("--hard", commit)
+    student_repo.git.add(all=True)
+    student_repo.index.commit("urnc convert")
+    log.log("Pushing student repo")
+    # student_repo.git.push()
+    log.log("Done.")
