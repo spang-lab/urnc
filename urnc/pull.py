@@ -44,6 +44,8 @@ def get_upstream_added(repo):
 def get_remote_url(isAdmin, course_name, user, token):
     if not isAdmin:
         return f"https://git.uni-regensburg.de/fids-public/{course_name}"
+    if not token:
+        log.critical("--token is required for admin pull")
     return f"https://{user}:{token}@git.uni-regensburg.de/fids/{course_name}"
 
 
@@ -89,13 +91,11 @@ def merge(repo):
     "course_name",
     type=str,
     required=True
-
-
 )
 @ click.option("-o", "--output", type=str, help="The name of the output folder", default=None)
 @ click.option("-b", "--branch", help="The branch to pull", default="main")
 @ click.option("-d", "--depth", help="The depth for git fetch", default=1)
-@ click.option("-t", "--token", help="The git access token", required=True)
+@ click.option("-t", "--token", help="The git access token")
 @ click.option("-u", "--user", help="The name of the access token", default="urnc")
 @ click.pass_context
 def pull(ctx, course_name, output, branch, depth, token, user):
