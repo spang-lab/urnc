@@ -5,22 +5,23 @@ import tomli_w
 import git
 import os
 
+
 def branch_exists(repo, branch):
     origin_branch = f"origin/{branch}"
     for ref in repo.references:
-        if(ref.name == branch or ref.name == origin_branch):
+        if (ref.name == branch or ref.name == origin_branch):
             return True
     return False
 
-def update_repo_config(repo, config):
+
+def update_repo_config(repo):
     config_writer = repo.config_writer()
-    new_name = get_config_value(config, "student", "git", "user", default="urnc")
-    new_email = get_config_value(config, "student", "git", "email", default="urnc@urnc.com")
-    config_writer.set_value("user", "name", new_name)
-    config_writer.set_value("user", "email", new_email)
+    config_writer.set_value("user", "name", "urnc")
+    config_writer.set_value("user", "email", "urnc@spang-lab.de")
     config_writer.release()
-    
-def get_config_value(config, *args, default = None, required = False):
+
+
+def get_config_value(config, *args, default=None, required=False):
     value = config
     full_key = "config"
     for key in args:
@@ -32,12 +33,14 @@ def get_config_value(config, *args, default = None, required = False):
         value = value[key]
     return value
 
+
 def write_gitignore(repo, config):
-    exclude = get_config_value(config, "student", "exclude", default=[]) 
+    exclude = get_config_value(config, "student", "exclude", default=[])
     gitignore_path = os.path.join(repo.working_dir, ".gitignore")
     with open(gitignore_path, "a") as gitignore:
         for value in exclude:
             gitignore.write(f"{value}\n")
+
 
 def get_git_repo(ctx):
     path = ctx.obj["ROOT"]

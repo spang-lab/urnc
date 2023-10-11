@@ -45,12 +45,13 @@ def get_handler():
     return None
 
 
-def setup_logger():
+def setup_logger(use_file=True):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
-    handler = get_handler()
-    if (handler is not None):
-        logger.addHandler(handler)
+    if (use_file):
+        handler = get_handler()
+        if (handler is not None):
+            logger.addHandler(handler)
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.setFormatter(CustomFormatter())
 
