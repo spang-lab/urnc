@@ -10,6 +10,8 @@ from urnc.preprocessor.add_tags import AddTags
 from urnc.preprocessor.exercises import ProcessExercises
 from urnc.preprocessor.remove_solutions import RemoveSolutions
 
+import urnc.logger as log
+
 
 @click.command(help="Convert Notebooks for UR FIDS Courses")
 @click.argument(
@@ -27,6 +29,7 @@ from urnc.preprocessor.remove_solutions import RemoveSolutions
 @click.option("-n", "--dry-run", is_flag=True)
 @click.pass_context
 def convert(ctx, input, output, verbose, force, dry_run):
+    log.setup_logger(False, verbose)
     convert_fn(ctx, input, output, verbose, force, dry_run)
 
 
@@ -38,22 +41,23 @@ def convert(ctx, input, output, verbose, force, dry_run):
 )
 @click.pass_context
 def check(ctx, input):
+    log.setup_logger(False, True)
     convert_fn(ctx, input, None, True, False, True)
 
 
 def get_abs_path(ctx, path):
-    if(path is None):
+    if (path is None):
         return None
-    if(os.path.isabs(path)):
-       return path
-    base:str = ctx.obj["ROOT"] 
+    if (os.path.isabs(path)):
+        return path
+    base: str = ctx.obj["ROOT"]
     new_path = os.path.join(base, path)
     return os.path.abspath(new_path)
 
 
 def convert_fn(ctx, input, output, verbose, force, dry_run):
     input = get_abs_path(ctx, input)
-    if(input is None):
+    if (input is None):
         raise Exception("No input")
     output = get_abs_path(ctx, output)
     print(f"Converting notebooks in {input} to {output}")
@@ -61,7 +65,7 @@ def convert_fn(ctx, input, output, verbose, force, dry_run):
     folder = input
     if os.path.isfile(input):
         paths.append(input)
-        folder = os.path.dirname(input) 
+        folder = os.path.dirname(input)
     else:
         for root, dirs, files in os.walk(input, topdown=True):
             dirs[:] = [d for d in dirs if not d[0] == "."]
@@ -83,9 +87,8 @@ def convert_fn(ctx, input, output, verbose, force, dry_run):
     ]
     converter = NotebookExporter(config=c)
 
-
     for file in paths:
-        opath = os.path.relpath(file, folder) 
+        opath = os.path.relpath(file, folder)
         out_file = None
         out_dir = None
         if output is not None:
@@ -107,8 +110,7 @@ def convert_fn(ctx, input, output, verbose, force, dry_run):
         resources["verbose"] = verbose
         (output_text, _) = converter.from_notebook_node(notebook, resources)
 
-        if(out_file is None or dry_run):
+        if (out_file is None or dry_run):
             continue
         with open(out_file, "w") as f:
             f.write(output_text)
-

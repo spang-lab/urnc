@@ -45,9 +45,12 @@ def get_handler():
     return None
 
 
-def setup_logger(use_file=True):
+def setup_logger(use_file=True, verbose=False):
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
+    if verbose:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
     if (use_file):
         handler = get_handler()
         if (handler is not None):

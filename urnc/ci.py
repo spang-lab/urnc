@@ -40,6 +40,7 @@ def ci(ctx):
     log.setup_logger(use_file=False)
     config = util.read_config(ctx)
     repo = util.get_git_repo(ctx)
+    commit = repo.head.commit
     if (repo.is_dirty()):
         raise Exception(f"Repo is not clean. Commit your changes.")
     util.update_repo_config(repo)
@@ -81,4 +82,5 @@ def ci(ctx):
     repo.git.add(all=True)
     repo.index.commit("urnc convert")
     log.log("Pushing to student remote")
-    repo.git.push("-u", remote_name, "HEAD:main")
+    repo.git.push("-u", remote_name, "HEAD:refs/heads/main")
+    repo.git.reset("--hard", commit)
