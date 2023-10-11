@@ -25,6 +25,8 @@ def clear_repo(repo):
     path = repo.working_dir
     entries = os.listdir(path)
     for entry in entries:
+        if (entry.startswith(".")):
+            continue
         entry_path = os.path.join(path, entry)
         if os.path.isfile(entry_path):
             os.remove(entry_path)
@@ -37,8 +39,9 @@ def copy_files(repo, student_repo):
     target_path = student_repo.working_dir
     entries = os.listdir(path)
     for entry in entries:
+        if (entry.startswith(".")):
+            continue
         entry_path = os.path.join(path, entry)
-        print(entry_path)
         copy_path = os.path.join(target_path, entry)
         if os.path.isfile(entry_path):
             shutil.copy2(entry_path, copy_path)
@@ -100,5 +103,5 @@ def ci(ctx):
     student_repo.git.add(all=True)
     student_repo.index.commit("urnc convert")
     log.log("Pushing student repo")
-    # student_repo.git.push()
+    student_repo.git.push()
     log.log("Done.")
