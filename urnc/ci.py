@@ -46,7 +46,15 @@ def ci(ctx):
 
     student_url = get_student_remote(config)
     log.log(f"Pushing to {student_url}")
-    student = repo.create_remote("student", student_url)
+
+    remote_name = "student"
+    if remote_name in repo.remotes:
+        existing_remote = repo.remotes[remote_name]
+        existing_remote.set_url(student_url)
+    else:
+        repo.create_remote(remote_name, student_url)
+
+    student = repo.remote("student")
     student.fetch()
 
     log.log("Converting files")
@@ -73,4 +81,4 @@ def ci(ctx):
     repo.git.add(all=True)
     repo.index.commit("urnc convert")
     log.log("Pushing to student remote")
-    repo.git.push("-u", "student", "main")
+    repo.git.push("-u", remote_name, "main")
