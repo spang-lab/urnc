@@ -7,8 +7,9 @@ from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
 from nbconvert.exporters.notebook import NotebookExporter
 
 from urnc.preprocessor.add_tags import AddTags
-from urnc.preprocessor.exercises import ProcessExercises
+from urnc.preprocessor.assignments import ProcessAssignments
 from urnc.preprocessor.remove_solutions import RemoveSolutions
+from urnc.preprocessor.broken_links import BrokenLinks
 
 import urnc.logger as log
 
@@ -80,8 +81,9 @@ def convert_fn(ctx, input, output, verbose, force, dry_run):
     c = Config()
     c.verbose = verbose
     c.NotebookExporter.preprocessors = [
+        BrokenLinks,
         AddTags,
-        ProcessExercises,
+        ProcessAssignments,
         RemoveSolutions,
         ClearOutputPreprocessor,
     ]
@@ -108,6 +110,7 @@ def convert_fn(ctx, input, output, verbose, force, dry_run):
         notebook = nbformat.read(file, as_version=4)
         resources = {}
         resources["verbose"] = verbose
+        resources["path"] = file
         (output_text, _) = converter.from_notebook_node(notebook, resources)
 
         if (out_file is None or dry_run):

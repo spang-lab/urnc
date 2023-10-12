@@ -3,58 +3,50 @@ from nbconvert.preprocessors.base import Preprocessor
 import re
 import urnc.preprocessor.util as util
 from urnc.preprocessor.util import Keywords, Tags
+import urnc.logger as log
 
 
-def critical_error(text):
-    RED = "\033[1;31m"
-    RESET = "\033[0;0m"
-    print("%sCritical Error: %s %s" % (RED, text, RESET))
-
-
-def end_exercise(exercise_id, has_solution):
-    if exercise_id is None:
+def end_assignment(assignment_id, has_solution):
+    if assignment_id is None:
         return
     if not has_solution:
-        critical_error("Exercise '%s' has no solution" % exercise_id)
+        log.warn(f"Assignment {assignment_id} has no solution")
 
 
 class AddTags(Preprocessor):
     def preprocess(self, notebook, resources):
-        verbose = resources["verbose"]
-
-        exercise_ids = set()
-        exercise_id = None
+        assignment_ids = set()
+        assignment_id = None
         has_solution = False
 
         for cell in notebook.cells:
-            if m := re.match(Keywords.EXERCISE_DEPRECATED, cell.source, re.IGNORECASE):
-                print("'Exercise' as Keyword is deprecated. Use 'Assignment' instead")
-            if match := re.search(Keywords.EXERCISE_START, cell.source, re.IGNORECASE):
-                end_exercise(exercise_id, has_solution)
+            if re.match(Keywords.ASSIGNMENT_DEPRECATED, cell.source, re.IGNORECASE):
+                log.warn(
+                    "'Exercise' as Keyword is deprecated. Use 'Assignment' instead")
+            if match := re.search(Keywords.ASSIGNMENT_START, cell.source, re.IGNORECASE):
+                end_assignment(assignment_id, has_solution)
                 has_solution = False
-                exercise_id = match.group(1)
-                util.set_tag(cell, Tags.EXERCISE_START)
-                if exercise_id in exercise_ids:
-                    critical_error("Duplicate Exercise id '%s'" % exercise_id)
+                assignment_id = match.group(1)
+                util.set_tag(cell, Tags.ASSIGNMENT_START)
+                if assignment_id in assignment_ids:
+                    log.error("Duplicate Assignment id '%s'" % assignment_id)
                 else:
-                    exercise_ids.add(exercise_id)
-                if verbose:
-                    print("Detected Exercise '%s'" % exercise_id)
-            elif util.has_header(cell) and exercise_id is not None:
-                end_exercise(exercise_id, has_solution)
-                exercise_id = None
-            if exercise_id is None:
+                    assignment_ids.add(assignment_id)
+                log.dbg("Detected Assignment '%s'" % assignment_id)
+            elif util.has_header(cell) and assignment_id is not None:
+                end_assignment(assignment_id, has_solution)
+                assignment_id = None
+            if assignment_id is None:
                 continue
-            util.set_tag(cell, Tags.EXERCISE)
-            cell.metadata.exercise_id = exercise_id
+            util.set_tag(cell, Tags.ASSIGNMENT)
+            cell.metadata.assignment_id = assignment_id
 
             if re.search(Keywords.SOLUTION, cell.source, re.IGNORECASE) or util.has_tag(
                 cell, Tags.SOLUTION
             ):
-                if verbose:
-                    print(" Detected Solution cell %s" %
-                          util.cell_preview(cell))
+                log.dbg(" Detected Solution cell %s" %
+                        util.cell_preview(cell))
                 util.set_tag(cell, Tags.SOLUTION)
                 has_solution = True
-        end_exercise(exercise_id, has_solution)
+        end_assignment(assignment_id, has_solution)
         return notebook, resources

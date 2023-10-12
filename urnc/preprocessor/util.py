@@ -3,17 +3,21 @@ import re
 
 
 class Keywords(str, enum.Enum):
-    EXERCISE_DEPRECATED = r"^### Exercise `?([\w-]+)`?"
-    EXERCISE_START = r"^### (?:Exercise|Assignment) `?([\w-]+)`?"
+    ASSIGNMENT_DEPRECATED = r"^### Exercise `?([\w-]+)`?"
+    ASSIGNMENT_START = r"^### (?:Exercise|Assignment) `?([\w-]+)`?"
     SOLUTION = "### Solution"
     SKELETON = "### Skeleton"
     SOLUTION_END = "###"
+    IMAGE_TAG = r'<img[^>]*src="([^"]*)"'
+    MD_IMAGE_TAG = r"!\[([^\]]*)\]\(([^)]*)\)"
+    ASSIGNMENT_LINK = r"\(#Assignment-.*\)"
+    ASSIGNMENT_REPLACE = r"#Assignment-"
 
 
 class Tags(str, enum.Enum):
     SOLUTION = "solution"
-    EXERCISE = "exercise"
-    EXERCISE_START = "exercise-start"
+    ASSIGNMENT = "assignment"
+    ASSIGNMENT_START = "assignment-start"
     SKELETON = "skeleton"
 
 

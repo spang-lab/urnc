@@ -2,9 +2,6 @@ import logging
 import os
 import sys
 
-import click
-
-
 GREY = "\x1b[38;20m"
 YELLOW = "\x1b[33;20m"
 RED = "\x1b[31;20m"
@@ -14,7 +11,7 @@ RESET = "\x1b[0m"
 
 class CustomFormatter(logging.Formatter):
     def format(self, record):
-        log_fmt = "%(asctime)s - %(levelname)s - %(message)s"
+        log_fmt = "%(levelname)s - %(message)s"
         formats = {
             logging.DEBUG: f"{GREY}{log_fmt}{RESET}",
             logging.INFO: f"{GREY}{log_fmt}{RESET}",
