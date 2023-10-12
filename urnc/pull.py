@@ -41,29 +41,48 @@ def get_upstream_added(repo):
     return files
 
 
-def get_remote_url(isAdmin, course_name, user, token):
-    if not isAdmin:
-        return f"https://git.uni-regensburg.de/fids-public/{course_name}"
-    if not token:
-        log.critical("--token is required for admin pull")
-    return f"https://{user}:{token}@git.uni-regensburg.de/fids/{course_name}"
+def get_course_info(course_name, output):
+    base_url = os.getenv("GIT_URL")
+    if not base_url:
+        log.error("Failed to pull. Missing env var GIT_URL")
+        return (None, None)
 
-
-def get_folder_name(isAdmin, course_name, output):
+    if not course_name:
+        try:
+            git_repo = git.Repo(os.getcwd(), search_parent_directories=True)
+            git_url = git_repo.remote().url
+            if not git_url.startswith(base_url):
+                log.error(f"Failed to pull. Invalid git remote_url {git_url}")
+                return (None, None)
+            folder_name = git_repo.working_dir
+            return (git_url, folder_name)
+        except Exception:
+            log.error("Failed to pull no course_name given and not in a git repo")
+            return (None, None)
     folder_name = output
-    if output is None:
+    if not output:
         folder_name = course_name
-    if isAdmin:
-        folder_name = f"{folder_name}-admin"
-    return folder_name
+
+    git_url = f"{base_url}{course_name}.git"
+    return (git_url, folder_name)
 
 
 def get_repo(folder_name):
+    base_url = os.getenv("GIT_URL")
+    if not base_url:
+        log.error("Missing env var GIT_URL")
+        return None
     try:
         git_repo = git.Repo(folder_name)
+        git_url = git_repo.remote().url
+        if not git_url.startswith(base_url):
+            log.error(
+                f"Invalid git remote_url {git_url} needs to start with {base_url}")
+            return None
         return git_repo
     except Exception:
-        return log.critical(f"{folder_name} is not a git repo")
+        log.error(f"{folder_name} is not a git repo")
+        return None
 
 
 def reset_deleted_files(repo):
@@ -86,24 +105,67 @@ def merge(repo):
     repo.git.merge("-Xours", remote_branch)
 
 
+def pull_admin(course_name, output, branch, depth):
+    isAdmin = os.getenv('IS_ADMIN') == "1"
+    if (not isAdmin):
+        return
+    if (not course_name):
+        return
+    base_url = os.getenv("GIT_URL_ADMIN")
+    if (not base_url):
+        log.error("Missing env var GIT_URL_ADMIN")
+        return
+    git_url = f"{base_url}{course_name}.git"
+    folder_name = output
+    if not output:
+        folder_name = f"{course_name}-admin"
+
+    if (not os.path.exists(folder_name)):
+        log.log(f"{folder_name} does not exists. Cloning repo {git_url}")
+        try:
+            git.Repo.clone_from(git_url, folder_name,
+                                branch=branch, depth=depth)
+            log.log("Cloned successfully.")
+        except Exception as err:
+            log.error("Failed to clone repo. Error:")
+            log.error(err)
+    else:
+        log.log(f"{folder_name} exists.")
+        try:
+            repo = git.Repo(folder_name)
+            log.log(f"Pulling...")
+            repo.git.pull("--ff-only")
+            log.log(f"Done")
+
+        except Exception as err:
+            log.error(f"{folder_name} is not a git repo")
+
+
 @ click.command(help="Pull the course repo")
 @ click.argument(
     "course_name",
     type=str,
-    required=True
+    default=None
 )
 @ click.option("-o", "--output", type=str, help="The name of the output folder", default=None)
 @ click.option("-b", "--branch", help="The branch to pull", default="main")
 @ click.option("-d", "--depth", help="The depth for git fetch", default=1)
-@ click.option("-t", "--token", help="The git access token")
-@ click.option("-u", "--user", help="The name of the access token", default="urnc")
 @ click.pass_context
-def pull(ctx, course_name, output, branch, depth, token, user):
+def pull(ctx, course_name, output, branch, depth):
     log.setup_logger()
-    isAdmin = os.getenv('JUPYTERHUB_ADMIN_ACCESS') == "1"
+    try:
+        pull_fn(ctx, course_name, output, branch, depth)
+    except Exception as err:
+        log.error("pull failed with unexpected error.")
+        log.error(err)
 
-    folder_name = get_folder_name(isAdmin, course_name, output)
-    git_url = get_remote_url(isAdmin, course_name, user, token)
+
+def pull_fn(ctx, course_name, output, branch, depth):
+    pull_admin(course_name, output, branch, depth)
+
+    (git_url, folder_name) = get_course_info(course_name, output)
+    if (not git_url or not folder_name):
+        return
 
     if (not os.path.exists(folder_name)):
         log.log(f"{folder_name} does not exists. Cloning repo {git_url}")
@@ -117,15 +179,11 @@ def pull(ctx, course_name, output, branch, depth, token, user):
         return
     log.log(f"{folder_name} exists. Updating the repo")
     repo = get_repo(folder_name)
+    if (not repo):
+        return
 
     log.log(f"Fetching changes...")
     repo.remote().fetch()
-    if (isAdmin):
-        log.log(f"Trying to pull")
-        repo.git.pull("--ff-only")
-        log.log(f"Pulled repo. Done.")
-        return
-
     log.log(f"Restoring locally deleted files")
     reset_deleted_files(repo)
     log.log(f"unstaging all changes")
