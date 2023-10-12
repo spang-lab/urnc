@@ -21,7 +21,6 @@ def update_repo_config(repo):
         email = r.get_value("user", "email")
         assert (name is not None)
         assert (email is not None)
-        print(f"Repo user is {name}<{email}>")
         return
     except Exception:
         pass

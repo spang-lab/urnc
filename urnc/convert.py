@@ -31,7 +31,7 @@ import urnc.logger as log
 @click.pass_context
 def convert(ctx, input, output, verbose, force, dry_run):
     log.setup_logger(False, verbose)
-    convert_fn(ctx, input, output, verbose, force, dry_run)
+    convert_fn(ctx, input, output, force, dry_run)
 
 
 @click.command(help="Check Notebooks for errors")
@@ -41,9 +41,10 @@ def convert(ctx, input, output, verbose, force, dry_run):
     default="."
 )
 @click.pass_context
-def check(ctx, input):
-    log.setup_logger(False, True)
-    convert_fn(ctx, input, None, True, False, True)
+@click.option("-q", "--quiet", is_flag=True)
+def check(ctx, input, quiet):
+    log.setup_logger(False, not quiet)
+    convert_fn(ctx, input, None, False, True)
 
 
 def get_abs_path(ctx, path):
@@ -56,12 +57,12 @@ def get_abs_path(ctx, path):
     return os.path.abspath(new_path)
 
 
-def convert_fn(ctx, input, output, verbose, force, dry_run):
+def convert_fn(ctx, input, output, force, dry_run):
     input = get_abs_path(ctx, input)
     if (input is None):
         raise Exception("No input")
     output = get_abs_path(ctx, output)
-    print(f"Converting notebooks in {input} to {output}")
+    log.log(f"Converting notebooks in {input} to {output}")
     paths = []
     folder = input
     if os.path.isfile(input):
@@ -75,11 +76,10 @@ def convert_fn(ctx, input, output, verbose, force, dry_run):
                     paths.append(os.path.join(root, file))
 
     if len(paths) == 0:
-        print("No Notebooks found in input %s" % input)
+        log.warn("No Notebooks found in input %s" % input)
         return
 
     c = Config()
-    c.verbose = verbose
     c.NotebookExporter.preprocessors = [
         BrokenLinks,
         AddTags,
@@ -98,18 +98,17 @@ def convert_fn(ctx, input, output, verbose, force, dry_run):
             out_dir = os.path.dirname(out_file)
             os.makedirs(out_dir, exist_ok=True)
         if out_file is None:
-            print(f"Checking {file}")
+            log.log(f"Checking {file}")
         elif os.path.isfile(out_file):
             if not force:
-                print(f"Skipping {file} because {out_file} already exists")
+                log.log(f"Skipping {file} because {out_file} already exists")
                 continue
             else:
-                print(f"Overwriting {out_file}")
+                log.warn(f"Overwriting {out_file}")
         else:
-            print(f"Converting '{file}' into '{out_file}'")
+            log.log(f"Converting '{file}' into '{out_file}'")
         notebook = nbformat.read(file, as_version=4)
         resources = {}
-        resources["verbose"] = verbose
         resources["path"] = file
         (output_text, _) = converter.from_notebook_node(notebook, resources)
 

@@ -5,23 +5,23 @@ from nbconvert.preprocessors.base import Preprocessor
 import urnc.preprocessor.util as util
 from urnc.preprocessor.util import Keywords
 
+import urnc.logger as log
 
-def replace_local_link(cell, verbose):
+
+def replace_local_link(cell):
     if cell.cell_type != "markdown":
         return
     if not re.search(Keywords.ASSIGNMENT_LINK, cell.source, re.IGNORECASE):
         return
-    if verbose:
-        print("Detected Link to assignment.")
+    log.dbg("Detected Link to assignment.")
     cell.source = re.sub(Keywords.ASSIGNMENT_REPLACE,
                          "#a-", cell.source, re.IGNORECASE)
 
 
 class ProcessAssignments(Preprocessor):
     def preprocess(self, notebook, resources):
-        verbose = resources["verbose"]
         for cell in notebook.cells:
-            replace_local_link(cell, verbose)
+            replace_local_link(cell)
             if util.has_tag(cell, util.Tags.ASSIGNMENT_START):
                 eid = cell.metadata.assignment_id
                 html = f"""

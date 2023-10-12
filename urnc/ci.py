@@ -78,7 +78,7 @@ def update_index(repo):
     cached_files_str = repo.git.ls_files("-ci", "--exclude-standard")
     if (cached_files_str != ''):
         cached_files = cached_files_str.split("\n")
-        print(f"Removing excluded files {cached_files}")
+        log.log(f"Removing excluded files {cached_files}")
         repo.index.remove(cached_files, working_tree=False)
         repo.index.write()
 
