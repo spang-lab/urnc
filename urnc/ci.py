@@ -9,12 +9,26 @@ from urnc.convert import convert_fn
 
 
 def clone_student_repo(config):
-    repo_name = "student"
-    # url = get_student_remote(config)
     url = util.get_config_value(
         config, "git", "student", required=True)
+    assert (url is not None)
+    repo_name_git = os.path.basename(url)
+    (repo_name, _) = os.path.splitext(repo_name_git)
+    folder_name = f"{repo_name}-student"
+
     base_path = os.path.dirname(os.getcwd())
-    repo_path = os.path.join(base_path, repo_name)
+    repo_path = os.path.join(base_path, folder_name)
+
+    if os.path.exists(repo_path):
+        try:
+            repo = git.Repo(repo_path)
+            repo_url = repo.remote().url
+            if (repo_url != url):
+                return log.critical(f"Repo remote mismatch {repo_url}!={url}")
+            log.log(f"Returning existing repo {repo_path}")
+            return repo
+        except Exception:
+            return log.critical(f"{repo_path} exists but is not a git repo")
     log.log(f"Cloning student repo {url} to {repo_path}")
     repo = git.Repo.clone_from(url, repo_path)
     util.update_repo_config(repo)
@@ -69,13 +83,17 @@ def update_index(repo):
         repo.index.write()
 
 
-@ click.command(help="Run the urnc ci pipeline, this creates a git branch with the converted files")
+@ click.command(help="Run the urnc ci pipeline, this pushed the converted motebooks to the public repo")
 @ click.pass_context
 def ci(ctx):
+    ci_fn(ctx, True)
+
+
+def ci_fn(ctx, commit=True):
     log.setup_logger(use_file=False)
     config = util.read_config(ctx)
     repo = util.get_git_repo(ctx)
-    if (repo.is_dirty()):
+    if (repo.is_dirty() and commit):
         raise Exception(f"Repo is not clean. Commit your changes.")
 
     student_repo = clone_student_repo(config)
@@ -98,6 +116,11 @@ def ci(ctx):
     # Remove exclude files from active index
     log.log("Dropping cached files...")
     update_index(student_repo)
+
+    if not commit:
+        log.log("Skipping git commit and push")
+        log.log("Done.")
+        return
 
     log.log("Adding files and commiting")
     student_repo.git.add(all=True)
