@@ -141,16 +141,17 @@ def pull_admin(course_name, output, branch, depth):
             log.error(f"{folder_name} is not a git repo")
 
 
-@ click.command(help="Pull the course repo")
-@ click.argument(
+@click.command(help="Pull the course repo")
+@click.argument(
     "course_name",
     type=str,
-    default=None
+    default=None,
+    required=False
 )
-@ click.option("-o", "--output", type=str, help="The name of the output folder", default=None)
-@ click.option("-b", "--branch", help="The branch to pull", default="main")
-@ click.option("-d", "--depth", help="The depth for git fetch", default=1)
-@ click.pass_context
+@click.option("-o", "--output", type=str, help="The name of the output folder", default=None)
+@click.option("-b", "--branch", help="The branch to pull", default="main")
+@click.option("-d", "--depth", help="The depth for git fetch", default=1)
+@click.pass_context
 def pull(ctx, course_name, output, branch, depth):
     log.setup_logger()
     try:
