@@ -105,7 +105,6 @@ def ci_fn(ctx, commit=True):
                input=repo.working_dir,
                output=student_repo.working_dir,
                force=True,
-               verbose=True,
                dry_run=False
                )
     log.log("Notebooks converted")
