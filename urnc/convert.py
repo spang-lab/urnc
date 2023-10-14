@@ -14,7 +14,7 @@ from urnc.preprocessor.broken_links import BrokenLinks
 import urnc.logger as log
 
 
-@click.command(help="Convert Notebooks for UR FIDS Courses")
+@click.command(help="Convert notebooks")
 @click.argument(
     "input",
     type=click.Path(exists=True),
@@ -34,7 +34,7 @@ def convert(ctx, input, output, verbose, force, dry_run):
     convert_fn(ctx, input, output, force, dry_run)
 
 
-@click.command(help="Check Notebooks for errors")
+@click.command(help="Check notebooks for errors")
 @click.argument(
     "input",
     type=click.Path(exists=True),
@@ -76,7 +76,7 @@ def convert_fn(ctx, input, output, force, dry_run):
                     paths.append(os.path.join(root, file))
 
     if len(paths) == 0:
-        log.warn("No Notebooks found in input %s" % input)
+        log.warn("No notebooks found in input %s" % input)
         return
 
     c = Config()
