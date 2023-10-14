@@ -60,14 +60,14 @@ git push --follow-tags
 The `--follow-tags` option is only required if git does not push tags by default. We recommend configuring git to push tags automatically:
 
 ```sh
-    git config --global push.followTags true
+git config --global push.followTags true
 ```
 
 The version is a [semver](https://semver.org). You can also run:
 
 ```sh
-    urnc version minor
-    urnc version major
+urnc version minor
+urnc version major
 ```
 
 This will trigger the ci pipeline of the repo and create a student branch.
