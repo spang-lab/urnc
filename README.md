@@ -101,7 +101,7 @@ git config --global push.followTags true
 The easiest way to test [urnc](https://github.com/spang-lab/urnc) updates on real data is to:
 
 1. Clone urnc
-2. Clone your course of interest, e.g. [urnc-example-course](https://github.com/spang-lab/urnc-example-course) 
+2. Clone your course of interest, e.g. [urnc-example-course](https://github.com/spang-lab/urnc-example-course)
 3. Add the folder you cloned `urnc` into to your `PYTHONPATH`
 4. Call urnc as usual
 
@@ -116,7 +116,7 @@ git clone https://github.com/spang-lab/urnc-example-course.git
 export "PYTHONPATH=$(pwd)/urnc" # bash/zsh syntax
 $env:PYTHONPATH = "$(pwd)\urnc" # powershell syntax
 
-# Make some updated to ./urnc/urnc/*.py
+# Make some updates to ./urnc/urnc/*.py
 
 # Call urnc as usual
 pushd urnc-example-course
