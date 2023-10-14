@@ -83,7 +83,7 @@ def update_index(repo):
         repo.index.write()
 
 
-@ click.command(help="Run the urnc ci pipeline, this pushed the converted motebooks to the public repo")
+@ click.command(short_help="Build student version and push to public repo", help="Run the urnc ci pipeline, this pushes the converted notebooks to the public repo")
 @ click.pass_context
 def ci(ctx):
     ci_fn(ctx, True)
