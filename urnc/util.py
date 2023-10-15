@@ -75,7 +75,10 @@ def read_config(ctx):
     try:
         with open(path, "r") as f:
             config = yaml.safe_load(f)
-            return config
+        if "git" in config and "student" in config["git"]:
+            config["git"]["student"] = config["git"]["student"].format(
+                **os.environ)
+        return config
     except Exception as e:
         raise click.FileError(path, str(e))
 
