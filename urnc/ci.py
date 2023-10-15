@@ -4,9 +4,10 @@ import click
 import git
 import urnc.util as util
 import urnc.logger as log
+import dateutil.parser
 
 from urnc.convert import convert_fn
-
+from datetime import datetime
 
 def clone_student_repo(config):
     url = util.get_config_value(
@@ -69,9 +70,19 @@ def write_gitignore(repo, student_repo, config):
     if (os.path.exists(main_gitignore)):
         shutil.copy(main_gitignore, student_gitignore)
     exclude = util.get_config_value(config, "git", "exclude", default=[])
+    now = datetime.now()
     with open(student_gitignore, "a") as gitignore:
         for value in exclude:
-            gitignore.write(f"{value}\n")
+            if isinstance(value, str):
+                gitignore.write(f"{value}\n")
+            else:
+                if "after" in value:
+                    if now < dateutil.parser.parse(value["after"]):
+                        continue
+                if "until" in value:
+                    if now > dateutil.parser.parse(value["until"]):
+                        continue
+                gitignore.write(f"{value['pattern']}\n")
 
 
 def update_index(repo):
