@@ -2,14 +2,25 @@ from nbconvert.preprocessors.base import Preprocessor
 
 import os
 import re
+import requests
 import urnc.preprocessor.util as util
 import urnc.logger as log
 from urnc.preprocessor.util import Keywords, Tags
 
 
+def url_is_valid(url):
+    try:
+        response = requests.head(url, allow_redirects=True)
+        return response.status_code == 200
+    except Exception:
+        return False
+
+
 def check_image(base_folder, src):
     if src.startswith("http"):
-        log.warn("Remote image detected.")
+        log.warn(f"Remote image detected. {src}")
+        if not url_is_valid(src):
+            log.error(f"Request to {src} failed.")
         return
     image_path = os.path.normpath(os.path.join(base_folder, src))
     if (not os.path.exists(image_path)):
