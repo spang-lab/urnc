@@ -102,7 +102,17 @@ def reset_deleted_files(repo):
 def merge(repo):
     branch = repo.active_branch
     remote_branch = f"origin/{branch}"
-    repo.git.merge("-Xours", remote_branch)
+    try:
+        repo.git.merge("-Xours", remote_branch)
+    except git.GitCommandError as err:
+        if "CONFLICT (modify/delete)" in str(err):
+            lines = str(err).split('\n')
+            log.warn(
+                "Found a CONFLICT (modify/delete). Keeping the local file by commiting.")
+            repo.git.commit(
+                "-am", "Resolve CONFLICT (modify/delete)", "--allow-empty")
+            return
+        raise
 
 
 def pull_admin(course_name, output, branch, depth):
