@@ -11,7 +11,10 @@ from urnc.preprocessor.util import Keywords, Tags
 def url_is_valid(url):
     try:
         response = requests.head(url, allow_redirects=True)
-        return response.status_code == 200
+        is_valid = response.status_code == 200
+        if not is_valid:
+            log.warn(f"Got response code {response.status_code}")
+        return is_valid
     except Exception:
         return False
 

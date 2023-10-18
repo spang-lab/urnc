@@ -55,6 +55,15 @@ def get_git_repo(ctx):
         )
 
 
+def tag_exists(repo, tag):
+    ref = f"refs/tags/{tag}"
+    try:
+        repo.git.rev_parse("--quiet", "--verify", ref)
+        return True
+    except Exception:
+        return False
+
+
 def get_git_root(ctx):
     repo = get_git_repo(ctx)
     return repo.working_dir
