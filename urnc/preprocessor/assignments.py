@@ -28,5 +28,7 @@ class ProcessAssignments(Preprocessor):
                     <a class="anchor" name="a-{eid}"></a>
                     <h3>   ✎    Assignment {eid}</h3>
                 """
-                cell.source = inspect.cleandoc(html)
+                clean = inspect.cleandoc(html)
+                cell.source = re.sub(
+                    Keywords.ASSIGNMENT_START, clean, cell.source, 1)
         return notebook, resources
