@@ -1,9 +1,12 @@
 import click
 import yaml
-import tomllib
 import tomli_w
 import git
 import os
+try:
+    import tomllib
+except:
+    tomllib = None
 
 
 def branch_exists(repo, branch):
@@ -106,6 +109,8 @@ def write_config(ctx, data):
 
 
 def read_pyproject(ctx):
+    if tomllib is None:
+        raise click.UsageError("tomllib (python3.11) is required")
     filename = "pyproject.toml"
     base_path = get_git_root(ctx)
 
