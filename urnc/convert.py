@@ -7,7 +7,7 @@ from nbconvert.exporters.notebook import NotebookExporter
 
 from urnc.preprocessor.add_tags import AddTags
 from urnc.preprocessor.remove_solutions import RemoveSolutions
-from urnc.preprocessor.broken_links import BrokenLinks
+from urnc.preprocessor.lint import Linter
 
 import urnc.logger as log
 
@@ -79,7 +79,7 @@ def convert_fn(ctx, input, output, force, dry_run):
 
     c = Config()
     c.NotebookExporter.preprocessors = [
-        BrokenLinks,
+        Linter,
         AddTags,
         RemoveSolutions,
         ClearOutputPreprocessor,

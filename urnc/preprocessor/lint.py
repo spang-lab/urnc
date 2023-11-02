@@ -4,8 +4,8 @@ import os
 import re
 import requests
 import urnc.preprocessor.util as util
-import urnc.logger as log
 from urnc.preprocessor.util import Keywords, Tags
+import urnc.logger as log
 
 
 def url_is_valid(url):
@@ -20,6 +20,8 @@ def url_is_valid(url):
 
 
 def check_image(base_folder, src):
+    max_size_str = "250 KiB"
+    max_size = util.string_to_byte(max_size_str)
     if src.startswith("http"):
         log.warn(f"Remote image detected. {src}")
         if not url_is_valid(src):
@@ -28,9 +30,14 @@ def check_image(base_folder, src):
     image_path = os.path.normpath(os.path.join(base_folder, src))
     if (not os.path.exists(image_path)):
         log.warn(f"The image {image_path} does not exists.")
+    image_size = os.path.getsize(image_path)
+    if image_size > max_size:
+        log.warn(f"The image {image_path} is larger than {max_size_str} KiB.")
+        log.warn(
+            f"Consider using: convert --max-size {max_size_str} --inplace {image_path}")
 
 
-class BrokenLinks(Preprocessor):
+class Linter(Preprocessor):
     def preprocess(self, notebook, resources):
         path = resources["path"]
 
