@@ -7,7 +7,6 @@ from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
 from nbconvert.exporters.notebook import NotebookExporter
 
 from urnc.preprocessor.add_tags import AddTags
-from urnc.preprocessor.assignments import ProcessAssignments
 from urnc.preprocessor.remove_solutions import RemoveSolutions
 from urnc.preprocessor.broken_links import BrokenLinks
 
@@ -83,7 +82,6 @@ def convert_fn(ctx, input, output, force, dry_run):
     c.NotebookExporter.preprocessors = [
         BrokenLinks,
         AddTags,
-        ProcessAssignments,
         RemoveSolutions,
         ClearOutputPreprocessor,
     ]

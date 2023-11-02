@@ -3,11 +3,12 @@ import re
 
 
 class Keywords(str, enum.Enum):
-    ASSIGNMENT_DEPRECATED = r"^### Exercise `?([\w-]+)`?"
-    ASSIGNMENT_START = r"^### (?:Exercise|Assignment) `?([\w-]+)`?"
-    SOLUTION = "### Solution"
-    SKELETON = "### Skeleton"
-    SOLUTION_END = "###"
+    ASSIGNMENT_DEPRECATED = r"^#+ Exercise `?([\w-]+)`?"
+    ASSIGNMENT_START = r"^#+ Assignment `?([\w-]+)`?"
+    SOLUTION = "^#+ Solution"
+    SKELETON = "^#+ Skeleton"
+    SOLUTION_END = r"^#+\s*$"
+    HEADER = r'^#'
     IMAGE_TAG = r'<img[^>]*src="([^"]*)"'
     MD_IMAGE_TAG = r"!\[([^\]]*)\]\(([^)]*)\)"
     ASSIGNMENT_LINK = r"\(#Assignment-.*\)"
@@ -45,13 +46,5 @@ def set_tag(cell, tag):
     cell.metadata.tags.append(tag)
 
 
-def has_header(cell):
-    if cell.cell_type != "markdown":
-        return False
-    if re.search(Keywords.SOLUTION, cell.source):
-        return False
-    if re.search("^#", cell.source):
-        return True
-    if re.search("\n#", cell.source):
-        return True
-    return False
+def to_snake_case(string):
+    return string.replace(r'\s+', '_').lower()
