@@ -1,4 +1,3 @@
-from os.path import abspath
 import click
 import nbformat
 import os

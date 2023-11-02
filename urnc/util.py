@@ -1,5 +1,6 @@
 import click
-import yaml
+from ruamel import yaml
+from ruamel.yaml import YAML
 import tomli_w
 import git
 import os
@@ -7,6 +8,8 @@ try:
     import tomllib
 except:
     tomllib = None
+
+yaml = YAML(typ='rt')
 
 
 def branch_exists(repo, branch):
@@ -86,7 +89,8 @@ def read_config(ctx):
         )
     try:
         with open(path, "r") as f:
-            config = yaml.safe_load(f)
+            config = yaml.load(f)
+
         if "git" in config and "student" in config["git"]:
             config["git"]["student"] = config["git"]["student"].format(
                 **os.environ)
@@ -102,7 +106,7 @@ def write_config(ctx, data):
     path = os.path.join(base_path, filename)
     try:
         with open(path, "w") as f:
-            yaml.dump(data, f, default_flow_style=False, sort_keys=False)
+            yaml.dump(data, f)
             return path
     except Exception as e:
         raise click.FileError(path, str(e))
