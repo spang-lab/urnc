@@ -124,6 +124,23 @@ urnc student
 popd
 ```
 
+## Documentation
+
+Documentation for this package is generated using [sphinx](https://www.sphinx-doc.org/en/master/index.html) with [myst_parser](https://myst-parser.readthedocs.io/en/latest/) to auto generate the documentation pages upon pushes to master. The relevant commands to generate the documentation pages locally, are listed in the following:
+
+```bash
+# Install sphinx and myst-parser (for markdown support)
+pip install sphinx myst-parser sphinx_rtd_theme
+
+# Create rst files from urnc docstrings
+sphinx-apidoc -o docs urnc
+
+# Build documentation
+cd docs
+make html # other formats are: epub, latex, latexpdf
+sphinx-build -M html source build # this is what make does
+```
+
 ## Changelog
 
 - `v1.5.0`: Added the option to provide an `"after"` and `"until"` value for every `git.exclude` config entry. I.e. something like `{pattern: assignments/sheet4.ipynb, after: 2023-12-04}` is now possible.
