@@ -2,6 +2,11 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html.
 
+# Make sure urnc can be found even when building from this directory
+from os.path import abspath, dirname, join
+import sys
+sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
+
 # Project Info
 project = 'urnc'
 copyright = '2023, Michael Huttner, Tobias Schmidt'
@@ -12,10 +17,10 @@ release = '1.6.3'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.autodoc', # docstring support
     'myst_parser', # markdown support
-    'sphinx.ext.autodoc',
-    'sphinx.ext.duration', # print sphinx runtime
-    'sphinx_rtd_theme' # read the docs theme
+    'sphinx_rtd_theme', # read-the-docs theme
+    'sphinx.ext.autosummary' # generate api reference automatically
 ]
 
 # Add any paths that contain templates here, relative to this directory.

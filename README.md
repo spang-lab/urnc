@@ -126,7 +126,7 @@ popd
 
 ## Documentation
 
-Documentation for this package is generated using [sphinx](https://www.sphinx-doc.org/en/master/index.html) with [myst_parser](https://myst-parser.readthedocs.io/en/latest/) to auto generate the documentation pages upon pushes to master. The relevant commands to generate the documentation pages locally, are listed in the following:
+Documentation for this package is generated automatically upon pushes to main using [sphinx](https://www.sphinx-doc.org/en/master/index.html) with extensions [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) and [myst_parser](https://myst-parser.readthedocs.io/en/latest/). The relevant commands to generate the documentation pages locally, are listed in the following:
 
 ```bash
 # Install sphinx and myst-parser (for markdown support)
