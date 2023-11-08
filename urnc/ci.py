@@ -1,3 +1,7 @@
+"""
+Module for functions to used by the CI pipeline.
+"""
+
 import os
 import shutil
 import click
@@ -8,6 +12,7 @@ import dateutil.parser
 
 from urnc.convert import convert_fn
 from datetime import datetime
+
 
 def clone_student_repo(config):
     url = util.get_config_value(

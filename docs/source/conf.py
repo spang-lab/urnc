@@ -3,9 +3,9 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html.
 
 # Make sure urnc can be found even when building from this directory
-from os.path import abspath, dirname, join
+import os
 import sys
-sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
+sys.path.insert(0, os.path.abspath('../..'))  # Source code dir relative to this file
 
 # Project Info
 project = 'urnc'
@@ -17,11 +17,26 @@ release = '1.6.3'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', # docstring support
     'myst_parser', # markdown support
     'sphinx_rtd_theme', # read-the-docs theme
-    'sphinx.ext.autosummary' # generate api reference automatically
+    'sphinx.ext.autodoc', # docstring support
+    'sphinx.ext.autosummary', # generate api reference automatically
+    'sphinx.ext.napoleon' # support for numpy docstrings
 ]
+
+# Mappings for sphinx.ext.intersphinx. Projects have to have Sphinx-generated doc! (.inv file)
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
+}
+
+autosummary_generate = True  # Turn on sphinx.ext.autosummary
+autoclass_content = "both"  # Add __init__ doc (ie. params) to class summaries
+html_show_sourcelink = False  # Remove 'view source code' from top of page (for html, not python)
+autodoc_inherit_docstrings = True  # If no docstring, inherit from base class
+set_type_checking_flag = True  # Enable 'expensive' imports for sphinx_autodoc_typehints
+nbsphinx_allow_errors = True  # Continue through Jupyter errors
+#autodoc_typehints = "description" # Sphinx-native method. Not as good as sphinx_autodoc_typehints
+add_module_names = False # Remove namespaces from class/method signatures
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

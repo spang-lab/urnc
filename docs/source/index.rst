@@ -1,22 +1,12 @@
-Welcome to urnc's documentation!
-================================
+URNC
+====
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
-API
-===
-
-.. autosummary::
-   :toctree: generated
-   :recursive:
-
-   urnc
+   Home page <self>
+   Installation <installation>
+   Usage <usage>
+   Testing <testing>
+   Documentation <documentation>
+   API reference <_autosummary/urnc>

@@ -134,3 +134,4 @@ dmypy.json
 # Manually added entries
 .vscode/
 generated/
+_autosummary/
