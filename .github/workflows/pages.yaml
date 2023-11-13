@@ -1,5 +1,5 @@
 name: GitHub Pages
-on: {push: {tags: ["v*"], branches: ["docs"]}}
+on: {push: {tags: ["v*"]}}
 jobs:
   docs:
     runs-on: ubuntu-latest
