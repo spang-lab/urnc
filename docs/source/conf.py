@@ -5,13 +5,15 @@
 # Make sure urnc can be found even when building from this directory
 import os
 import sys
+import toml
 sys.path.insert(0, os.path.abspath('../..'))  # Source code dir relative to this file
 
 # Project Info
 project = 'urnc'
 copyright = '2023, Michael Huttner, Tobias Schmidt'
 author = 'Michael Huttner, Tobias Schmidt'
-release = '1.6.3'
+pyproject = toml.load("../../pyproject.toml")
+release = pyproject['project']['version']
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -30,11 +32,11 @@ intersphinx_mapping = {
 
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 autoclass_content = "both"  # Add __init__ doc (ie. params) to class summaries
-html_show_sourcelink = False  # Remove 'view source code' from top of page (for html, not python)
+html_show_sourcelink = True  # Remove 'view source code' from top of page (for html, not python)
 autodoc_inherit_docstrings = True  # If no docstring, inherit from base class
 set_type_checking_flag = True  # Enable 'expensive' imports for sphinx_autodoc_typehints
 nbsphinx_allow_errors = True  # Continue through Jupyter errors
-#autodoc_typehints = "description" # Sphinx-native method. Not as good as sphinx_autodoc_typehints
+autodoc_typehints = "description" # Sphinx-native method. Not as good as sphinx_autodoc_typehints
 add_module_names = False # Remove namespaces from class/method signatures
 
 # Add any paths that contain templates here, relative to this directory.
