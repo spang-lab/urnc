@@ -1,3 +1,4 @@
+"""Create student version from main version"""
 import click
 import re
 

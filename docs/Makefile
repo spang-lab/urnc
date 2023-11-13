@@ -1,20 +1,24 @@
-# Minimal makefile for Sphinx documentation
-#
-
-# You can set these variables from the command line, and also
-# from the environment for the first two.
-SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = source
-BUILDDIR      = build
-
-# Put it first so that "make" without argument is like "make help".
+# Put help target first so that "make" without argument is like "make help".
 help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	sphinx-build -M help source build
 
 .PHONY: help Makefile
 
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+# The % and $@ are used in Makefile for pattern matching and automatic variable
+# substitution, respectively. They provide a way to write generic rules for
+# targets. For example, if you have two targets html and latexpdf that you
+# usually build, you could write:
+#
+# html: Makefile
+#     sphinx-apidoc -o ./source ../urnc
+#     @sphinx-build -M html "source" "build"
+# latexpdf: Makefile
+#     sphinx-apidoc -o ./source ../urnc
+#     @sphinx-build -M latexpdf "source" "build"
+#
+# However, this approach requires you to write a new rule for each new target,
+# which can become tedious if you have many targets. The % and $@ approach is
+# more flexible and requires less maintenance.
 %: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	sphinx-apidoc -o ./source ../urnc
+	sphinx-build -b $@ source build

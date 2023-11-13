@@ -1,3 +1,4 @@
+"""Manage the semantic version of your course"""
 import click
 
 import semver
@@ -6,15 +7,12 @@ import urnc.logger as log
 import urnc.util as util
 
 
-def bump(version, action):
+def bump(version: str, action: str) -> None:
     """Bump the version based on the action
 
     :param version: The current version.
-    :type version: str
     :param action: The action to perform (show, patch, minor, major).
-    :type action: str
     :return: The new version after bumping, or None if action is 'show'.
-    :rtype: semver.Version or None
     """
     v = semver.Version.parse(version)
     print(v)
@@ -30,14 +28,11 @@ def bump(version, action):
     raise click.UsageError("Invalid action")
 
 
-def version_self(ctx, action):
-    """
-    Bump the version of the urnc project itself.
+def version_self(ctx: click.core.Context, action: str) -> None:
+    """Bump the version of the urnc project itself.
 
     :param ctx: The context object containing project information.
-    :type ctx: object
     :param action: The action to perform (show, patch, minor, major).
-    :type action: str
     """
     repo = util.get_git_repo(ctx)
     config = util.read_pyproject(ctx)
@@ -60,14 +55,11 @@ def version_self(ctx, action):
         print("Done.")
 
 
-def version_course(ctx, action):
-    """
-    Bump the version of the course.
+def version_course(ctx: click.core.Context, action: str) -> None:
+    """Bump the version of the course.
 
     :param ctx: The context object containing course information.
-    :type ctx: object
     :param action: The action to perform (show, patch, minor, major).
-    :type action: str
     """
     config = util.read_config(ctx)
     v = config["version"]

@@ -1,3 +1,5 @@
+"""Create student version of one or more Jupyter notebooks"""
+
 import click
 import nbformat
 import os

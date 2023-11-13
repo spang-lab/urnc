@@ -1,6 +1,4 @@
-"""
-Module for functions to used by the CI pipeline.
-"""
+"""Functions to be used by CI pipelines"""
 
 import os
 import shutil

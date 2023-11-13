@@ -1,12 +1,23 @@
 URNC
 ====
 
-.. toctree::
-   :maxdepth: 2
+Welcome to the documentation website of URNC, the Uni Regensburg Notebook Converter.
 
-   Home page <self>
+.. toctree::
+   :maxdepth: 1
+
+   Home <self>
    Installation <installation>
    Usage <usage>
+   Modules <modules>
+   Contributing <contributing>
    Testing <testing>
    Documentation <documentation>
-   API reference <_autosummary/urnc>
+   Changelog <changelog>
+
+Indices and tables
+------------------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
