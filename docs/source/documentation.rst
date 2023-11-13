@@ -5,8 +5,8 @@ Documentation for this package is generated automatically upon pushes to main us
 
 .. code-block:: bash
 
-   # Install sphinx and myst-parser (for markdown support)
-   pip install sphinx myst-parser sphinx_rtd_theme
+   # Install sphinx and dependencies
+   pip install sphinx sphinx_rtd_theme myst_parser toml
 
    # Build documentation
    cd docs
