@@ -1,3 +1,4 @@
+"""Logging functionality for URNC"""
 import logging
 import os
 import sys
