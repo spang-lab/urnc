@@ -8,6 +8,8 @@ jobs:
       - uses: actions/setup-python@v3
       - name: Install dependencies
         run: pip install sphinx sphinx_rtd_theme myst_parser toml
+      - name: Install urnc
+        run: pip install .
       - name: Sphinx build
         run: make html
         working-directory: ./docs
