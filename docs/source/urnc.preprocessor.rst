@@ -1,6 +1,11 @@
 urnc.preprocessor package
 =========================
 
+.. automodule:: urnc.preprocessor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -32,14 +37,6 @@ urnc.preprocessor.util module
 -----------------------------
 
 .. automodule:: urnc.preprocessor.util
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: urnc.preprocessor
    :members:
    :undoc-members:
    :show-inheritance:
