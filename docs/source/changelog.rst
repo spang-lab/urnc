@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.6.4 (2023-11-13)
+-------------------
+
+Added package documentation in `docs` folder.
+
 v1.5.0
 ------
 Added the option to provide an `"after"` and `"until"` value for every `git.exclude` config entry. I.e. something like `{pattern: assignments/sheet4.ipynb, after: 2023-12-04}` is now possible.
