@@ -32,17 +32,16 @@ urnc convert assignments
 urnc student
 ```
 
-You can find a more detailed introduction to URNC at page [Usage](https://spang-lab.github.io/urnc/getting_started.html) of URNC's [Documentation Website](https://spang-lab.github.io/urnc/).
+You can find a more detailed introduction to URNC at page [Usage](https://spang-lab.github.io/urnc/usage.html) of URNC's [Documentation Website](https://spang-lab.github.io/urnc/).
 
 ## Documentation
 
 You can find the full documentation for URNC at [spang-lab.github.io/urnc](https://spang-lab.github.io/urnc/). Amongst others, it includes chapters about:
 
 - [Installation](https://spang-lab.github.io/urnc/installation.html)
-- [Usage](https://spang-lab.github.io/urnc/getting_started.html)
-- [Configuration](https://spang-lab.github.io/urnc/configuration.html)
-- [CLI Reference](https://spang-lab.github.io/urnc/documentation.html)
-- [Function Reference](https://spang-lab.github.io/urnc/documentation.html)
+- [Usage](https://spang-lab.github.io/urnc/usage.html)
+- [Modules](https://spang-lab.github.io/urnc/modules.html)
 - [Contributing](https://spang-lab.github.io/urnc/contributing.html)
 - [Testing](https://spang-lab.github.io/urnc/testing.html)
+- [Documentation](https://spang-lab.github.io/urnc/documentation.html)
 - [Changelog](https://spang-lab.github.io/urnc/changelog.html)

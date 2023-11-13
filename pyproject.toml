@@ -11,7 +11,7 @@ include = [
 
 [project]
 name = "urnc"
-version = "1.6.4"
+version = "1.6.5"
 authors = [
     { name = "Michael Huttner", email = "michael@mhuttner.com" },
     { name = "Tobias Schmidt", email = "tobias.schmidt331@gmail.com" },
@@ -39,5 +39,6 @@ dependencies = [
 urnc = "urnc.main:main"
 
 [project.urls]
-Homepage = "https://github.com/spang-lab/urnc"
+Homepage = "https://spang-lab.github.io/urnc"
+Source = "https://github.com/spang-lab/urnc"
 "Bug Tracker" = "https://github.com/spang-lab/urnc/issues"
