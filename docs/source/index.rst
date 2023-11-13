@@ -14,10 +14,5 @@ Welcome to the documentation website of URNC, the Uni Regensburg Notebook Conver
    Testing <testing>
    Documentation <documentation>
    Changelog <changelog>
+   Index <genindex>
 
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

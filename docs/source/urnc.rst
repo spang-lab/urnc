@@ -1,6 +1,11 @@
 urnc package
 ============
 
+.. automodule:: urnc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -80,14 +85,6 @@ urnc.version module
 -------------------
 
 .. automodule:: urnc.version
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: urnc
    :members:
    :undoc-members:
    :show-inheritance:

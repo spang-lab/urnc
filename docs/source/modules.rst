@@ -1,5 +1,5 @@
-urnc
-====
+Modules
+=======
 
 .. toctree::
    :maxdepth: 4

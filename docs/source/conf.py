@@ -20,7 +20,6 @@ extensions = [
     'myst_parser', # markdown support
     'sphinx_rtd_theme', # read-the-docs theme
     'sphinx.ext.autodoc', # docstring support
-    'sphinx.ext.autosummary', # generate api reference automatically
     'sphinx.ext.napoleon' # support for numpy docstrings
 ]
 
