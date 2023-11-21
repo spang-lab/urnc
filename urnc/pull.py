@@ -1,6 +1,7 @@
 import click
 import os
 import git
+import datetime
 
 
 import urnc.util as util
@@ -99,6 +100,27 @@ def reset_deleted_files(repo):
             repo.git.checkout(f"origin/{branch}", "--", filename)
 
 
+def rename_file_with_timestamp(path):
+    timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    (folder, filename) = os.path.split(path)
+    (basename, ext) = os.path.splitext(filename)
+    new_filename = f"{basename}_{timestamp}{ext}"
+    new_path = os.path.join(folder, new_filename)
+    log.warn(
+        f"Renaming {path} to {new_path}, to avoid merge conflict with local untracked files.")
+    os.rename(path, new_path)
+
+
+def rename_local_untracked(repo):
+    added_files = get_upstream_added(repo)
+    for filename in added_files:
+        if (not filename):
+            continue
+        path = os.path.join(repo.working_dir, filename)
+        if (os.path.exists(path)):
+            rename_file_with_timestamp(path)
+
+
 def merge(repo):
     branch = repo.active_branch
     remote_branch = f"origin/{branch}"
@@ -106,7 +128,6 @@ def merge(repo):
         repo.git.merge("-Xours", remote_branch)
     except git.GitCommandError as err:
         if "CONFLICT (modify/delete)" in str(err):
-            lines = str(err).split('\n')
             log.warn(
                 "Found a CONFLICT (modify/delete). Keeping the local file by commiting.")
             repo.git.commit(
@@ -195,6 +216,8 @@ def pull_fn(ctx, course_name, output, branch, depth):
 
     log.log(f"Fetching changes...")
     repo.remote().fetch()
+    log.log(f"Checking for local untracked files")
+    rename_local_untracked(repo)
     log.log(f"Restoring locally deleted files")
     reset_deleted_files(repo)
     log.log(f"unstaging all changes")
