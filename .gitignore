@@ -133,3 +133,7 @@ dmypy.json
 
 # Manually added entries
 .vscode/
+generated/
+_autosummary/
+docs/source/urnc.rst
+docs/source/urnc.preprocessor.rst

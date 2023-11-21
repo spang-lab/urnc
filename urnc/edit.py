@@ -1,6 +1,6 @@
+"""Toggle between main and student version of the course"""
 import re
 import click
-
 
 import urnc.util as util
 import urnc.student as student

@@ -1,3 +1,5 @@
+"""Create student version of one or more Jupyter notebooks"""
+
 import click
 import nbformat
 import os
@@ -13,16 +15,8 @@ import urnc.logger as log
 
 
 @click.command(help="Convert notebooks")
-@click.argument(
-    "input",
-    type=click.Path(exists=True),
-    default="."
-)
-@click.argument(
-    "output",
-    type=str,
-    default="out"
-)
+@click.argument("input", type=click.Path(exists=True), default=".")
+@click.argument("output", type=str, default="out")
 @click.option("-v", "--verbose", is_flag=True)
 @click.option("-f", "--force", is_flag=True)
 @click.option("-n", "--dry-run", is_flag=True)
@@ -33,11 +27,7 @@ def convert(ctx, input, output, verbose, force, dry_run):
 
 
 @click.command(help="Check notebooks for errors")
-@click.argument(
-    "input",
-    type=click.Path(exists=True),
-    default="."
-)
+@click.argument("input", type=click.Path(exists=True), default=".")
 @click.pass_context
 @click.option("-q", "--quiet", is_flag=True)
 def check(ctx, input, quiet):
@@ -55,7 +45,38 @@ def get_abs_path(ctx, path):
     return os.path.abspath(new_path)
 
 
+def get_abs_path(ctx, path):
+    """
+    Get the absolute path.
+
+    :param ctx: The context object containing root directory information.
+    :type ctx: object
+    :param path: The relative or absolute path.
+    :type path: str
+    :return:
+        The absolute path based on the root directory in the context object. If
+        the input path is None, returns None.
+    :rtype: str or None
+    """
+    if (path is None):
+        return None
+    if (os.path.isabs(path)):
+        return path
+    base: str = ctx.obj["ROOT"]
+    new_path = os.path.join(base, path)
+    return os.path.abspath(new_path)
+
+
 def convert_fn(ctx, input, output, force, dry_run):
+    """Convert notebooks.
+
+    Args:
+        input (str, optional): The input path, defaults to current directory.
+        output (str, optional): The output path, defaults to 'out'.
+        verbose (bool, optional): The verbose flag, defaults to False.
+        force (bool, optional): The force flag, defaults to False.
+        dry_run (bool, optional): The dry run flag, defaults to False.
+    """
     input = get_abs_path(ctx, input)
     if (input is None):
         raise Exception("No input")

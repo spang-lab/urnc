@@ -1,3 +1,4 @@
+"""Main entry point for urnc when called from command line"""
 #!/usr/bin/env python3
 import click
 import os

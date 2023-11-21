@@ -1,8 +1,8 @@
+"""Fetch and merge the student repo"""
 import click
 import os
 import git
 import datetime
-
 
 import urnc.util as util
 

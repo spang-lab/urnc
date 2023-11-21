@@ -1,3 +1,4 @@
+"""Manage the semantic version of your course"""
 import click
 
 import semver
@@ -6,7 +7,13 @@ import urnc.logger as log
 import urnc.util as util
 
 
-def bump(version, action):
+def bump(version: str, action: str) -> None:
+    """Bump the version based on the action
+
+    :param version: The current version.
+    :param action: The action to perform (show, patch, minor, major).
+    :return: The new version after bumping, or None if action is 'show'.
+    """
     v = semver.Version.parse(version)
     print(v)
     match action:
@@ -21,7 +28,12 @@ def bump(version, action):
     raise click.UsageError("Invalid action")
 
 
-def version_self(ctx, action):
+def version_self(ctx: click.core.Context, action: str) -> None:
+    """Bump the version of the urnc project itself.
+
+    :param ctx: The context object containing project information.
+    :param action: The action to perform (show, patch, minor, major).
+    """
     repo = util.get_git_repo(ctx)
     config = util.read_pyproject(ctx)
     v = config["project"]["version"]
@@ -43,7 +55,12 @@ def version_self(ctx, action):
         print("Done.")
 
 
-def version_course(ctx, action):
+def version_course(ctx: click.core.Context, action: str) -> None:
+    """Bump the version of the course.
+
+    :param ctx: The context object containing course information.
+    :param action: The action to perform (show, patch, minor, major).
+    """
     config = util.read_config(ctx)
     v = config["version"]
     new_version = bump(v, action)
@@ -56,12 +73,7 @@ def version_course(ctx, action):
 
 @click.command(help="Manage the semantic version of your course")
 @click.option("--self", is_flag=True, help="Echo the version of urnc")
-@click.argument(
-    "action",
-    type=click.Choice(["show", "patch", "minor", "major"]),
-    required=False,
-    default="show",
-)
+@click.argument("action", type=click.Choice(["show", "patch", "minor", "major"]), required=False, default="show")
 @click.pass_context
 def version(ctx, self, action):
     log.setup_logger(False, False)
