@@ -11,9 +11,9 @@ from urnc.pull import pull
 from urnc.ci import ci
 
 
-@click.group(help="urnc manages UR FIDS courses")
+@click.group(help="urnc manages UR FIDS courses ")
 @click.option("-f", "--root", help="The course folder", default=os.getcwd())
-@click.version_option()
+@click.version_option(prog_name="urnc", message="%(version)s")
 @click.pass_context
 def main(ctx, root):
     ctx.ensure_object(dict)
