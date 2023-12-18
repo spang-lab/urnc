@@ -1,17 +1,13 @@
 [build-system]
-requires = [
-    "setuptools>=61.0",
-]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = [
-    "urnc*",
-]
+include = ["urnc*"]
 
 [project]
 name = "urnc"
-version = "1.6.6"
+version = "1.7.0"
 authors = [
     { name = "Michael Huttner", email = "michael@mhuttner.com" },
     { name = "Tobias Schmidt", email = "tobias.schmidt331@gmail.com" },
@@ -32,7 +28,7 @@ dependencies = [
     "semver >= 3.0.1",
     "tomli_w >= 1.0.0",
     "ruamel.yaml >= 0.18.4",
-    "requests >= 2.31.0",
+    "requests >= 2.31.0"
 ]
 
 [project.scripts]

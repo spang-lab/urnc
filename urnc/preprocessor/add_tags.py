@@ -55,7 +55,7 @@ class AddTags(Preprocessor):
                 has_solution = False
                 util.set_tag(cell, Tags.ASSIGNMENT_START)
                 if assignment_id in assignment_ids:
-                    log.error("Duplicate Assignment id '%s'" % assignment_id)
+                    log.warn("Duplicate Assignment id '%s'" % assignment_id)
                 else:
                     assignment_ids.add(assignment_id)
                 log.dbg("Detected Assignment '%s'" % assignment_id)
@@ -67,9 +67,8 @@ class AddTags(Preprocessor):
             if is_solution(cell):
                 preview = util.cell_preview(cell)
                 if assignment_id is None:
-                    log.error(
-                        f"Solution cell is not part of an assignment. \n {preview}")
-                log.dbg(f" Detected Solution cell {preview}")
+                    log.warn(f"Solution cell is not part of an assignment: {preview}")
+                log.dbg(f"Detected Solution cell {preview}")
                 util.set_tag(cell, Tags.SOLUTION)
                 has_solution = True
 

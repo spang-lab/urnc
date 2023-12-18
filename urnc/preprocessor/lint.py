@@ -28,13 +28,15 @@ def check_image(base_folder, src):
             log.error(f"Request to {src} failed.")
         return
     image_path = os.path.normpath(os.path.join(base_folder, src))
-    if (not os.path.exists(image_path)):
+    if os.path.exists(image_path):
+        try:
+            image_size = os.path.getsize(image_path)
+            if image_size > max_size:
+                log.warn(f"The image {image_path} is larger than {max_size_str} KiB. This will increase the loading time of your notebook. Consider compressing the image.")
+        except Exception:
+            log.warn(f"Could not retrieve the size of image {image_path}.")
+    else:
         log.warn(f"The image {image_path} does not exists.")
-    image_size = os.path.getsize(image_path)
-    if image_size > max_size:
-        log.warn(f"The image {image_path} is larger than {max_size_str} KiB.")
-        log.warn(
-            f"Consider using: convert --max-size {max_size_str} --inplace {image_path}")
 
 
 class Linter(Preprocessor):

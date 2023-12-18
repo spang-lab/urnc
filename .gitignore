@@ -137,3 +137,5 @@ generated/
 _autosummary/
 docs/source/urnc.rst
 docs/source/urnc.preprocessor.rst
+tests/courses/data-science*
+tests/courses/developer-skills*
