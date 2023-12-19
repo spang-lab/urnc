@@ -142,4 +142,5 @@ tests/courses/data-science-student
 tests/courses/developer-skills
 tests/courses/developer-skills-student
 tests/courses/minimal-student
-tests/**/.git/
+tests/courses/urnc-example-course
+tests/courses/urnc-example-course-public
