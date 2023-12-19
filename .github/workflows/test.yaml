@@ -1,0 +1,21 @@
+name: Python package
+on:
+  push: {branches: [ main ]}
+  pull_request: {branches: [ main ]}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+        # support for '3.8' and '3.9' will be added with issue `https://github.com/spang-lab/urnc/issues/18`
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Test installation
+      run: python -m pip install .
+    - name: Run test suite
+      run: pytest
