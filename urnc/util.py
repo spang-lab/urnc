@@ -1,12 +1,14 @@
 """Utility functions for urnc"""
 import abc
+import os
+from typing import Optional
+
 import click
+import git
+import tomli_w
 from ruamel import yaml
 from ruamel.yaml import YAML
-import tomli_w
-import git
-import os
-import re
+
 try:
     import tomllib
 except:
@@ -76,21 +78,34 @@ def get_git_root():
     return repo.working_dir
 
 
-def read_config():
+def read_config(course_root: Optional[str] = None) -> dict:
+    """
+    Reads the configuration from a YAML file named 'config.yaml' located at the root of the git repository.
+
+    Args:
+        course_root: The root directory of the course. Defaults to the root of the git repository when called from within a git repository.
+
+    Raises:
+        click.UsageError: If the 'config.yaml' file does not exist in the git root folder.
+        click.FileError: If there is an error reading the file or processing its content.
+
+    Returns:
+        dict: The configuration dictionary.
+    """
     filename = "config.yaml"
-    base_path = get_git_root()
-    path = os.path.join(base_path, filename)
+    if course_root is None:
+        course_root = get_git_root()
+    path = os.path.join(course_root, filename)
     if not os.path.isfile(path):
-        raise click.UsageError(
-            f"urnc expects a config file called '{filename}' in the git root folder '{base_path}' of the course")
+        raise click.UsageError(f"urnc expects a config file called '{filename}' in the course root folder '{course_root}'")
     try:
         with open(path, "r") as f:
             config = yaml.load(f)
         if "git" in config and "student" in config["git"]:
             config["git"]["student"] = config["git"]["student"].format(**os.environ)
-        return config
     except Exception as e:
         raise click.FileError(path, str(e))
+    return config
 
 
 def write_config(data):

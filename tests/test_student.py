@@ -1,9 +1,9 @@
-import os
 import re
 from os.path import exists
 from pathlib import Path
 from subprocess import run
 
+import pytest
 from git import Repo
 
 from urnc.test import python
@@ -14,6 +14,7 @@ def test_student_command_in_minimal_repo():
     pass
 
 
+@pytest.mark.slow
 def test_student_command_in_data_science_repo():
     print("Running `urnc student` in data_science repo. Takes approx. 30 secs.")
 
@@ -57,6 +58,7 @@ def test_student_command_in_data_science_repo():
     assert n_errors == 0
 
 
+@pytest.mark.slow
 def test_student_command_in_developer_skills_repo():
     print("Running `urnc student` in developer_skills repo.")
 

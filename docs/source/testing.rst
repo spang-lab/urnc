@@ -4,7 +4,7 @@ Testing
 Regression tests
 ----------------
 
-We use `pytest <https://docs.pytest.org/en/latest/>`_ for regression testing. To run the full regression test suite, simply call ``pytest --tb=short`` from the root of the repository **after package installation**. The tests are located in folder `tests <https://github.com/spang-lab/urnc/tree/main/tests>`_. To run a specific test, you can use the ``-k`` flag, e.g. ``pytest -k test_version``. For a list of existing tests see `test <https://github.com/spang-lab/urnc/tree/main/tests>`_. To avoid having to install the package repeatedly after each change, we recommend performing an `editable install <https://setuptools.pypa.io/en/latest/userguide/development_mode.html>`_ using ``pip install -e .``. This allows you to modify the source code and run the tests directly without needing to reinstall the package. Note, however, that it is still required to reinstall the package whenever you modify the `pyproject.toml <https://github.com/spang-lab/urnc/tree/main/pyproject.toml>`_ file.
+We use `pytest <https://docs.pytest.org/en/latest/>`_ for regression testing. To run the full regression test suite, call ``pytest --runslow`` from the root of the repository **after package installation**. The tests are located in folder `tests <https://github.com/spang-lab/urnc/tree/main/tests>`_. To skip the slow tests, omit the ``--runslow`` flag. To run a specific test, use the ``-k`` flag, e.g. ``pytest -k test_version``. To avoid having to install the package repeatedly after each change, we recommend performing an `editable install <https://setuptools.pypa.io/en/latest/userguide/development_mode.html>`_ using ``pip install -e .``. This allows you to modify the source code and run the tests for the modified version without needing to reinstall the package. Note, however, that it is still required to reinstall the package whenever you modify the `pyproject.toml <https://github.com/spang-lab/urnc/tree/main/pyproject.toml>`_ file.
 
 For now, you also need to have access to `<https://git.uni-regensburg.de/fids>`_ to run the regression tests, i.e.
 
@@ -19,8 +19,10 @@ In the future, we might replace the real FIDS courses with public dummy courses.
    git clone https://github.com/spang-lab/urnc.git
    cd urnc
    pip install -e .
-   pytest --tb=short -k test_version # run tests/test_version.py only
-   pytest --tb=short # run all tests/test*py files
+   pytest --tb=short # run all fast tests and show short traceback
+   pytest --runslow  # run all tests/test*py files
+   pytest -k test_version # run tests/test_version.py only
+   pytest -s # show stdout of commands during tests (useful for debugging)
 
 Testing urnc on real data
 -------------------------
