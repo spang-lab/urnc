@@ -141,4 +141,5 @@ tests/courses/data-science
 tests/courses/data-science-student
 tests/courses/developer-skills
 tests/courses/developer-skills-student
+tests/courses/minimal-student
 tests/**/.git/
