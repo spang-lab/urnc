@@ -31,7 +31,6 @@ def bump(version: str, action: str) -> None:
 def version_self(action: str) -> None:
     """Bump the version of the urnc project itself.
 
-    :param ctx: The context object containing project information.
     :param action: The action to perform (show, patch, minor, major).
     """
     repo = util.get_git_repo()
