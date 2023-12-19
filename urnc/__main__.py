@@ -1,3 +1,3 @@
-from urnc.main import main
+import urnc.main
 
-main()
+urnc.main.main()

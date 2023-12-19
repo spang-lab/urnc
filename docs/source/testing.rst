@@ -9,16 +9,16 @@ We use `pytest <https://docs.pytest.org/en/latest/>`_ for regression testing. To
 For now, you also need to have access to `<https://git.uni-regensburg.de/fids>`_ to run the regression tests, i.e.
 
 #. you need to be a member of the FIDS organization at the Gitlab Server of the University of Regensburg and
-#. you need to be connected to the university network.
+#. you need to be connected to the university network
 
 In the future, we might replace the real FIDS courses with public dummy courses. In case your interested in this feature, please open a corresponding issue.
 
 .. code-block:: bash
+
    # All commands for copy pasting
    git clone https://github.com/spang-lab/urnc.git
    cd urnc
-   $env:PYTHONPATH = "$(pwd)" # powershell syntax
-   export "PYTHONPATH=$(pwd)" # bash/zsh syntax
+   pip install -e .
    pytest --tb=short -k test_version # run tests/test_version.py only
    pytest --tb=short # run all tests/test*py files
 
