@@ -2,40 +2,35 @@
 
 import os
 import shutil
-import click
-import git
-import urnc.util as util
-import urnc.logger as log
-import dateutil.parser
-
-from urnc.convert import convert_fn
 from datetime import datetime
+
+import dateutil.parser
+import git
+
+import urnc
 
 
 def clone_student_repo(config):
-    url = util.get_config_value(
-        config, "git", "student", required=True)
+    url = urnc.util.get_config_value(config, "git", "student", required=True)
     assert (url is not None)
     repo_name_git = os.path.basename(url)
-    (repo_name, _) = os.path.splitext(repo_name_git)
+    repo_name, _ = os.path.splitext(repo_name_git)
     folder_name = f"{repo_name}-student"
-
     base_path = os.path.dirname(os.getcwd())
     repo_path = os.path.join(base_path, folder_name)
-
     if os.path.exists(repo_path):
         try:
             repo = git.Repo(repo_path)
             repo_url = repo.remote().url
             if (repo_url != url):
-                return log.critical(f"Repo remote mismatch {repo_url}!={url}")
-            log.log(f"Returning existing repo {repo_path}")
+                return urnc.logger.critical(f"Repo remote mismatch {repo_url}!={url}")
+            urnc.logger.log(f"Returning existing repo {repo_path}")
             return repo
         except Exception:
-            return log.critical(f"{repo_path} exists but is not a git repo")
-    log.log(f"Cloning student repo {url} to {repo_path}")
+            return urnc.logger.critical(f"{repo_path} exists but is not a git repo")
+    urnc.logger.log(f"Cloning student repo {url} to {repo_path}")
     repo = git.Repo.clone_from(url, repo_path)
-    util.update_repo_config(repo)
+    urnc.util.update_repo_config(repo)
     return repo
 
 
@@ -72,7 +67,7 @@ def write_gitignore(repo, student_repo, config):
     student_gitignore = os.path.join(student_repo.working_dir, ".gitignore")
     if (os.path.exists(main_gitignore)):
         shutil.copy(main_gitignore, student_gitignore)
-    exclude = util.get_config_value(config, "git", "exclude", default=[])
+    exclude = urnc.util.get_config_value(config, "git", "exclude", default=[])
     now = datetime.now()
     with open(student_gitignore, "a") as gitignore:
         for value in exclude:
@@ -92,52 +87,45 @@ def update_index(repo):
     cached_files_str = repo.git.ls_files("-ci", "--exclude-standard")
     if (cached_files_str != ''):
         cached_files = cached_files_str.split("\n")
-        log.log(f"Removing excluded files {cached_files}")
+        urnc.logger.log(f"Removing excluded files {cached_files}")
         repo.index.remove(cached_files, working_tree=False)
         repo.index.write()
 
 
-@ click.command(short_help="Build student version and push to public repo", help="Run the urnc ci pipeline, this pushes the converted notebooks to the public repo")
-@ click.pass_context
-def ci(ctx):
-    ci_fn(ctx, True)
-
-
-def ci_fn(ctx, commit=True):
-    log.setup_logger(use_file=False)
-    config = util.read_config(ctx)
-    repo = util.get_git_repo(ctx)
+def ci(commit=True):
+    urnc.logger.setup_logger(use_file=False)
+    config = urnc.util.read_config()
+    repo = urnc.util.get_git_repo()
     if (repo.is_dirty() and commit):
         raise Exception(f"Repo is not clean. Commit your changes.")
 
+    # Clone and clear student repo. Then copy over files from course repo.
     student_repo = clone_student_repo(config)
     clear_repo(student_repo)
     copy_files(repo, student_repo)
 
-    log.log("Converting files")
-    convert_fn(ctx,
-               input=repo.working_dir,
-               output=student_repo.working_dir,
-               force=True,
-               dry_run=False
-               )
-    log.log("Notebooks converted")
+    # Convert notebooks
+    urnc.logger.log("Converting files")
+    urnc.convert.convert(input=repo.working_dir,
+                         output=student_repo.working_dir,
+                         force=True,
+                         dry_run=False)
+    urnc.logger.log("Notebooks converted")
 
-    log.log("Updating .gitignore from config")
+    # Update .gitignore and drop cached files
+    urnc.logger.log("Updating .gitignore from config")
     write_gitignore(repo, student_repo, config)
-
-    # Remove exclude files from active index
-    log.log("Dropping cached files...")
+    urnc.logger.log("Dropping cached files...")
     update_index(student_repo)
 
-    if not commit:
-        log.log("Skipping git commit and push")
-        log.log("Done.")
-        return
-
-    log.log("Adding files and commiting")
-    student_repo.git.add(all=True)
-    student_repo.index.commit("urnc convert")
-    log.log("Pushing student repo")
-    student_repo.git.push()
-    log.log("Done.")
+    # Commit and push
+    if commit:
+        urnc.logger.log("Adding files and commiting")
+        student_repo.git.add(all=True)
+        student_repo.index.commit("urnc convert")
+        urnc.logger.log("Pushing student repo")
+        student_repo.git.push()
+        urnc.logger.log("Done.")
+    else:
+        urnc.logger.log("Skipping git commit and push")
+        urnc.logger.log("Done.")

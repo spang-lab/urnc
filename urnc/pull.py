@@ -1,5 +1,4 @@
 """Fetch and merge the student repo"""
-import click
 import os
 import git
 import datetime
@@ -172,27 +171,7 @@ def pull_admin(course_name, output, branch, depth):
             log.error(f"{folder_name} is not a git repo")
 
 
-@click.command(help="Pull the course repo")
-@click.argument(
-    "course_name",
-    type=str,
-    default=None,
-    required=False
-)
-@click.option("-o", "--output", type=str, help="The name of the output folder", default=None)
-@click.option("-b", "--branch", help="The branch to pull", default="main")
-@click.option("-d", "--depth", help="The depth for git fetch", default=1)
-@click.pass_context
-def pull(ctx, course_name, output, branch, depth):
-    log.setup_logger()
-    try:
-        pull_fn(ctx, course_name, output, branch, depth)
-    except Exception as err:
-        log.error("pull failed with unexpected error.")
-        log.error(err)
-
-
-def pull_fn(ctx, course_name, output, branch, depth):
+def pull(course_name, output, branch, depth):
     pull_admin(course_name, output, branch, depth)
 
     (git_url, folder_name) = get_course_info(course_name, output)
@@ -202,8 +181,7 @@ def pull_fn(ctx, course_name, output, branch, depth):
     if (not os.path.exists(folder_name)):
         log.log(f"{folder_name} does not exists. Cloning repo {git_url}")
         try:
-            git.Repo.clone_from(git_url, folder_name,
-                                branch=branch, depth=depth)
+            git.Repo.clone_from(git_url, folder_name, branch=branch, depth=depth)
             log.log("Cloned successfully.")
         except Exception as err:
             log.error("Failed to clone repo. Error:")
@@ -220,14 +198,13 @@ def pull_fn(ctx, course_name, output, branch, depth):
     rename_local_untracked(repo)
     log.log(f"Restoring locally deleted files")
     reset_deleted_files(repo)
-    log.log(f"unstaging all changes")
+    log.log(f"Unstaging all changes")
     repo.git.reset("--mixed")
 
     util.update_repo_config(repo)
     if repo.is_dirty():
         log.log("Repo is dirty. Commiting....")
-        repo.git.commit("-am", "Automatic commit by urnc",
-                        "--allow-empty")
+        repo.git.commit("-am", "Automatic commit by urnc", "--allow-empty")
         log.log("Created new commit")
 
     log.log("Merging from remote...")

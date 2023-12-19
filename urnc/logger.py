@@ -12,6 +12,7 @@ RESET = "\x1b[0m"
 
 class CustomFormatter(logging.Formatter):
     def format(self, record):
+        # log_fmt = "%(asctime)s %(levelname)s: %(message)s" # introduce with separate issue
         log_fmt = "%(levelname)s - %(message)s"
         formats = {
             logging.DEBUG: f"{GREY}{log_fmt}{RESET}",
@@ -21,7 +22,7 @@ class CustomFormatter(logging.Formatter):
             logging.CRITICAL: f"{BOLD_RED}{log_fmt}{RESET}",
         }
         log_fmt = formats.get(record.levelno)
-        formatter = logging.Formatter(log_fmt)
+        formatter = logging.Formatter(log_fmt, datefmt="%Y-%m-%d %H:%M:%S")
         return formatter.format(record)
 
 
@@ -43,19 +44,28 @@ def get_handler():
     return None
 
 
-def setup_logger(use_file=True, verbose=False):
+def setup_logger(use_file: bool = True, verbose: bool = False) -> None:
+    """
+    Sets up a logger with a custom handler and formatter.
+
+    Parameters:
+        use_file: If True, a file handler is added to the logger.
+        verbose: If True, the logger's level is set to DEBUG. Otherwise, to INFO.
+
+    Returns:
+        None
+    """
     logger = logging.getLogger(__name__)
     if verbose:
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
-    if (use_file):
+    if use_file:
         handler = get_handler()
-        if (handler is not None):
+        if handler is not None:
             logger.addHandler(handler)
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.setFormatter(CustomFormatter())
-
     logger.addHandler(stdout_handler)
 
 

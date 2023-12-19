@@ -1,86 +1,30 @@
 """Create student version of one or more Jupyter notebooks"""
 
-import click
-import nbformat
 import os
-from traitlets.config import Config
-from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
-from nbconvert.exporters.notebook import NotebookExporter
 
-from urnc.preprocessor.add_tags import AddTags
-from urnc.preprocessor.remove_solutions import RemoveSolutions
-from urnc.preprocessor.lint import Linter
+import nbformat
+from nbconvert.exporters.notebook import NotebookExporter
+from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
+from traitlets.config import Config
 
 import urnc.logger as log
+from urnc.preprocessor.add_tags import AddTags
+from urnc.preprocessor.lint import Linter
+from urnc.preprocessor.remove_solutions import RemoveSolutions
 
 
-@click.command(help="Convert notebooks")
-@click.argument("input", type=click.Path(exists=True), default=".")
-@click.argument("output", type=str, default="out")
-@click.option("-v", "--verbose", is_flag=True)
-@click.option("-f", "--force", is_flag=True)
-@click.option("-n", "--dry-run", is_flag=True)
-@click.pass_context
-def convert(ctx, input, output, verbose, force, dry_run):
-    log.setup_logger(False, verbose)
-    convert_fn(ctx, input, output, force, dry_run)
-
-
-@click.command(help="Check notebooks for errors")
-@click.argument("input", type=click.Path(exists=True), default=".")
-@click.pass_context
-@click.option("-q", "--quiet", is_flag=True)
-def check(ctx, input, quiet):
-    log.setup_logger(False, not quiet)
-    convert_fn(ctx, input, None, False, True)
-
-
-def get_abs_path(ctx, path):
-    if (path is None):
-        return None
-    if (os.path.isabs(path)):
-        return path
-    base: str = ctx.obj["ROOT"]
-    new_path = os.path.join(base, path)
-    return os.path.abspath(new_path)
-
-
-def get_abs_path(ctx, path):
-    """
-    Get the absolute path.
-
-    :param ctx: The context object containing root directory information.
-    :type ctx: object
-    :param path: The relative or absolute path.
-    :type path: str
-    :return:
-        The absolute path based on the root directory in the context object. If
-        the input path is None, returns None.
-    :rtype: str or None
-    """
-    if (path is None):
-        return None
-    if (os.path.isabs(path)):
-        return path
-    base: str = ctx.obj["ROOT"]
-    new_path = os.path.join(base, path)
-    return os.path.abspath(new_path)
-
-
-def convert_fn(ctx, input, output, force, dry_run):
+def convert(input: str = ".",
+            output: str = "out/",
+            force: bool = False,
+            dry_run: bool = False) -> None:
     """Convert notebooks.
 
     Args:
-        input (str, optional): The input path, defaults to current directory.
-        output (str, optional): The output path, defaults to 'out'.
-        verbose (bool, optional): The verbose flag, defaults to False.
-        force (bool, optional): The force flag, defaults to False.
-        dry_run (bool, optional): The dry run flag, defaults to False.
+        input: The input path. Can be either the path to a single ipynb file or the path to a directory containing ipynb files.
+        output: The output path. Must be a directory. Every input notebook will be copied to the output directory and converted there. If the output directory does not exist, it will be created.
+        force: If true, existing output files will be overwritten.
+        dry_run: If true, input files will be converted but not written to disk. This is useful for checking if the conversion works without changing any files.
     """
-    input = get_abs_path(ctx, input)
-    if (input is None):
-        raise Exception("No input")
-    output = get_abs_path(ctx, output)
     log.log(f"Converting notebooks in {input} to {output}")
     paths = []
     folder = input
