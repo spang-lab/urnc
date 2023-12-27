@@ -24,6 +24,10 @@ def convert(input: str = ".",
         output: The output path. Must be a directory. Every input notebook will be copied to the output directory and converted there. If the output directory does not exist, it will be created.
         force: If true, existing output files will be overwritten.
         dry_run: If true, input files will be converted but not written to disk. This is useful for checking if the conversion works without changing any files.
+
+    Examples:
+        convert_notebooks("/path/to/notebooks", "/path/to/output", force=True)
+        convert_notebooks("/path/to/single_notebook.ipynb", "/path/to/output", dry_run=True)
     """
     log.log(f"Converting notebooks in {input} to {output}")
     paths = []

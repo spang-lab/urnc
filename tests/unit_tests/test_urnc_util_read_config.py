@@ -11,15 +11,15 @@ def test_read_config_for_valid_config():
             "solution": "solutions/{notebook.name}"
         }
     }
-    config_observed = urnc.util.read_config(course_root = "tests/courses/minimal")
+    config_observed = urnc.util.read_config(course_root = "tests/inputs/minimal-course")
     assert config_observed == config_expected
 
 def test_read_config_for_broken_config():
-    # Idea: open `tests/courses/broken/config.yaml` for writing so it cannot
+    # Idea: open `tests/inputs/broken-course/config.yaml` for writing so it cannot
     # be opened for reading by `read_config()`
-    with open("tests/courses/broken/config.yaml", "w") as f:
+    with open("tests/inputs/broken-course/config.yaml", "w") as f:
         with pytest.raises(click.FileError):
-            urnc.util.read_config(course_root = "tests/courses/broken")
+            urnc.util.read_config(course_root = "tests/inputs/broken-course")
 
 def test_read_config_for_missing_config():
     with pytest.raises(click.UsageError):

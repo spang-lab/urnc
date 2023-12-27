@@ -1,6 +1,7 @@
 """Utility functions for urnc"""
 import abc
 import os
+import re
 from typing import Optional
 
 import click

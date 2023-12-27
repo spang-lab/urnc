@@ -6,12 +6,7 @@ from subprocess import run
 import pytest
 from git import Repo
 
-from urnc.test import python
-
-
-def test_student_command_in_minimal_repo():
-    # TODO: Implement test as soon as it is possible to run `urnc student` without having property git.student defined in config.yaml.
-    pass
+from conftest import python
 
 
 @pytest.mark.slow
