@@ -14,6 +14,7 @@ def test_urnc_ci_clone_student_repo__urlMissing_repoMissing():
         input_sources=["tests/inputs/minimal-course"]
     )
     with urnc.util.chdir(f"{outputs_dir}/minimal-course"):
+        git.Repo.init() # urnc courses must be git repos (for now)
         config = urnc.util.read_config()
         repo = urnc.ci.clone_student_repo(config)
     assert normpath(repo.working_dir) == normpath(f"{outputs_dir}/minimal-course-student")
@@ -30,6 +31,7 @@ def test_urnc_ci_clone_student_repo__urlMissing_repoExists():
     with urnc.util.chdir(outputs_dir):
         git.Repo.init("minimal-course-student")
     with urnc.util.chdir(f"{outputs_dir}/minimal-course"):
+        git.Repo.init() # urnc courses must be git repos (for now)
         config = urnc.util.read_config()
         repo = urnc.ci.clone_student_repo(config)
     assert normpath(repo.working_dir) == normpath(f"{outputs_dir}/minimal-course-student")
