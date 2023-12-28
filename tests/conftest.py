@@ -27,7 +27,6 @@ def pytest_addoption(parser):
     Add the --runslow option to the pytest command-line parser.
     The option is stored as a boolean value, with a default of False.
     """
-
     parser.addoption("--runslow", action="store_true", default=False, help="run slow tests")
 
 
@@ -124,7 +123,7 @@ def clone_urnc_example_course(path: Optional[str] = "urnc-example-course",
         repo = init_urnc_example_course()
         repo = init_urnc_example_course(path="urncExampleCourse", hash="9c277cdc7c7985f433f2c7f6fabcba1eefd2f844")
     """
-    url="https://github.com/spang-lab/urnc-example-course"
+    url = "https://github.com/spang-lab/urnc-example-course"
     repo = clone(path, url, hash)
     # Remove ACCESS_TOKEN mentioned in config.yaml, as it most likely is not set
     # in the environment of the person running the tests. Since we only need to
@@ -136,8 +135,41 @@ def clone_urnc_example_course(path: Optional[str] = "urnc-example-course",
 
 
 def clone_urnc_example_course_public(path: Optional[str] = "urnc-example-course-public",
-                                     hash: Optional[str] = "38e5c1169266dd50f13912c0546779ddb2f71c3d") -> Optional[git.Repo]:
+                                     hash: Optional[str] = "38e5c1169266dd50f13912c0546779ddb2f71c3d"
+                                     ) -> Optional[git.Repo]:
     url = "https://github.com/spang-lab/urnc-example-course-public.git"
+    repo = clone(path, url, hash)
+    return repo
+
+
+def clone_data_science(path: Optional[str] = "data-science",
+                       hash: Optional[str] = "15fc5e5234767b943c4771aef3455bc7af910fb7"  # 2023-12-21
+                       ) -> Optional[git.Repo]:
+    url = "git@git.uni-regensburg.de:fids/data-science.git"
+    repo = clone(path, url, hash)
+    return repo
+
+
+def clone_data_science_student(path: Optional[str] = "data-science-student",
+                               hash: Optional[str] = "dd00a7320446f461d2a02a801f54f46f304029ea"  # 2023-12-21
+                               ) -> Optional[git.Repo]:
+    url = "git@git.uni-regensburg.de:fids-public/data-science.git"
+    repo = clone(path, url, hash)
+    return repo
+
+
+def clone_developer_skills(path: Optional[str] = "developer-skills",
+                           hash: Optional[str] = "6a211eda1fb96d56a50ac0ae2f73e331f6a166ae"  # 2023-12-21
+                           ) -> Optional[git.Repo]:
+    url = "git@git.uni-regensburg.de:fids/developer-skills.git"
+    repo = clone(path, url, hash)
+    return repo
+
+
+def clone_developer_skills_student(path: Optional[str] = "developer-skills-student",
+                                   hash: Optional[str] = "dc36b54c46763300394db39f3bb976921ac80ba8"  # 2023-12-21
+                                   ) -> Optional[git.Repo]:
+    url = "git@git.uni-regensburg.de:fids-public/developer-skills.git"
     repo = clone(path, url, hash)
     return repo
 

@@ -70,7 +70,7 @@ def convert(input: str = ".",
                 log.log(f"Skipping {file} because {out_file} already exists")
                 continue
             else:
-                log.warn(f"Overwriting {out_file}")
+                log.log(f"Overwriting {out_file}")
         else:
             log.log(f"Converting '{file}' into '{out_file}'")
         notebook = nbformat.read(file, as_version=4)

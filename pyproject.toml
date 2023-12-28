@@ -28,7 +28,10 @@ dependencies = [
     "semver >= 3.0.1",
     "tomli_w >= 1.0.0",
     "ruamel.yaml >= 0.18.4",
-    "requests >= 2.31.0"
+    "requests >= 2.31.0",
+    "freezegun" # 1)
+    # 1) only required for testing, but setuptools doesn't support development
+    # dependencies (maybe we should switch to poetry in the future)
 ]
 
 [project.scripts]

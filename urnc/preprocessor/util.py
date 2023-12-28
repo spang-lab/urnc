@@ -3,11 +3,11 @@ import re
 
 
 class Keywords(str, enum.Enum):
-    ASSIGNMENT_DEPRECATED = r"^#+ Exercise `?([\w-]+)`?"
-    ASSIGNMENT_START = r"^#+ Assignment `?([\w-]+)`?"
-    SOLUTION = "^#+ Solution"
-    SKELETON = "^#+ Skeleton"
-    SOLUTION_END = r"^#+\s*$"
+    ASSIGNMENT_DEPRECATED = r"^#+\s+Exercise `?([\w-]+)`?"
+    ASSIGNMENT_START = r"^#+\s+Assignment `?([\w-]+)`?"
+    SOLUTION = r"^###+\s+Solution"
+    SKELETON = r"^###+\s+Skeleton"
+    SOLUTION_END = r"^###+\s*$"
     HEADER = r'^#'
     IMAGE_TAG = r'<img[^>]*src="([^"]*)"'
     MD_IMAGE_TAG = r"!\[([^\]]*)\]\(([^)]*)\)"

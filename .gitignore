@@ -146,3 +146,4 @@ tests/courses/urnc-example-course
 tests/courses/urnc-example-course-public
 tests/courses_bak
 tests/outputs
+.virtual_documents/
