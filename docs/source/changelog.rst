@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v1.9.2 (2023-12-19)
+-------------------
+
+- Major improvements to unit and regression tests.
+- Reverted solution pattern from `^#+ Solution`, `^#+ Skeleton`, `^#+\s*$` to `^###+\s+Solution`, `^###+\s+Skeleton`, `^###+\s*$` to maintain backwards compatibility with existing notebooks (some notebooks in data-science use `# Solution` for already published solutions).
+
 v1.9.0 (2023-12-19)
 -------------------
 
