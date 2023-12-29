@@ -1,9 +1,8 @@
 import re
 from subprocess import run
-from urnc.test import python
+from conftest import python
 
 def test_version_command():
-    print("Running `urnc --version`")
     cmd = f"{python} -m urnc --version".split()
     proc = run(cmd, capture_output=True, encoding="utf-8")
     errors = []

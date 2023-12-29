@@ -144,3 +144,6 @@ tests/courses/developer-skills-student
 tests/courses/minimal-student
 tests/courses/urnc-example-course
 tests/courses/urnc-example-course-public
+tests/courses_bak
+tests/outputs
+.virtual_documents/
