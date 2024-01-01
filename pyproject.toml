@@ -7,7 +7,7 @@ include = ["urnc*"]
 
 [project]
 name = "urnc"
-version = "1.9.2"
+version = "1.9.3"
 authors = [
     { name = "Michael Huttner", email = "michael@mhuttner.com" },
     { name = "Tobias Schmidt", email = "tobias.schmidt331@gmail.com" },
@@ -28,10 +28,7 @@ dependencies = [
     "semver >= 3.0.1",
     "tomli_w >= 1.0.0",
     "ruamel.yaml >= 0.18.4",
-    "requests >= 2.31.0",
-    "freezegun" # 1)
-    # 1) only required for testing, but setuptools doesn't support development
-    # dependencies (maybe we should switch to poetry in the future)
+    "requests >= 2.31.0"
 ]
 
 [project.scripts]

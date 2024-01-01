@@ -9,7 +9,7 @@ import pytest
 import git
 
 
-@freezegun.freeze_time("2023-12-21 12:59:17 +0000")
+@freezegun.freeze_time("2024-01-01 08:00:00 +0000")
 @pytest.mark.slow
 def test_urnc_student__data_science():
     outputs_dir = conftest.init_outputs_dir(
@@ -36,7 +36,7 @@ def test_urnc_student__data_science():
     ])
 
 
-@freezegun.freeze_time("2023-12-18 11:12:00 +0100")
+@freezegun.freeze_time("2024-01-01 08:00:00 +0100")
 @pytest.mark.slow
 def test_urnc_student__developer_skills():
     outputs_dir = conftest.init_outputs_dir(

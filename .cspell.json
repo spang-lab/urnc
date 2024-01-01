@@ -1,0 +1,30 @@
+{
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "addinivalue",
+        "addoption",
+        "clearoutput",
+        "dateutil",
+        "freezegun",
+        "modifyitems",
+        "nbconvert",
+        "nbformat",
+        "opath",
+        "preprocessors",
+        "pyproject",
+        "pytest",
+        "rmforce",
+        "runslow",
+        "topdown",
+        "traceback",
+        "traitlets",
+        "unittests",
+        "urncbot",
+        "xcopy"
+    ],
+    "ignoreWords": [],
+    "import": []
+}

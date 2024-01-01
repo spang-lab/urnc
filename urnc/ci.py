@@ -105,7 +105,7 @@ def write_gitignore(repo, student_repo, config):
         shutil.copy(main_gitignore, student_gitignore)
     exclude = get_config_value(config, "git", "exclude", default=[])
     now = datetime.now()
-    with open(student_gitignore, "a") as gitignore:
+    with open(student_gitignore, "a", newline = "\n") as gitignore:
         for value in exclude:
             if isinstance(value, str):
                 gitignore.write(f"{value}\n")

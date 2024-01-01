@@ -15,8 +15,7 @@ def test_read_config_for_valid_config():
     assert config_observed == config_expected
 
 def test_read_config_for_broken_config():
-    # Idea: open `tests/inputs/broken-course/config.yaml` for writing so it cannot
-    # be opened for reading by `read_config()`
+    # Idea: open `tests/inputs/broken-course/config.yaml` for writing so it cannot be opened for reading by `read_config()`
     with open("tests/inputs/broken-course/config.yaml", "w") as f:
         with pytest.raises(click.FileError):
             urnc.util.read_config(course_root = "tests/inputs/broken-course")
