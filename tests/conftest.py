@@ -11,6 +11,7 @@
 import platform
 import shutil
 import re
+import os
 from os import chmod, getcwd, listdir, makedirs, remove
 from os.path import dirname, join, exists, isdir, normpath
 from stat import S_IWRITE
@@ -19,7 +20,9 @@ from typing import List, Optional
 import git
 import pytest
 
-# Configure pytest
+python = "python" if platform.system() == "Windows" else "python3"
+ur_git_url = os.environ.get("UR_GIT_URL", default = "git@git.uni-regensburg.de:") # 1)
+# 1) In our github actions we set UR_GIT_URL to "https://{token_name}:{token_value}/git.uni-regensburg.de/". Locally, where we usually don't have a token defined, we use SSH by default.
 
 
 def pytest_addoption(parser):
@@ -52,11 +55,6 @@ def pytest_collection_modifyitems(config, items):
         for item in items:
             if "slow" in item.keywords:
                 item.add_marker(skip_slow)
-
-# Helper functions and constants for tests
-
-
-python = "python" if platform.system() == "Windows" else "python3"
 
 
 def init_outputs_dir(test_module: str,
@@ -130,7 +128,7 @@ def clone_urnc_example_course(path: Optional[str] = "urnc-example-course",
     # clone/pull/checkout during the tests, but not push, this is fine.
     yaml = open(f"{path}/config.yaml").read()
     yaml = yaml.replace("urncbot:{URNC_ACCESS_TOKEN_STUDENT_REPO}@", "")
-    open(f"{path}/config.yaml", "w").write(yaml)
+    open(f"{path}/config.yaml", "w", newline = "\n").write(yaml)
     return (repo)
 
 
@@ -143,33 +141,33 @@ def clone_urnc_example_course_public(path: Optional[str] = "urnc-example-course-
 
 
 def clone_data_science(path: Optional[str] = "data-science",
-                       hash: Optional[str] = "15fc5e5234767b943c4771aef3455bc7af910fb7"  # 2023-12-21
+                       hash: Optional[str] = "496cdba07c68d9e781fa837c82dd70576186dec4"  # 2024-01-01 (approx. 8 am)
                        ) -> Optional[git.Repo]:
-    url = "git@git.uni-regensburg.de:fids/data-science.git"
+    url = f"{ur_git_url}fids/data-science.git"
     repo = clone(path, url, hash)
     return repo
 
 
 def clone_data_science_student(path: Optional[str] = "data-science-student",
-                               hash: Optional[str] = "dd00a7320446f461d2a02a801f54f46f304029ea"  # 2023-12-21
+                               hash: Optional[str] = "9d66b436a882c40a0cf763fa4c363bfc633303b2"  # 2024-01-01 (approx. 8 am)
                                ) -> Optional[git.Repo]:
-    url = "git@git.uni-regensburg.de:fids-public/data-science.git"
+    url = f"{ur_git_url}fids-public/data-science.git"
     repo = clone(path, url, hash)
     return repo
 
 
 def clone_developer_skills(path: Optional[str] = "developer-skills",
-                           hash: Optional[str] = "6a211eda1fb96d56a50ac0ae2f73e331f6a166ae"  # 2023-12-21
+                           hash: Optional[str] = "93a33b4b19747df66d818b70643ce5279956b195"  # 2024-01-01 (approx. 8 am)
                            ) -> Optional[git.Repo]:
-    url = "git@git.uni-regensburg.de:fids/developer-skills.git"
+    url = f"{ur_git_url}fids/developer-skills.git"
     repo = clone(path, url, hash)
     return repo
 
 
 def clone_developer_skills_student(path: Optional[str] = "developer-skills-student",
-                                   hash: Optional[str] = "dc36b54c46763300394db39f3bb976921ac80ba8"  # 2023-12-21
+                                   hash: Optional[str] = "1c53c8cd032d69d9faabe8b9284587caa487b7e7"  # 2024-01-01 (approx. 8 am)
                                    ) -> Optional[git.Repo]:
-    url = "git@git.uni-regensburg.de:fids-public/developer-skills.git"
+    url = f"{ur_git_url}fids-public/developer-skills.git"
     repo = clone(path, url, hash)
     return repo
 
@@ -195,6 +193,12 @@ def clone(path: str, url: str, hash: str) -> git.Repo:
     """
     if isdir(path) and not isdir(f"{path}/.git"):
         shutil.rmtree(path)
+    if "https://git.uni-regensburg.de" in url and "UR_GIT_TOKEN" in os.environ:
+        token = os.environ["UR_GIT_TOKEN"]
+        url = url.replace(
+            f"https://git.uni-regensburg.de",
+            f"https://{token}@git.uni-regensburg.de"
+        )
     if not isdir(path):
         git.Repo.clone_from(url=url, to_path=path)
     repo = git.Repo(path)
@@ -245,8 +249,8 @@ def rmforce(path):
 
 def get_urnc_root():
     """
-    This function navigates up the directory tree from the current working directory until it finds a 'pyproject.toml' 
-    file that belongs to the 'urnc' package, or it reaches the root directory. If it doesn't find a suitable 
+    This function navigates up the directory tree from the current working directory until it finds a 'pyproject.toml'
+    file that belongs to the 'urnc' package, or it reaches the root directory. If it doesn't find a suitable
     'pyproject.toml' file, it raises an Exception.
 
     Returns:

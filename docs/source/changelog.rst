@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v1.9.3 (2024-01-01)
+-------------------
+
+- Added code coverage calculation to test action
+- Test action now also runs regression tests in addition to unit tests.
+
 v1.9.2 (2023-12-19)
 -------------------
 

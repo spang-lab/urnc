@@ -1,4 +1,4 @@
-name: Publish urnc
+name: publish
 on: {push: {tags: ["v*"]}}
 jobs:
   pypi:

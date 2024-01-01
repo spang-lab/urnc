@@ -115,7 +115,7 @@ def write_config(data):
 
     path = os.path.join(base_path, filename)
     try:
-        with open(path, "w") as f:
+        with open(path, "w", newline = "\n") as f:
             yaml.dump(data, f)
             return path
     except Exception as e:

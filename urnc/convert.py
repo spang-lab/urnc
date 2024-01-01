@@ -80,5 +80,5 @@ def convert(input: str = ".",
 
         if (out_file is None or dry_run):
             continue
-        with open(out_file, "w") as f:
+        with open(out_file, "w", newline='\n') as f:
             f.write(output_text)
