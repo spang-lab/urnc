@@ -1,3 +1,8 @@
+[![PyTest](https://github.com/spang-lab/urnc/actions/workflows/test.yaml/badge.svg)](https://github.com/spang-lab/urnc/actions)
+[![Codecov](https://codecov.io/gh/spang-lab/urnc/branch/main/graph/badge.svg)](https://app.codecov.io/gh/spang-lab/urnc?branch=main)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/urnc.svg?label=PyPI%20downloads)](
+https://pypi.org/project/urnc/)
+
 # URNC
 
 Uni Regensburg Notebook Converter
