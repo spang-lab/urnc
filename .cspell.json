@@ -4,6 +4,7 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
+        "absdirpath",
         "addinivalue",
         "addoption",
         "clearoutput",
@@ -18,7 +19,9 @@
         "preprocessors",
         "pyproject",
         "pytest",
+        "reldirpath",
         "rmforce",
+        "rootpath",
         "runslow",
         "topdown",
         "traceback",
