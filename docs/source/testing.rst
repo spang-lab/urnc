@@ -19,7 +19,7 @@ In the future, we might replace the real FIDS courses with public dummy courses.
    git clone https://github.com/spang-lab/urnc.git # clone urnc
    cd urnc
    pip install -e . # install urnc in editable mode
-   pip install pytest pytest-cov freezegun # install testing dependencies
+   pip install pytest pytest-cov freezegun yaml # install testing dependencies
    pytest --tb=short # run all fast tests and show short traceback
    pytest --runslow  # run all tests/test*py files
    pytest -k test_version # run tests/test_version.py only
