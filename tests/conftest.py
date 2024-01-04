@@ -12,6 +12,8 @@ import platform
 import shutil
 import re
 import os
+import re
+import yaml
 from os import chmod, getcwd, listdir, makedirs, remove
 from os.path import dirname, join, exists, isdir, normpath
 from stat import S_IWRITE
@@ -282,3 +284,10 @@ def remove_readonly_attribute(func, path, _):
     "Helper function for rmtree. Clears the readonly bit and reattempts removal."
     chmod(path, S_IWRITE)
     func(path)
+
+
+def disable_solution_generation(config_yaml_path: str = "config.yaml"):
+    # Open the file
+    yaml = open(config_yaml_path, 'r').read()
+    yaml = re.sub(r'solution: .*', 'solution: null', yaml)
+    open(config_yaml_path, 'w', newline = "\n").write(yaml)

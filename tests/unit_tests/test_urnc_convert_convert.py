@@ -60,7 +60,7 @@ def test_convert__inDir_solF_forceF_dryF_outExistF_solExistF():
 def test_convert__inNB_solT_forceF_dryF_outExistF_solExistF():
     test_case = 4
     outputs_dir = conftest.init_outputs_dir(test_module, test_function, test_case)
-    expects_dir = "tests/expected/minimal-course-converted-with-solutions/lectures"
+    expects_dir = "tests/expected/minimal-course-converted/lectures"
     input = "tests/inputs/minimal-course/lectures/urnc.ipynb"
     outputs = [f"{outputs_dir}/urnc.ipynb", f"{outputs_dir}/urnc-solution.ipynb"]
     expects = [f"{expects_dir}/urnc.ipynb", f"{expects_dir}/urnc-solution.ipynb"]
@@ -88,7 +88,7 @@ def test_convert__inNB_solT_forceF_dryF_outExistT_solExistT():
 def test_convert__inNB_solT_forceT_dryF_outExistT_solExistT():
     test_case = 6
     outputs_dir = conftest.init_outputs_dir(test_module, test_function, test_case)
-    expects_dir = "tests/expected/minimal-course-converted-with-solutions/lectures"
+    expects_dir = "tests/expected/minimal-course-converted/lectures"
     input = "tests/inputs/minimal-course/lectures/urnc.ipynb"
     outputs = [f"{outputs_dir}/urnc.ipynb", f"{outputs_dir}/urnc-solution.ipynb"]
     expects = [f"{expects_dir}/urnc.ipynb", f"{expects_dir}/urnc-solution.ipynb"]
@@ -103,7 +103,7 @@ def test_convert__inDir_solT_forceF_dryF_outExistF_solExistF():
     test_case = 7
     input = "tests/inputs/minimal-course"
     outputs_dir = conftest.init_outputs_dir(test_module, test_function, test_case)
-    expects_dir = "tests/expected/minimal-course-converted-with-solutions"
+    expects_dir = "tests/expected/minimal-course-converted"
     urnc.convert.convert(input=input, output=outputs_dir, solution=outputs_dir, ask=False)
     cmp = filecmp.dircmp(outputs_dir, expects_dir)
     assert all((cmp.diff_files == [],
