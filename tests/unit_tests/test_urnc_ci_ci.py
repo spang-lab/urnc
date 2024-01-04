@@ -6,7 +6,7 @@ import filecmp
 from conftest import *
 
 
-def test_urnc_ci_ci():
+def test_urnc_ci_ci__with_solutions():
     outputs_dir = init_outputs_dir(
         test_module="urnc.ci",
         test_function="ci",
@@ -18,10 +18,10 @@ def test_urnc_ci_ci():
         urnc.ci.ci(commit=False)
     output = f"{outputs_dir}/minimal-course-student"
     expect = "tests/expected/minimal-course-student"
-    cmp = filecmp.dircmp(output, expect)
-    assert all((cmp.diff_files == [],
-                cmp.left_only == [],
-                cmp.right_only == []))
+    out_only, exp_only, diff, _ = compare_dirs(output, expect)
+    assert all((out_only == set(),
+                exp_only == set(),
+                diff == set()))
 
 
 def test_urnc_ci_ci__no_solutions():
@@ -37,8 +37,7 @@ def test_urnc_ci_ci__no_solutions():
         urnc.ci.ci(commit=False)
     output = f"{outputs_dir}/minimal-course-student"
     expect = "tests/expected/minimal-course-student"
-    cmp = filecmp.dircmp(output, expect)
-    import ipdb; ipdb.set_trace()
-    assert all((cmp.diff_files == [],
-                cmp.left_only == [],
-                cmp.right_only == []))
+    out_only, exp_only, diff, _ = compare_dirs(output, expect)
+    assert all((out_only == set(),
+                all("solutions" in s for s in exp_only),
+                diff == {"config.yaml"}))

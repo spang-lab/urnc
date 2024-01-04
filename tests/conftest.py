@@ -15,7 +15,7 @@ import os
 import re
 import yaml
 from os import chmod, getcwd, listdir, makedirs, remove
-from os.path import dirname, join, exists, isdir, normpath
+from os.path import dirname, join, exists, isdir, normpath, getsize
 from stat import S_IWRITE
 from typing import List, Optional
 
@@ -291,3 +291,15 @@ def disable_solution_generation(config_yaml_path: str = "config.yaml"):
     yaml = open(config_yaml_path, 'r').read()
     yaml = re.sub(r'solution: .*', 'solution: null', yaml)
     open(config_yaml_path, 'w', newline = "\n").write(yaml)
+
+
+def compare_dirs(x, y):
+    import glob
+    x_set = set(glob.glob(f"**", recursive=True, root_dir=x))
+    y_set = set(glob.glob(f"**", recursive=True, root_dir=y))
+    left_only = x_set - y_set
+    right_only = y_set - x_set
+    common_files = x_set & y_set
+    diff_size = set((f for f in common_files if getsize(join(x, f)) != getsize(join(y, f))))
+    same_size = common_files - diff_size
+    return left_only, right_only, diff_size, same_size

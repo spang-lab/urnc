@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v1.10.0 (2024-01-04)
+-------------------
+
+- Added solution parameter to `urnc.convert.convert`
+- Added config option `ci.solution` to `config.yaml`. When specified, `urnc student` now creates student notebooks incl. solution in addition to the usual student notebooks. For details see `https://spang-lab.github.io/urnc/urnc.html#urnc.ci.ci`_.
+
 v1.9.3 (2024-01-01)
 -------------------
 

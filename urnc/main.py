@@ -30,17 +30,18 @@ def edit(ctx):
         urnc.edit.edit()
 
 
-@click.command(help="Convert notebooks")
+@click.command(name = "convert", short_help="Convert notebooks", help="Convert notebooks to student version. For details see https://spang-lab.github.io/urnc/urnc.html#urnc.convert.convert.")
 @click.argument("input", type=click.Path(exists=True), default=".")
 @click.argument("output", type=str, default="out")
+@click.option("-s", "--solution", type=str, default=None)
 @click.option("-v", "--verbose", is_flag=True)
 @click.option("-f", "--force", is_flag=True)
 @click.option("-n", "--dry-run", is_flag=True)
 @click.pass_context
-def convert(ctx, input, output, verbose, force, dry_run):
+def convert(ctx, input, output, solution, verbose, force, dry_run):
     with urnc.util.chdir(ctx.obj["root"]):
         urnc.logger.setup_logger(False, verbose)
-        urnc.convert.convert(input, output, force, dry_run)
+        urnc.convert.convert(input, output, solution, force, dry_run)
 
 
 @click.command(help="Check notebooks for errors")
