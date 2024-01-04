@@ -17,6 +17,59 @@ from urnc.preprocessor.lint import Linter
 from urnc.preprocessor.remove_solutions import RemoveSolutions
 
 
+student_preprocessors = [Linter, AddTags, RemoveSolutions, ClearOutputPreprocessor]
+student_config = traitlets.config.Config()
+student_config.NotebookExporter.preprocessors = student_preprocessors
+student_converter = NotebookExporter(student_config)
+
+solution_preprocessors = [AddTags, ClearOutputPreprocessor]
+solution_config = traitlets.config.Config()
+solution_config.NotebookExporter.preprocessors = solution_preprocessors
+solution_converter = NotebookExporter(solution_config)
+
+
+class NbPath(type(Path())):
+    """Path to a jupyter notebook inside a arbitrarily nested directory structure.
+
+    Attributes:
+        abspath: Absolute path to the notebook.
+        absdirpath: Absolute path to the directory containing the notebook.
+        rootpath: Absolute path to the root directory of the notebook.
+        relpath: Relative path to the notebook from the root directory.
+        reldirpath: Relative path to the directory containing the notebook from the root directory.
+        name: Name of the notebook including extension.
+        basename: Name of the notebook without extension.
+        ext: Extension of the notebook without the dot.
+
+    Example:
+        abspath = "C:/Users/max/mycourse/lectures/week2/lecture1.ipynb"
+        rootpath = "C:/Users/max/mycourse"
+        nb = NbPath(abspath, rootpath)
+        nb.abspath    == "C:/Users/max/mycourse/lectures/week2/lecture1.ipynb"
+        nb.absdirpath == "C:/Users/max/mycourse/lectures/week2"
+        nb.rootpath   == "C:/Users/max/mycourse"
+        nb.relpath    == "lectures/week2/lecture1.ipynb"
+        nb.reldirpath == "lectures/week2"
+        nb.name       == "lecture1.ipynb"
+        nb.basename   == "lecture1"
+        nb.ext        == "ipynb"
+    """
+    # Developer Notes:
+    #   By subclassing `type(Path())` instead of `Path` we subclass `WindowsPath` on Windows and `PosixPath` on Linux/MacOS. This is necessary because instances of the base class `Path` require some properties (e.g. `_flavour`) which are only set by the constructors of the respective subclasses. For details see <https://stackoverflow.com/questions/29850801/subclass-pathlib-path-fails>.
+    def __new__(cls, abspath: str, rootpath: str):
+        self = super().__new__(cls, abspath)
+        self.rootpath = Path(rootpath)
+        assert self.exists(), f"Notebook {self} does not exist"
+        assert self.rootpath.exists(), f"Directory {self.rootpath} does not exist"
+        self.abspath = self.absolute()
+        self.absdirpath = self.parent.absolute()
+        self.relpath = self.relative_to(self.rootpath)
+        self.reldirpath = self.absdirpath.relative_to(self.rootpath)
+        self.basename = self.stem
+        self.ext = self.suffix[1:] if self.suffix.startswith(".") else self.suffix
+        return self
+
+
 def convert(input: str = ".",
             output: str = "out/",
             solution: Optional[str] = None,
@@ -108,75 +161,16 @@ def convert(input: str = ".",
     """
     log.log(f"Converting notebooks in {input}")
     nbs = get_nb_paths(input)
-    if output and (not "{" in output) and (not output.lower().endswith(".ipynb")):
+    outstr = str(output).lower() if output else "{}"
+    solstr = str(solution).lower() if solution else "{}"
+    if not ("{" in outstr or outstr.endswith(".ipynb")):
         output = f"{output}/{{nb.relpath}}"
-    if solution and (not "{" in solution) and (not solution.lower().endswith(".ipynb")):
+    if not ("{" in solstr or solstr.endswith(".ipynb")):
         solution = f"{solution}/{{nb.reldirpath}}/{{nb.basename}}-solution.{{nb.ext}}"
     for nb in nbs:
-        convert_nb(input=nb, force=force, dry_run=dry_run, ask=ask,
-                   output=output.format(nb=nb) if output else None,
-                   solution=solution.format(nb=nb) if solution else None)
-
-
-class NbPath(type(Path())):
-    # By subclassing `type(Path())` instead of `Path` we subclass `WindowsPath` on Windows and `PosixPath` on Linux/MacOS. This is necessary because instances of the base class `Path` require some properties (e.g. `_flavour`) which are only set by the constructors of the respective subclasses. For details see <https://stackoverflow.com/questions/29850801/subclass-pathlib-path-fails>.
-
-    def __new__(cls, abspath: str, rootpath: str):
-        """Path to a jupyter notebook inside a arbitrarily nested directory structure.
-
-        Attributes:
-            abspath: Absolute path to the notebook.
-            absdirpath: Absolute path to the directory containing the notebook.
-            rootpath: Absolute path to the root directory of the notebook.
-            relpath: Relative path to the notebook from the root directory.
-            reldirpath: Relative path to the directory containing the notebook from the root directory.
-            name: Name of the notebook including extension.
-            basename: Name of the notebook without extension.
-            ext: Extension of the notebook without the dot.
-
-        Example:
-            abspath = "C:/Users/max/mycourse/lectures/week2/lecture1.ipynb"
-            rootpath = "C:/Users/max/mycourse"
-            nb = NbPath(abspath, rootpath)
-            nb.abspath    == "C:/Users/max/mycourse/lectures/week2/lecture1.ipynb"
-            nb.absdirpath == "C:/Users/max/mycourse/lectures/week2"
-            nb.rootpath   == "C:/Users/max/mycourse"
-            nb.relpath    == "lectures/week2/lecture1.ipynb"
-            nb.reldirpath == "lectures/week2"
-            nb.name       == "lecture1.ipynb"
-            nb.basename   == "lecture1"
-            nb.ext        == "ipynb"
-        """
-        self = super().__new__(cls, abspath)
-        self.rootpath = Path(rootpath)
-        assert self.exists(), f"Notebook {self} does not exist"
-        assert self.rootpath.exists(), f"Directory {self.rootpath} does not exist"
-        self.abspath = self.absolute()
-        self.absdirpath = self.parent.absolute()
-        self.relpath = self.relative_to(self.rootpath)
-        self.reldirpath = self.absdirpath.relative_to(self.rootpath)
-        self.basename = self.stem
-        self.ext = self.suffix[1:] if self.suffix.startswith(".") else self.suffix
-        return self
-
-
-def get_nb_paths(input: str) -> List[NbPath]:
-    """Creates `NbPath` objects from all notebook files in input and returns them as list."""
-    input = Path(os.path.abspath(input))
-    nbs = []
-    if input.is_file():
-        nb = NbPath(abspath=input, rootpath=input.parent)
-        nbs.append(nb)
-    elif input.is_dir():
-        for root, dirs, files in os.walk(input, topdown=True):
-            dirs[:] = [d for d in dirs if not d[0] == "."]
-            files[:] = [f for f in files if f.lower().endswith(".ipynb")]
-            for file in files:
-                nb = NbPath(abspath=os.path.join(root, file), rootpath=input)
-                nbs.append(nb)
-    else:
-        log.warn(f"Input path {input} does not exist")
-    return nbs
+        onb = Path(str(output).format(nb=nb)) if output else None
+        snb = Path(str(solution).format(nb=nb)) if solution else None
+        convert_nb(input=nb, output=onb, solution=snb, force=force, dry_run=dry_run, ask=ask)
 
 
 def convert_nb(input: Union[str, Path],
@@ -220,21 +214,34 @@ def convert_nb(input: Union[str, Path],
         in_text = nbformat.read(in_path, as_version=4)
         resources = {"path": in_path}
     if out_path:
-        out_config = traitlets.config.Config()
-        out_config.NotebookExporter.preprocessors = [Linter, AddTags, RemoveSolutions, ClearOutputPreprocessor]
-        out_converter = NotebookExporter(out_config)
         log.log(f"Converting {in_path} to student version without solutions")
-        out_text = out_converter.from_notebook_node(in_text, resources)[0]
+        out_text = student_converter.from_notebook_node(in_text, resources)[0]
         if not dry_run:
             write(text=out_text, path=out_path, force=force, ask=ask)
     if sol_path:
-        sol_config = traitlets.config.Config()
-        sol_config.NotebookExporter.preprocessors = [AddTags, ClearOutputPreprocessor]
-        sol_converter = NotebookExporter(sol_config)
-        log.log(f"Converting {in_path} to student with solutions")
-        sol_text = sol_converter.from_notebook_node(in_text, resources)[0]
+        log.log(f"Converting {in_path} to student version with solutions")
+        sol_text = solution_converter.from_notebook_node(in_text, resources)[0]
         if not dry_run:
             write(text=sol_text, path=sol_path, force=force, ask=ask)
+
+
+def get_nb_paths(input: str) -> List[NbPath]:
+    """Creates `NbPath` objects from all notebook files in input and returns them as list."""
+    input = Path(os.path.abspath(input))
+    nbs = []
+    if input.is_file():
+        nb = NbPath(abspath=input, rootpath=input.parent)
+        nbs.append(nb)
+    elif input.is_dir():
+        for root, dirs, files in os.walk(input, topdown=True):
+            dirs[:] = [d for d in dirs if not d[0] == "."]
+            files[:] = [f for f in files if f.lower().endswith(".ipynb")]
+            for file in files:
+                nb = NbPath(abspath=os.path.join(root, file), rootpath=input)
+                nbs.append(nb)
+    else:
+        log.warn(f"Input path {input} does not exist")
+    return nbs
 
 
 def write(text: str, path: str, force: bool = False, ask=True) -> None:

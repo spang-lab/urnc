@@ -33,7 +33,7 @@ def version_self(action: str) -> None:
 
     :param action: The action to perform (show, patch, minor, major).
     """
-    repo = util.get_git_repo()
+    repo = util.get_urnc_repo()
     config = util.read_pyproject()
     v = config["project"]["version"]
     new_version = bump(v, action)
@@ -70,7 +70,7 @@ def version_course(action: str) -> None:
 
 def tag():
     """Tag the current commit with the current version of the course."""
-    repo = util.get_git_repo()
+    repo = util.get_course_repo()
     config = util.read_config()
     v = config["version"]
     tag = f"v{v}"

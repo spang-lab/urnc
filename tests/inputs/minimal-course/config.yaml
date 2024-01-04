@@ -1,12 +1,7 @@
 name: Minimal Course
 version: 1.0.0
 description: Minimal Course for testing URNC's functionality
-convert:
-  solution: "solutions/{notebook.name}"
+ci:
+  solution: "{nb.reldirpath}/solutions/{nb.name}"
   # Path where solutions should be copied to, when converting a notebook. If not
-  # specified, no solution will be created. You can use {notebook.name},
-  # {notebook.stem} and {notebook.suffix} as placeholders. Example: assuming the
-  # notebook is stored at "C:/users/me/mycourse/mylecture.ipynb", then
-  # - {notebook.name} == mylecture.ipynb
-  # - {notebook.stem} == mylecture
-  # - {notebook.suffix} == .ipynb
+  # specified, no solution will be created. Support placeholders TODO. For details see TODO.

@@ -56,8 +56,6 @@ def test_convert__inDir_solF_forceF_dryF_outExistF_solExistF():
     cmp = filecmp.dircmp(outputs_dir, expected)
     assert all((cmp.diff_files == [], cmp.left_only == [], cmp.right_only == []))
 
-# Solution True
-
 
 def test_convert__inNB_solT_forceF_dryF_outExistF_solExistF():
     test_case = 4

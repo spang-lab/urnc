@@ -4,7 +4,7 @@ import urnc
 
 def edit():
     """Deprecated. Do not use anymore. Will be removed in 2.0.0."""
-    repo = urnc.util.get_git_repo()
+    repo = urnc.util.get_course_repo()
     main_branch = "main"
     if not urnc.util.branch_exists(repo, main_branch):
         repo.git.remote("set-branches","--add", "origin", "main")

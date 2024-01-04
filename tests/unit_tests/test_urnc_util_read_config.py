@@ -7,8 +7,8 @@ def test_read_config_for_valid_config():
         "name": "Minimal Course",
         "version": "1.0.0",
         "description": "Minimal Course for testing URNC's functionality",
-        "convert": {
-            "solution": "solutions/{notebook.name}"
+        "ci": {
+            "solution": "{nb.reldirpath}/solutions/{nb.name}"
         }
     }
     config_observed = urnc.util.read_config(course_root = "tests/inputs/minimal-course")

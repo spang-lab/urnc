@@ -7,12 +7,12 @@ import urnc.logger as log
 
 
 def is_assignment_start(cell):
+    if util.has_tag(cell, Tags.NORMAL):
+        return None
     opts = re.IGNORECASE | re.MULTILINE
     if match := re.search(Keywords.ASSIGNMENT_DEPRECATED, cell.source, opts):
-        log.warn("'Exercise' as Keyword is deprecated. Use 'Assignment' instead")
         id = util.to_snake_case(match.group(1))
         return id
-
     if match := re.search(Keywords.ASSIGNMENT_START, cell.source, opts):
         id = util.to_snake_case(match.group(1))
         return id
@@ -20,6 +20,8 @@ def is_assignment_start(cell):
 
 
 def is_solution(cell):
+    if util.has_tag(cell, Tags.NORMAL):
+        return False
     if util.has_tag(cell, Tags.SOLUTION):
         return True
     opts = re.IGNORECASE | re.MULTILINE
@@ -27,6 +29,8 @@ def is_solution(cell):
 
 
 def is_assignment_end(cell, assignment_id):
+    if util.has_tag(cell, Tags.NORMAL):
+        return False
     if assignment_id is None:
         return False
     if cell.cell_type != "markdown":

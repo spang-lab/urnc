@@ -249,9 +249,7 @@ def rmforce(path):
 
 def get_urnc_root():
     """
-    This function navigates up the directory tree from the current working directory until it finds a 'pyproject.toml'
-    file that belongs to the 'urnc' package, or it reaches the root directory. If it doesn't find a suitable
-    'pyproject.toml' file, it raises an Exception.
+    This function navigates up the directory tree from the current working directory until it finds a 'pyproject.toml' file that belongs to the 'urnc' package, or it reaches the root directory. If it doesn't find a suitable    'pyproject.toml' file, it raises an Exception.
 
     Returns:
         str: The path of the directory containing the 'pyproject.toml' file of the 'urnc' package.
