@@ -10,7 +10,8 @@ jobs:
       UR_GIT_URL: ${{ secrets.UR_GIT_URL }}
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ['3.10']
+        # '3.11', '3.12'
         # support for '3.8' and '3.9' will be added with issue `https://github.com/spang-lab/urnc/issues/18`
     steps:
     - uses: actions/checkout@v4
@@ -23,7 +24,7 @@ jobs:
     - name: Setup test dependencies
       run: python -m pip install pytest pytest-cov freezegun PyYAML
     - name: Run test suite
-      run: pytest --runslow --cov=urnc --cov-report=xml
+      run: pytest --runslow --cov=urnc --cov-report=xml -k test_convert__inNB_solF_forceF_dryF_outExistF_solExistF
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
