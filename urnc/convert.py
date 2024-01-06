@@ -64,6 +64,7 @@ class NbPath(object):
         self.relpath = path.relative_to(rootpath)
         self.absdirpath = path.parent.absolute()
         self.reldirpath = self.absdirpath.relative_to(self.rootpath)
+        self.name = path.name
         self.basename = path.stem
         self.ext = path.suffix[1:] if path.suffix.startswith(".") else path.suffix
 
