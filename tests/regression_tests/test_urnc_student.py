@@ -1,6 +1,5 @@
 import filecmp
-import re
-import os
+import sys
 import subprocess
 
 import freezegun
@@ -19,7 +18,7 @@ def test_urnc_student__data_science():
         inputs=["data-science", "data-science-student-expected"],
         input_sources=[conftest.clone_data_science, conftest.clone_data_science_student]
     )
-    cmd = f"{conftest.python} -m urnc student".split()
+    cmd = f"{sys.executable} -m urnc student".split()
     cwd = f"{outputs_dir}/data-science"
     proc = subprocess.run(args=cmd, cwd=cwd)
 
@@ -46,7 +45,7 @@ def test_urnc_student__developer_skills():
         inputs=["developer-skills", "developer-skills-student-expected"],
         input_sources=[conftest.clone_developer_skills, conftest.clone_developer_skills_student]
     )
-    cmd = f"{conftest.python} -m urnc student".split()
+    cmd = f"{sys.executable} -m urnc student".split()
     cwd = f"{outputs_dir}/developer-skills"
     proc = subprocess.run(args=cmd, cwd=cwd)
 

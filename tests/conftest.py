@@ -22,7 +22,7 @@ from typing import List, Optional
 import git
 import pytest
 
-python = "python" if platform.system() == "Windows" else "python3"
+
 ur_git_url = os.environ.get("UR_GIT_URL", default = "git@git.uni-regensburg.de:") # 1)
 # 1) In our github actions we set UR_GIT_URL to "https://{token_name}:{token_value}/git.uni-regensburg.de/". Locally, where we usually don't have a token defined, we use SSH by default.
 

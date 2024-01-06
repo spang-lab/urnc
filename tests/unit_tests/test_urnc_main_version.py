@@ -1,9 +1,9 @@
 import re
 from subprocess import run
-from conftest import python
+import sys
 
 def test_version_command():
-    cmd = f"{python} -m urnc --version".split()
+    cmd = f"{sys.executable} -m urnc --version".split()
     proc = run(cmd, capture_output=True, encoding="utf-8")
     errors = []
     semver = r'^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$' # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string

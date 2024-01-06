@@ -28,46 +28,44 @@ solution_config.NotebookExporter.preprocessors = solution_preprocessors
 solution_converter = NotebookExporter(solution_config)
 
 
-class NbPath(type(Path())):
-    """Path to a jupyter notebook inside a arbitrarily nested directory structure.
+class NbPath(object):
+    def __init__(self, path: str, rootpath: str = None):
+        """Path to a jupyter notebook inside a arbitrarily nested directory structure.
 
-    Attributes:
-        abspath: Absolute path to the notebook.
-        absdirpath: Absolute path to the directory containing the notebook.
-        rootpath: Absolute path to the root directory of the notebook.
-        relpath: Relative path to the notebook from the root directory.
-        reldirpath: Relative path to the directory containing the notebook from the root directory.
-        name: Name of the notebook including extension.
-        basename: Name of the notebook without extension.
-        ext: Extension of the notebook without the dot.
+        Attributes:
+            path (Path): Path object initialized from the provided path.
+            abspath (str): Absolute path to the notebook.
+            absdirpath (str): Absolute path to the directory containing the notebook.
+            rootpath (str): Absolute path to the root directory of the notebook.
+            relpath (str): Relative path to the notebook from the root directory.
+            reldirpath (str): Relative path to the directory containing the notebook from the root directory.
+            name (str): Name of the notebook including extension.
+            basename (str): Name of the notebook without extension.
+            ext (str): Extension of the notebook without the dot.
 
-    Example:
-        abspath = "C:/Users/max/mycourse/lectures/week2/lecture1.ipynb"
-        rootpath = "C:/Users/max/mycourse"
-        nb = NbPath(abspath, rootpath)
-        nb.abspath    == "C:/Users/max/mycourse/lectures/week2/lecture1.ipynb"
-        nb.absdirpath == "C:/Users/max/mycourse/lectures/week2"
-        nb.rootpath   == "C:/Users/max/mycourse"
-        nb.relpath    == "lectures/week2/lecture1.ipynb"
-        nb.reldirpath == "lectures/week2"
-        nb.name       == "lecture1.ipynb"
-        nb.basename   == "lecture1"
-        nb.ext        == "ipynb"
-    """
-    # Developer Notes:
-    #   By subclassing `type(Path())` instead of `Path` we subclass `WindowsPath` on Windows and `PosixPath` on Linux/MacOS. This is necessary because instances of the base class `Path` require some properties (e.g. `_flavour`) which are only set by the constructors of the respective subclasses. For details see <https://stackoverflow.com/questions/29850801/subclass-pathlib-path-fails>.
-    def __new__(cls, abspath: str, rootpath: str):
-        self = super().__new__(cls, abspath)
-        self.rootpath = Path(rootpath)
-        assert self.exists(), f"Notebook {self} does not exist"
-        assert self.rootpath.exists(), f"Directory {self.rootpath} does not exist"
-        self.abspath = self.absolute()
-        self.absdirpath = self.parent.absolute()
-        self.relpath = self.relative_to(self.rootpath)
+        Example:
+            path = "C:/Users/max/mycourse/lectures/week2/lecture1.ipynb"
+            rootpath = "C:/Users/max/mycourse"
+            nb = NbPath(path, rootpath)
+            nb.abspath    == "C:/Users/max/mycourse/lectures/week2/lecture1.ipynb"
+            nb.absdirpath == "C:/Users/max/mycourse/lectures/week2"
+            nb.rootpath   == "C:/Users/max/mycourse"
+            nb.relpath    == "lectures/week2/lecture1.ipynb"
+            nb.reldirpath == "lectures/week2"
+            nb.name       == "lecture1.ipynb"
+            nb.basename   == "lecture1"
+            nb.ext        == "ipynb"
+        """
+        self.path = path = Path(path)
+        self.rootpath = rootpath = Path(rootpath)
+        assert path.exists(), f"Notebook {path} does not exist"
+        assert rootpath.exists(), f"Directory {rootpath} does not exist"
+        self.abspath = path.absolute()
+        self.relpath = path.relative_to(rootpath)
+        self.absdirpath = path.parent.absolute()
         self.reldirpath = self.absdirpath.relative_to(self.rootpath)
-        self.basename = self.stem
-        self.ext = self.suffix[1:] if self.suffix.startswith(".") else self.suffix
-        return self
+        self.basename = path.stem
+        self.ext = path.suffix[1:] if path.suffix.startswith(".") else path.suffix
 
 
 def convert(input: str = ".",
@@ -168,9 +166,10 @@ def convert(input: str = ".",
     if not ("{" in solstr or solstr.endswith(".ipynb")):
         solution = f"{solution}/{{nb.reldirpath}}/{{nb.basename}}-solution.{{nb.ext}}"
     for nb in nbs:
+        inb = nb.abspath
         onb = Path(str(output).format(nb=nb)) if output else None
         snb = Path(str(solution).format(nb=nb)) if solution else None
-        convert_nb(input=nb, output=onb, solution=snb, force=force, dry_run=dry_run, ask=ask)
+        convert_nb(input=inb, output=onb, solution=snb, force=force, dry_run=dry_run, ask=ask)
 
 
 def convert_nb(input: Union[str, Path],
@@ -230,14 +229,14 @@ def get_nb_paths(input: str) -> List[NbPath]:
     input = Path(os.path.abspath(input))
     nbs = []
     if input.is_file():
-        nb = NbPath(abspath=input, rootpath=input.parent)
+        nb = NbPath(path=input, rootpath=input.parent)
         nbs.append(nb)
     elif input.is_dir():
         for root, dirs, files in os.walk(input, topdown=True):
             dirs[:] = [d for d in dirs if not d[0] == "."]
             files[:] = [f for f in files if f.lower().endswith(".ipynb")]
             for file in files:
-                nb = NbPath(abspath=os.path.join(root, file), rootpath=input)
+                nb = NbPath(path=os.path.join(root, file), rootpath=input)
                 nbs.append(nb)
     else:
         log.warn(f"Input path {input} does not exist")
