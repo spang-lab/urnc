@@ -89,7 +89,7 @@ def get_urnc_root():
     while path != path.parent:
         pyproject_toml = path.joinpath('pyproject.toml')
         if pyproject_toml.exists():
-            pyproject = pyproject_toml.read()
+            pyproject = open(pyproject_toml).read()
             if re.search(r'name\s*=\s*"?urnc"?', pyproject):
                 return path
             raise Exception(f"Path '{path}' does not belong to the 'urnc' package")
