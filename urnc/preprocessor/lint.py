@@ -25,7 +25,7 @@ def check_image(base_folder, src):
     if src.startswith("http"):
         log.warn(f"Remote image detected. {src}")
         if not url_is_valid(src):
-            log.error(f"Request to {src} failed.")
+            log.warn(f"Request to {src} failed.")
         return
     image_path = os.path.normpath(os.path.join(base_folder, src))
     if os.path.exists(image_path):

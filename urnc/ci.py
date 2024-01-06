@@ -5,14 +5,14 @@ import shutil
 from datetime import datetime
 from os.path import basename, dirname, exists, isdir, isfile, join, splitext
 from pathlib import Path
+from typing import Optional, Dict
 
 import dateutil.parser
 import git
 
 import urnc
 from urnc.logger import critical, log, setup_logger, warn
-from urnc.util import (get_config_value, get_git_repo, read_config,
-                       update_repo_config)
+from urnc.util import get_config_value, update_repo_config
 
 
 def clone_student_repo(config: dict) -> git.Repo:
@@ -33,8 +33,7 @@ def clone_student_repo(config: dict) -> git.Repo:
     """
 
     # Get info about main repo
-    main_repo = get_git_repo()
-    main_path = Path(main_repo.working_dir)
+    main_path = urnc.util.get_course_root()
     main_name = basename(main_path)
     stud_url = get_config_value(config, "git", "student")
 
@@ -83,9 +82,7 @@ def clear_repo(repo):
             shutil.rmtree(entry_path)
 
 
-def copy_files(repo, student_repo):
-    path = repo.working_dir
-    target_path = student_repo.working_dir
+def copy_files(path, target_path):
     entries = os.listdir(path)
     for entry in entries:
         if (entry.startswith(".")):
@@ -98,25 +95,31 @@ def copy_files(repo, student_repo):
             shutil.copytree(entry_path, copy_path)
 
 
-def write_gitignore(repo, student_repo, config):
-    main_gitignore = join(repo.working_dir, ".gitignore")
-    student_gitignore = join(student_repo.working_dir, ".gitignore")
-    if (exists(main_gitignore)):
+def write_gitignore(main_gitignore: Optional[str], student_gitignore: str, config: Dict) -> None:
+    """
+    Writes a .gitignore file in the student repository.
+
+    This function copies the .gitignore file from the main repository (if it exists) and appends additional patterns to exclude based on the configuration.
+
+    Parameters:
+        main_repo (Optional[str]): The path to the main repository. If None, no .gitignore file is copied.
+        student_repo (str): The path to the student repository.
+        config (Dict): The configuration dictionary. Can contain a 'git' key with a 'exclude' key, which should be a list of patterns to exclude. Each pattern can be a string or a dictionary with a 'pattern' key and optional 'after' and 'until' keys specifying a date range, e.g. `config = {'git': {'exclude': ['*.pyc', {'pattern': '*.tmp', 'after': '2022-01-01', 'until': '2022-12-31'}]}}`
+    """
+    if main_gitignore and exists(main_gitignore):
         shutil.copy(main_gitignore, student_gitignore)
     exclude = get_config_value(config, "git", "exclude", default=[])
     now = datetime.now()
-    with open(student_gitignore, "a", newline = "\n") as gitignore:
+    with open(student_gitignore, "a", newline="\n") as gitignore:
         for value in exclude:
             if isinstance(value, str):
                 gitignore.write(f"{value}\n")
-            else:
-                if "after" in value:
-                    if now < dateutil.parser.parse(value["after"]):
-                        continue
-                if "until" in value:
-                    if now > dateutil.parser.parse(value["until"]):
-                        continue
-                gitignore.write(f"{value['pattern']}\n")
+                continue
+            if "after" in value and now < dateutil.parser.parse(value["after"]):
+                continue
+            if "until" in value and now > dateutil.parser.parse(value["until"]):
+                continue
+            gitignore.write(f"{value['pattern']}\n")
 
 
 def update_index(repo):
@@ -129,28 +132,65 @@ def update_index(repo):
 
 
 def ci(commit=True):
-    setup_logger(use_file=False)
-    config = read_config()
-    repo = get_git_repo()
-    if (repo.is_dirty() and commit):
-        raise Exception(f"Repo is not clean. Commit your changes.")
+    """
+    Perform a continuous integration run on a student repository.
 
-    # Clone and clear student repo. Then copy over files from course repo.
-    student_repo = clone_student_repo(config)
+    This function
+
+    1. Clones the student repository
+    2. Clears it
+    3. Copies over all files from the course repository
+    4. Converts the notebooks
+    5. Updates the .gitignore file according to the `git.exclude` setting from the `config.yaml`
+    6. Commits and pushes the changes if `commit` is True
+
+    Parameters:
+        commit (bool): commit and push updates?
+
+    Raises:
+        Exception: If the repository is dirty and commit is True, an exception is raised.
+
+    Examples:
+        >>> ci(commit=True)   # This will commit and push the changes
+        >>> ci(commit=False)  # This will not commit or push the changes
+    """
+    setup_logger(use_file=False)
+    course_root = urnc.util.get_course_root()
+    course_config = urnc.util.read_config()
+
+    # Make sure main repo is clean if we want to commit and push to student remote
+    if commit:
+        course_repo = urnc.util.get_course_repo()
+        if course_repo.is_dirty():
+            raise Exception(f"Repo is not clean. Commit your changes first.")
+
+    # Clone and clear student repo. Then copy over files from main repo
+    student_repo = clone_student_repo(course_config)
+    student_root = Path(student_repo.working_dir)
     clear_repo(student_repo)
-    copy_files(repo, student_repo)
+    copy_files(course_root, student_root)
 
     # Convert notebooks
-    log("Converting files")
-    urnc.convert.convert(input=repo.working_dir,
-                         output=student_repo.working_dir,
-                         force=True,
-                         dry_run=False)
+    solution_relpath = get_config_value(course_config, "ci", "solution", default=None)
+    solution_pattern = student_root.joinpath(solution_relpath) if solution_relpath else None
+    with urnc.util.chdir(student_root):
+        # Paths printed as info messages by urnc.convert.convert are relative to the current working directory, so we change the working directory to the student repo root in order to get the shorter paths in the log messages.
+        urnc.convert.convert(
+            input=student_root,
+            output=student_root,
+            solution=solution_pattern,
+            force=True,
+            dry_run=False
+        )
     log("Notebooks converted")
 
     # Update .gitignore and drop cached files
     log("Updating .gitignore from config")
-    write_gitignore(repo, student_repo, config)
+    write_gitignore(
+        main_gitignore=course_root.joinpath(".gitignore"),
+        student_gitignore=student_root.joinpath(".gitignore"),
+        config=course_config
+    )
     log("Dropping cached files...")
     update_index(student_repo)
 

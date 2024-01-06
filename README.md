@@ -1,6 +1,6 @@
-[![PyTest](https://github.com/spang-lab/urnc/actions/workflows/test.yaml/badge.svg)](https://github.com/spang-lab/urnc/actions)
-[![Codecov](https://codecov.io/gh/spang-lab/urnc/branch/main/graph/badge.svg)](https://app.codecov.io/gh/spang-lab/urnc?branch=main)
-[![PyPI Downloads](https://img.shields.io/pypi/dm/urnc.svg?label=PyPI%20downloads)](
+[![Test Badge](https://github.com/spang-lab/urnc/actions/workflows/test.yaml/badge.svg)](https://github.com/spang-lab/urnc/actions)
+[![Coverage Badge](https://img.shields.io/codecov/c/github/spang-lab/urnc?label=Code%20Coverage)](https://app.codecov.io/gh/spang-lab/urnc?branch=main)
+[![Download Badge](https://img.shields.io/pypi/dm/urnc.svg?label=PyPI%20Downloads)](
 https://pypi.org/project/urnc/)
 
 # URNC

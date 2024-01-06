@@ -12,15 +12,17 @@ import platform
 import shutil
 import re
 import os
+import re
+import yaml
 from os import chmod, getcwd, listdir, makedirs, remove
-from os.path import dirname, join, exists, isdir, normpath
+from os.path import dirname, join, exists, isdir, normpath, getsize, isfile
 from stat import S_IWRITE
 from typing import List, Optional
 
 import git
 import pytest
 
-python = "python" if platform.system() == "Windows" else "python3"
+
 ur_git_url = os.environ.get("UR_GIT_URL", default = "git@git.uni-regensburg.de:") # 1)
 # 1) In our github actions we set UR_GIT_URL to "https://{token_name}:{token_value}/git.uni-regensburg.de/". Locally, where we usually don't have a token defined, we use SSH by default.
 
@@ -249,9 +251,7 @@ def rmforce(path):
 
 def get_urnc_root():
     """
-    This function navigates up the directory tree from the current working directory until it finds a 'pyproject.toml'
-    file that belongs to the 'urnc' package, or it reaches the root directory. If it doesn't find a suitable
-    'pyproject.toml' file, it raises an Exception.
+    This function navigates up the directory tree from the current working directory until it finds a 'pyproject.toml' file that belongs to the 'urnc' package, or it reaches the root directory. If it doesn't find a suitable    'pyproject.toml' file, it raises an Exception.
 
     Returns:
         str: The path of the directory containing the 'pyproject.toml' file of the 'urnc' package.
@@ -284,3 +284,24 @@ def remove_readonly_attribute(func, path, _):
     "Helper function for rmtree. Clears the readonly bit and reattempts removal."
     chmod(path, S_IWRITE)
     func(path)
+
+
+def disable_solution_generation(config_yaml_path: str = "config.yaml"):
+    # Open the file
+    yaml = open(config_yaml_path, 'r').read()
+    yaml = re.sub(r'solution: .*', 'solution: null', yaml)
+    open(config_yaml_path, 'w', newline = "\n").write(yaml)
+
+
+def compare_dirs(x, y):
+    import glob
+    xs = set(glob.glob(f"**", recursive=True, root_dir=x))
+    ys = set(glob.glob(f"**", recursive=True, root_dir=y))
+    left_only = xs - ys
+    right_only = ys - xs
+    common_files = xs & ys
+    common_dirs = set((d for d in common_files if isdir(join(x, d)) and isdir(join(y, d))))
+    common_files = common_files - common_dirs
+    diff_size = set((f for f in common_files if getsize(join(x, f)) != getsize(join(y, f))))
+    same_size = common_files - diff_size
+    return left_only, right_only, diff_size, same_size

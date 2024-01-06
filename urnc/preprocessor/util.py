@@ -20,6 +20,7 @@ class Tags(str, enum.Enum):
     ASSIGNMENT = "assignment"
     ASSIGNMENT_START = "assignment-start"
     SKELETON = "skeleton"
+    NORMAL = "normal"
 
 
 def cell_preview(cell):

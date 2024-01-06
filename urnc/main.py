@@ -8,7 +8,7 @@ import urnc
 
 
 @click.group(help="Uni Regensburg Notebook Converter")
-@click.option("-f", "--root", help="Root folder for resolving relative paths. E.g. `urnc -f some/long/path convert lecture_xyz.ipynb out` is the same as `urnc convert some/long/path/lecture_xyz.ipynb some/long/path/out`.", default=os.getcwd(), type=click.Path())
+@click.option("-f", "--root", help="Root folder for resolving relative paths. E.g. `urnc -f some/long/path convert xyz.ipynb out` is the same as `urnc convert some/long/path/xyz.ipynb some/long/path/out`.", default=os.getcwd(), type=click.Path())
 @click.version_option(prog_name="urnc", message="%(version)s")
 @click.pass_context
 def main(ctx, root):
@@ -16,31 +16,24 @@ def main(ctx, root):
     ctx.obj["root"] = root
 
 
-@click.command(short_help="Build student version and push to public repo", help="Run the urnc ci pipeline, this pushes the converted notebooks to the public repo")
+@click.command(short_help="Build student version and push to public repo", help="Run the urnc ci pipeline, i.e. create student versions of all notebooks and push the converted notebooks to the public repo. To test the pipeline locally, without actually pushing to the remote, use command `urnc student`. For further details see https://spang-lab.github.io/urnc/urnc.html#urnc.ci.ci.")
 @click.pass_context
 def ci(ctx):
     with urnc.util.chdir(ctx.obj["root"]):
         urnc.ci.ci(True)
 
-
-@click.command(short_help="Deprecated")
-@click.pass_context
-def edit(ctx):
-    with urnc.util.chdir(ctx.obj["root"]):
-        urnc.edit.edit()
-
-
-@click.command(help="Convert notebooks")
+@click.command(name = "convert", short_help="Convert notebooks", help="Convert notebooks to student version. For details see https://spang-lab.github.io/urnc/urnc.html#urnc.convert.convert.")
 @click.argument("input", type=click.Path(exists=True), default=".")
 @click.argument("output", type=str, default="out")
+@click.option("-s", "--solution", type=str, default=None)
 @click.option("-v", "--verbose", is_flag=True)
 @click.option("-f", "--force", is_flag=True)
 @click.option("-n", "--dry-run", is_flag=True)
 @click.pass_context
-def convert(ctx, input, output, verbose, force, dry_run):
+def convert(ctx, input, output, solution, verbose, force, dry_run):
     with urnc.util.chdir(ctx.obj["root"]):
         urnc.logger.setup_logger(False, verbose)
-        urnc.convert.convert(input, output, force, dry_run)
+        urnc.convert.convert(input, output, solution, force, dry_run)
 
 
 @click.command(help="Check notebooks for errors")
@@ -50,7 +43,7 @@ def convert(ctx, input, output, verbose, force, dry_run):
 def check(ctx, input, quiet):
     with urnc.util.chdir(ctx.obj["root"]):
         urnc.logger.setup_logger(use_file=False, verbose=not quiet)
-        urnc.convert.convert(ctx, input, None, False, True)
+        urnc.convert.convert(input=input, output="out", solution=None, force=False, dry_run=True, ask=False)
 
 
 @click.command(help="Manage the semantic version of your course")
@@ -100,7 +93,6 @@ main.add_command(version)
 main.add_command(convert)
 main.add_command(ci)
 main.add_command(check)
-main.add_command(edit)
 main.add_command(student)
 main.add_command(pull)
 main.add_command(tag)

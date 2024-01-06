@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v1.10.0 (2024-01-04)
+-------------------
+
+- Added solution parameter to `urnc.convert.convert`
+- Added config option `ci.solution` to `config.yaml`. When specified, `urnc student` now creates student notebooks incl. solutions in addition to the usual student notebooks. For details see `https://spang-lab.github.io/urnc/urnc.html#urnc.ci.ci`_.
+- Info messages printed by convert now use relative paths instead of absolute paths to make them more readable.
+- Remote images that cannot be verified now cause a warning message instead of an error message.
+
 v1.9.3 (2024-01-01)
 -------------------
 
