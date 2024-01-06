@@ -97,14 +97,21 @@ def copy_files(path, target_path):
 
 def write_gitignore(main_gitignore: Optional[str], student_gitignore: str, config: Dict) -> None:
     """
-    Writes a .gitignore file in the student repository.
+    Writes a ``.gitignore`` file in the student repository.
 
-    This function copies the .gitignore file from the main repository (if it exists) and appends additional patterns to exclude based on the configuration.
+    This function copies the ``.gitignore`` file from the main repository (if it exists) and appends additional patterns to exclude based on the configuration.
 
     Parameters:
-        main_repo (Optional[str]): The path to the main repository. If None, no .gitignore file is copied.
-        student_repo (str): The path to the student repository.
-        config (Dict): The configuration dictionary. Can contain a 'git' key with a 'exclude' key, which should be a list of patterns to exclude. Each pattern can be a string or a dictionary with a 'pattern' key and optional 'after' and 'until' keys specifying a date range, e.g. `config = {'git': {'exclude': ['*.pyc', {'pattern': '*.tmp', 'after': '2022-01-01', 'until': '2022-12-31'}]}}`
+        main_gitignore (Optional[str]): The path to the .gitignore file in the main repository. If None, no .gitignore file is copied.
+        student_gitignore (str): The path to the .gitignore file in the student repository.
+        config (Dict): The configuration dictionary. Can contain a ``git`` key with a ``exclude`` key, which should be a list of patterns to exclude. Each pattern can be a string or a dictionary with a ``pattern`` key and optional ``after`` and ``until`` keys specifying a date range, e.g.::
+
+                git:
+                    exclude:
+                        - *.pyc
+                        - /tutorials/*.*
+                        - {pattern: '!tutorials/Tutorial_1.ipynb', after: '2023-10-25 9:30 CET'}
+                        - {pattern: '!tutorials/Tutorial21.ipynb', after: '2023-10-25 9:30 CET'}
     """
     if main_gitignore and exists(main_gitignore):
         shutil.copy(main_gitignore, student_gitignore)

@@ -118,7 +118,7 @@ def get_course_root() -> Path:
 class chdir(abc.ABC):
     """Non thread-safe context manager to change the current working directory.
 
-    Same as [contextlib.chdir](https://docs.python.org/3/library/contextlib.html#contextlib.chdir). We implement it ourselves because `contextlib.chdir` is only available for python versions >=3.11 and we want to support versions >=3.8.
+    Same as `contextlib.chdir <https://docs.python.org/3/library/contextlib.html#contextlib.chdir>`_. We implement it ourselves because ``contextlib.chdir`` is only available for python versions >=3.11 and we want to support versions >=3.8.
 
     Example:
         >>> with chdir(".."):
