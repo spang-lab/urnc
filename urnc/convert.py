@@ -260,10 +260,12 @@ def write(text: str, path: str, force: bool = False, ask=True) -> None:
         force: Overwrite existing files without asking?
         ask: Ask the user if they want to overwrite the file if it exists already and force is False?
     """
+    cwd = os.getcwd()
     path = Path(path)
+    relpath = path.relative_to(cwd) if path.is_relative_to(cwd) else path
     path.parent.mkdir(parents=True, exist_ok=True)
     if not path.exists() or force:
-        log.log(f"Writing {path}.")
+        log.log(f"Writing {relpath}.")
         with open(path, "w", newline="\n") as f:
             f.write(text)
         return
