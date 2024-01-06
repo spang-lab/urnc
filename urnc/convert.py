@@ -158,7 +158,7 @@ def convert(input: str = ".",
         convert("/path/to/single_notebook.ipynb", "/path/to/output", dry_run=True)
         convert("/path/to/notebooks", "/path/to/output", force=True)
     """
-    log.log(f"Converting notebooks in {input}")
+    log.log(f"Converting notebooks in {os.path.abspath(input)}")
     nbs = get_nb_paths(input)
     outstr = str(output).lower() if output else "{}"
     solstr = str(solution).lower() if solution else "{}"
@@ -206,20 +206,22 @@ def convert_nb(input: Union[str, Path],
         # Don't write converted files to disk
         convert_nb("dummy.ipynb", output="dummy-converted.ipynb", dry_run=True)
     """
+    cwd = os.getcwd()
     in_path = Path(input)
+    in_relpath = in_path.relative_to(cwd) if in_path.is_relative_to(cwd) else in_path
     out_path = Path(output) if output else None
     sol_path = Path(solution) if solution else None
     if out_path or sol_path:
-        log.log(f"Reading {in_path}")
+        log.log(f"Reading {in_relpath}")
         in_text = nbformat.read(in_path, as_version=4)
         resources = {"path": in_path}
     if out_path:
-        log.log(f"Converting {in_path} to student version without solutions")
+        log.log(f"Converting {in_relpath} to student version without solutions")
         out_text = student_converter.from_notebook_node(in_text, resources)[0]
         if not dry_run:
             write(text=out_text, path=out_path, force=force, ask=ask)
     if sol_path:
-        log.log(f"Converting {in_path} to student version with solutions")
+        log.log(f"Converting {in_relpath} to student version with solutions")
         sol_text = solution_converter.from_notebook_node(in_text, resources)[0]
         if not dry_run:
             write(text=sol_text, path=sol_path, force=force, ask=ask)
