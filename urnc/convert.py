@@ -270,7 +270,7 @@ def write(text: str, path: str, force: bool = False, ask=True) -> None:
             f.write(text)
         return
     if not sys.stdout.isatty() or not ask:
-        log.log(f"Skipped writing {path} because it exists already and force is False.")
+        log.log(f"Skipped writing {relpath} because it exists already and force is False.")
         return
     overwrite = ''
     while overwrite.lower() not in ['y', 'n']:

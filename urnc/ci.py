@@ -173,13 +173,15 @@ def ci(commit=True):
     # Convert notebooks
     solution_relpath = get_config_value(course_config, "ci", "solution", default=None)
     solution_pattern = student_root.joinpath(solution_relpath) if solution_relpath else None
-    urnc.convert.convert(
-        input=course_root,
-        output=student_root,
-        solution=solution_pattern,
-        force=True,
-        dry_run=False
-    )
+    with urnc.util.chdir(student_root):
+        # Paths printed as info messages by urnc.convert.convert are relative to the current working directory, so we change the working directory to the student repo root in order to get the shorter paths in the log messages.
+        urnc.convert.convert(
+            input=student_root,
+            output=student_root,
+            solution=solution_pattern,
+            force=True,
+            dry_run=False
+        )
     log("Notebooks converted")
 
     # Update .gitignore and drop cached files
