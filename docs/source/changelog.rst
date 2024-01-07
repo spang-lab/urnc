@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.10.2 (2024-01-04)
+--------------------
+
+- Skeletons are now removed when creating student version with solutions.
+
 v1.10.0 (2024-01-04)
 --------------------
 

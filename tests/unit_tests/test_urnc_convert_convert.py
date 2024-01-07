@@ -53,10 +53,12 @@ def test_convert__inDir_solF_forceF_dryF_outExistF_solExistF():
     input = "tests/inputs/minimal-course/lectures"
     expected = "tests/expected/minimal-course-converted/lectures"
     urnc.convert.convert(input=input, output=outputs_dir, ask=False)
-    cmp = filecmp.dircmp(outputs_dir, expected)
-    assert all([cmp.diff_files == [],
-                cmp.left_only == [],
-                all([f.endswith("-solution.ipynb") for f in cmp.right_only])])
+    left_only, right_only, diff_size, same_size = conftest.compare_dirs(outputs_dir, expected)
+    assert all([
+        left_only == set(),
+        all([f.endswith("-solution.ipynb") for f in right_only]),
+        diff_size == set()
+    ])
 
 
 def test_convert__inNB_solT_forceF_dryF_outExistF_solExistF():
@@ -103,7 +105,7 @@ def test_convert__inDir_solT_forceF_dryF_outExistF_solExistF():
     outputs_dir = conftest.init_outputs_dir(test_module, test_function, test_case)
     expects_dir = "tests/expected/minimal-course-converted"
     urnc.convert.convert(input=input, output=outputs_dir, solution=outputs_dir, ask=False)
-    cmp = filecmp.dircmp(outputs_dir, expects_dir)
-    assert all((cmp.diff_files == [],
-                cmp.left_only == [],
-                cmp.right_only == []))
+    left_only, right_only, diff_size, same_size = conftest.compare_dirs(outputs_dir, expects_dir)
+    assert all((left_only == set(),
+                right_only == set(),
+                diff_size == set()))
