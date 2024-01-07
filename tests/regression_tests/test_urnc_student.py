@@ -26,12 +26,12 @@ def test_urnc_student__data_science():
     output = f"{outputs_dir}/data-science-student"
     git.Repo(output).git.clean("-xdf")
     expected = f"{outputs_dir}/data-science-student-expected"
-    cmp = filecmp.dircmp(output, expected)
+    left_only, right_only, diff_size, same_size = conftest.compare_dirs(outputs_dir, expected)
     assert all([
         proc.returncode == 0,
-        cmp.diff_files == [],
-        cmp.left_only == [],
-        cmp.right_only == []
+        left_only == set(),
+        right_only == set(),
+        diff_size == set()
     ])
 
 
@@ -53,10 +53,10 @@ def test_urnc_student__developer_skills():
     output = f"{outputs_dir}/developer-skills-student"
     git.Repo(output).git.clean("-xdf")
     expected = f"{outputs_dir}/developer-skills-student-expected"
-    cmp = filecmp.dircmp(output, expected)
+    left_only, right_only, diff_size, same_size = conftest.compare_dirs(outputs_dir, expected)
     assert all([
         proc.returncode == 0,
-        cmp.diff_files == [],
-        cmp.left_only == [],
-        cmp.right_only == []
+        left_only == set(),
+        right_only == set(),
+        diff_size == set()
     ])

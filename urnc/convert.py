@@ -14,15 +14,15 @@ from traitlets.config import Config
 import urnc.logger as log
 from urnc.preprocessor.add_tags import AddTags
 from urnc.preprocessor.lint import Linter
-from urnc.preprocessor.remove_solutions import RemoveSolutions
+from urnc.preprocessor.solutions import SolutionRemover, SkeletonRemover
 
 
-student_preprocessors = [Linter, AddTags, RemoveSolutions, ClearOutputPreprocessor]
+student_preprocessors = [Linter, AddTags, SolutionRemover, ClearOutputPreprocessor]
 student_config = traitlets.config.Config()
 student_config.NotebookExporter.preprocessors = student_preprocessors
 student_converter = NotebookExporter(student_config)
 
-solution_preprocessors = [AddTags, ClearOutputPreprocessor]
+solution_preprocessors = [AddTags, SkeletonRemover, ClearOutputPreprocessor]
 solution_config = traitlets.config.Config()
 solution_config.NotebookExporter.preprocessors = solution_preprocessors
 solution_converter = NotebookExporter(solution_config)
