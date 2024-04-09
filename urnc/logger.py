@@ -1,7 +1,9 @@
 """Logging functionality for URNC"""
+
 import logging
 import os
 import sys
+from typing import NoReturn
 
 GREY = "\x1b[38;20m"
 YELLOW = "\x1b[33;20m"
@@ -89,7 +91,7 @@ def error(msg):
     logger.error(msg)
 
 
-def critical(msg):
+def critical(msg) -> NoReturn:
     logger = logging.getLogger(__name__)
     logger.critical(msg)
     raise Exception(msg)
