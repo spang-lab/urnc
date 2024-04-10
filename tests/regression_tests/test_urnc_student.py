@@ -1,14 +1,11 @@
-import filecmp
 import sys
 import subprocess
 
-import freezegun
 import conftest
 import pytest
 import git
 
 
-@freezegun.freeze_time("2024-01-01 08:00:00 +0000")
 @pytest.mark.slow
 def test_urnc_student__data_science():
     outputs_dir = conftest.init_outputs_dir(
@@ -30,12 +27,11 @@ def test_urnc_student__data_science():
     assert all([
         proc.returncode == 0,
         left_only == {'tutorials\\Tutorial_10.ipynb', 'tutorials\\Tutorial_11.ipynb'},
-        right_only == {'data\\scheduled-pipeline-show'},
+        right_only == set(),
         diff_size == set()
     ])
 
 
-@freezegun.freeze_time("2024-01-01 08:00:00 +0100")
 @pytest.mark.slow
 def test_urnc_student__developer_skills():
     outputs_dir = conftest.init_outputs_dir(
