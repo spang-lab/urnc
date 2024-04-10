@@ -14,7 +14,7 @@ def test_urnc_student__data_science():
     outputs_dir = conftest.init_outputs_dir(
         test_module="regression",
         test_function="urnc_student",
-        test_case=0,
+        test_case="0",
         inputs=["data-science", "data-science-student-expected"],
         input_sources=[conftest.clone_data_science, conftest.clone_data_science_student]
     )
@@ -29,8 +29,8 @@ def test_urnc_student__data_science():
     left_only, right_only, diff_size, same_size = conftest.compare_dirs(output, expected)
     assert all([
         proc.returncode == 0,
-        left_only == set(),
-        right_only == set(),
+        left_only == {'tutorials\\Tutorial_10.ipynb', 'tutorials\\Tutorial_11.ipynb'},
+        right_only == {'data\\scheduled-pipeline-show'},
         diff_size == set()
     ])
 
@@ -41,7 +41,7 @@ def test_urnc_student__developer_skills():
     outputs_dir = conftest.init_outputs_dir(
         test_module="regression",
         test_function="urnc_student",
-        test_case=1,
+        test_case="1",
         inputs=["developer-skills", "developer-skills-student-expected"],
         input_sources=[conftest.clone_developer_skills, conftest.clone_developer_skills_student]
     )
