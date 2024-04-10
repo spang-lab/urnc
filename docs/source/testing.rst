@@ -20,6 +20,7 @@ In the future, we might replace the real FIDS courses with public dummy courses.
    cd urnc
    pip install -e . # install urnc in editable mode
    pip install pytest pytest-cov freezegun PyYAML # install testing dependencies
+   pytest -k test_urnc_student__data_science # run a single test
    pytest --tb=short # run all fast tests and show short traceback
    pytest --runslow  # run all tests/test*py files
    pytest -k test_version # run tests/test_version.py only

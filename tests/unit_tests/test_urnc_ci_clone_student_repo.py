@@ -9,7 +9,7 @@ def test_urnc_ci_clone_student_repo__urlMissing_repoMissing():
     outputs_dir = init_outputs_dir(
         test_module="urnc.ci",
         test_function="clone_student_repo",
-        test_case=0,
+        test_case="0",
         inputs=["minimal-course"],
         input_sources=["tests/inputs/minimal-course"]
     )
@@ -24,7 +24,7 @@ def test_urnc_ci_clone_student_repo__urlMissing_repoExists():
     outputs_dir = init_outputs_dir(
         test_module="urnc.ci",
         test_function="clone_student_repo",
-        test_case=1,
+        test_case="1",
         inputs=["minimal-course"],
         input_sources=["tests/inputs/minimal-course"]
     )
@@ -41,7 +41,7 @@ def test_urnc_ci_clone_student_repo__urlExists_repoMissing():
     outputs_dir = init_outputs_dir(
         test_module="urnc.ci",
         test_function="clone_student_repo",
-        test_case=2,
+        test_case="2",
         inputs=["urnc-example-course"],
         input_sources=[clone_urnc_example_course]
     )
@@ -55,7 +55,7 @@ def test_urnc_ci_clone_student_repo__urlExists_falseRepoExists():
     outputs_dir = init_outputs_dir(
         test_module="urnc.ci",
         test_function="clone_student_repo",
-        test_case=3,
+        test_case="3",
         inputs=["urnc-example-course"],
         input_sources=[clone_urnc_example_course]
     )
@@ -75,9 +75,12 @@ def test_urnc_ci_clone_student_repo__urlExists_correctRepoExists():
     outputs_dir = init_outputs_dir(
         test_module="urnc.ci",
         test_function="clone_student_repo",
-        test_case=4,
+        test_case="4",
         inputs=["urnc-example-course", "urnc-example-course-public"],
-        input_sources=[clone_urnc_example_course, clone_urnc_example_course_public]
+        input_sources=[
+            clone_urnc_example_course,
+            lambda dst: clone_urnc_example_course_public(path=dst, hash="main")
+        ]
     )
     with urnc.util.chdir(f"{outputs_dir}/urnc-example-course"):
         config = urnc.util.read_config()

@@ -8,17 +8,14 @@
 #
 # 2. Define helper functions that can be used during the tests.
 
-import platform
 import shutil
 import re
 import os
 import re
-import yaml
 from os import chmod, getcwd, listdir, makedirs, remove
 from os.path import dirname, join, exists, isdir, normpath, getsize, isfile
 from stat import S_IWRITE
-from typing import List, Optional
-
+from typing import List, Union, Callable, Optional
 import git
 import pytest
 
@@ -63,7 +60,7 @@ def init_outputs_dir(test_module: str,
                      test_function: str,
                      test_case: str,
                      inputs: List[str] = [],
-                     input_sources: List[str] = []) -> str:
+                     input_sources: List[Union[str, Callable]] = []) -> str:
     """
     Initialize the outputs directory for a specific test case.
 
@@ -75,7 +72,9 @@ def init_outputs_dir(test_module: str,
         test_function: The name of the test function.
         test_case: The name of the test case.
         inputs: List of input files for the test case.
-        input_sources: List of source files to be copied into the outputs directory.
+        input_sources: List of source paths to be copied into the outputs directory.
+            Paths should be relative to the root of the repository.
+            Instead of a path, a function that takes a destination path as an argument can be provided.
 
     Returns:
         The path to the outputs directory.
@@ -100,8 +99,8 @@ def init_outputs_dir(test_module: str,
     return outputs
 
 
-def clone_urnc_example_course(path: Optional[str] = "urnc-example-course",
-                              hash: Optional[str] = "9c277cdc7c7985f433f2c7f6fabcba1eefd2f844") -> Optional[git.Repo]:
+def clone_urnc_example_course(path: str = "urnc-example-course",
+                              hash: str = "9c277cdc7c7985f433f2c7f6fabcba1eefd2f844") -> git.Repo:
     """
     Initialize the urnc-example-course directory.
 
@@ -134,41 +133,41 @@ def clone_urnc_example_course(path: Optional[str] = "urnc-example-course",
     return (repo)
 
 
-def clone_urnc_example_course_public(path: Optional[str] = "urnc-example-course-public",
-                                     hash: Optional[str] = "38e5c1169266dd50f13912c0546779ddb2f71c3d"
-                                     ) -> Optional[git.Repo]:
+def clone_urnc_example_course_public(path: str = "urnc-example-course-public",
+                                     hash: str = "38e5c1169266dd50f13912c0546779ddb2f71c3d"
+                                     ) -> git.Repo:
     url = "https://github.com/spang-lab/urnc-example-course-public.git"
     repo = clone(path, url, hash)
     return repo
 
 
-def clone_data_science(path: Optional[str] = "data-science",
-                       hash: Optional[str] = "496cdba07c68d9e781fa837c82dd70576186dec4"  # 2024-01-01 (approx. 8 am)
-                       ) -> Optional[git.Repo]:
+def clone_data_science(path: str = "data-science",
+                       hash: str = "496cdba07c68d9e781fa837c82dd70576186dec4"  # 2024-01-01 (approx. 8 am)
+                       ) -> git.Repo:
     url = f"{ur_git_url}fids/data-science.git"
     repo = clone(path, url, hash)
     return repo
 
 
-def clone_data_science_student(path: Optional[str] = "data-science-student",
-                               hash: Optional[str] = "9d66b436a882c40a0cf763fa4c363bfc633303b2"  # 2024-01-01 (approx. 8 am)
-                               ) -> Optional[git.Repo]:
+def clone_data_science_student(path: str = "data-science-student",
+                               hash: str = "9d66b436a882c40a0cf763fa4c363bfc633303b2"  # 2024-01-01 (approx. 8 am)
+                               ) -> git.Repo:
     url = f"{ur_git_url}fids-public/data-science.git"
     repo = clone(path, url, hash)
     return repo
 
 
-def clone_developer_skills(path: Optional[str] = "developer-skills",
-                           hash: Optional[str] = "93a33b4b19747df66d818b70643ce5279956b195"  # 2024-01-01 (approx. 8 am)
-                           ) -> Optional[git.Repo]:
+def clone_developer_skills(path: str = "developer-skills",
+                           hash: str = "93a33b4b19747df66d818b70643ce5279956b195"  # 2024-01-01 (approx. 8 am)
+                           ) -> git.Repo:
     url = f"{ur_git_url}fids/developer-skills.git"
     repo = clone(path, url, hash)
     return repo
 
 
-def clone_developer_skills_student(path: Optional[str] = "developer-skills-student",
-                                   hash: Optional[str] = "1c53c8cd032d69d9faabe8b9284587caa487b7e7"  # 2024-01-01 (approx. 8 am)
-                                   ) -> Optional[git.Repo]:
+def clone_developer_skills_student(path: str = "developer-skills-student",
+                                   hash: str = "1c53c8cd032d69d9faabe8b9284587caa487b7e7"  # 2024-01-01 (approx. 8 am)
+                                   ) -> git.Repo:
     url = f"{ur_git_url}fids-public/developer-skills.git"
     repo = clone(path, url, hash)
     return repo
@@ -185,7 +184,7 @@ def clone(path: str, url: str, hash: str) -> git.Repo:
     Args:
         path (str): The path where the repository will be cloned.
         url (str): The URL of the git repository to clone.
-        hash (str): The specific commit hash to checkout after cloning.
+        hash (str): The specific commit hash or branch name to checkout after cloning.
 
     Returns:
         git.Repo: The cloned git repository.
