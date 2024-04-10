@@ -12,7 +12,7 @@ import git
 
 import urnc
 from urnc.logger import critical, log, setup_logger, warn
-from urnc.util import get_config_value, update_repo_config
+from urnc.util import get_config_string, get_config_value, update_repo_config
 
 
 def clone_student_repo(config: dict) -> git.Repo:
@@ -35,7 +35,7 @@ def clone_student_repo(config: dict) -> git.Repo:
     # Get info about main repo
     main_path = urnc.util.get_course_root()
     main_name = basename(main_path)
-    stud_url = get_config_value(config, "git", "student")
+    stud_url = get_config_string(config, "git", "student")
 
     # Init and return new repo if no student repo is specified
     if stud_url is None:
@@ -46,8 +46,6 @@ def clone_student_repo(config: dict) -> git.Repo:
         )
         stud_repo = git.Repo.init(stud_path)
         return stud_repo
-    if not isinstance(stud_url, str):
-        critical("Property git.student in config.yaml must be a string.")
 
     # Collect info about student repo if specified in config.yaml
     stud_name = splitext(basename(stud_url))[0]
@@ -125,6 +123,8 @@ def write_gitignore(
     if main_gitignore and exists(main_gitignore):
         shutil.copy(main_gitignore, student_gitignore)
     exclude = get_config_value(config, "git", "exclude", default=[])
+    if not isinstance(exclude, list):
+        critical("config.git.exclude must be a list")
     now = datetime.now()
     with open(student_gitignore, "a", newline="\n") as gitignore:
         gitignore.write("\n")
@@ -188,7 +188,7 @@ def ci(commit=True):
     copy_files(course_root, student_root)
 
     # Convert notebooks
-    solution_relpath = get_config_value(course_config, "ci", "solution", default=None)
+    solution_relpath = get_config_string(course_config, "ci", "solution", default=None)
     solution_pattern = (
         student_root.joinpath(solution_relpath) if solution_relpath else None
     )

@@ -1,4 +1,5 @@
 """Utility functions for urnc"""
+
 import abc
 import os
 import re
@@ -15,15 +16,16 @@ try:
 except:
     tomllib = None
 
-yaml = YAML(typ='rt')
+yaml = YAML(typ="rt")
 
 
 # Git related functions
 
+
 def branch_exists(repo, branch):
     origin_branch = f"origin/{branch}"
     for ref in repo.references:
-        if (ref.name == branch or ref.name == origin_branch):
+        if ref.name == branch or ref.name == origin_branch:
             return True
     return False
 
@@ -42,8 +44,8 @@ def update_repo_config(repo):
         r = repo.config_reader()
         name = r.get_value("user", "name")
         email = r.get_value("user", "email")
-        assert (name is not None)
-        assert (email is not None)
+        assert name is not None
+        assert email is not None
         return
     except Exception:
         pass
@@ -74,6 +76,7 @@ def get_urnc_repo():
 
 # Functions for finding/switching course/urnc root paths
 
+
 def get_urnc_root():
     """
     This function navigates up the directory tree from the current working directory until it finds a 'pyproject.toml' file that belongs to the 'urnc' package, or it reaches the root directory. If it doesn't find a suitable    'pyproject.toml' file, it raises an Exception.
@@ -87,7 +90,7 @@ def get_urnc_root():
     """
     path = Path(os.getcwd())
     while path != path.parent:
-        pyproject_toml = path.joinpath('pyproject.toml')
+        pyproject_toml = path.joinpath("pyproject.toml")
         if pyproject_toml.exists():
             pyproject = open(pyproject_toml).read()
             if re.search(r'name\s*=\s*"?urnc"?', pyproject):
@@ -109,7 +112,7 @@ def get_course_root() -> Path:
     """
     path = Path(os.getcwd())
     while path != path.parent:
-        if path.joinpath('config.yaml').exists():
+        if path.joinpath("config.yaml").exists():
             return path
         path = path.parent
     raise Exception("No 'config.yaml' found in the directory hierarchy")
@@ -125,6 +128,7 @@ class chdir(abc.ABC):
         >>>     # This code will be executed in the parent directory of the current working directory
         >>>     pass
     """
+
     def __init__(self, path):
         self.path = path
         self._old_cwd = []
@@ -138,6 +142,7 @@ class chdir(abc.ABC):
 
 
 # Functions for reading/writing course configs
+
 
 def read_config(course_root: Optional[str] = None) -> dict:
     """
@@ -159,7 +164,8 @@ def read_config(course_root: Optional[str] = None) -> dict:
     path = os.path.join(course_root, filename)
     if not os.path.isfile(path):
         raise click.UsageError(
-            f"urnc expects a config file called '{filename}' in the course root folder '{course_root}'")
+            f"urnc expects a config file called '{filename}' in the course root folder '{course_root}'"
+        )
     try:
         with open(path, "r") as f:
             config = yaml.load(f)
@@ -196,7 +202,18 @@ def get_config_value(config, *args, default=None, required=False):
     return value
 
 
+def get_config_string(config, *args, default=None, required=False):
+    value = get_config_value(config, *args, default=default, required=required)
+    if value is None:
+        return default
+    if not isinstance(value, str):
+        full_key = ".".join(args)
+        raise Exception(f"config value config.{full_key} must be a string")
+    return str(value)
+
+
 # Functions for reading/writing urnc's pyproject.toml
+
 
 def read_pyproject():
     if tomllib is None:
