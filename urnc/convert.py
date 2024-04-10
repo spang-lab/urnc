@@ -231,9 +231,9 @@ def convert_nb(
             write(text=sol_text, path=sol_path, force=force, ask=ask)
 
 
-def get_nb_paths(input_str: str) -> List[NbPath]:
+def get_nb_paths(input: Union[str, Path]) -> List[NbPath]:
     """Creates `NbPath` objects from all notebook files in input and returns them as list."""
-    input = Path(os.path.abspath(input_str))
+    input = Path(os.path.abspath(input))
     nbs = []
     if input.is_file():
         nb = NbPath(path=input, rootpath=input.parent)
