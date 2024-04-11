@@ -3,13 +3,12 @@
 import os
 import sys
 from pathlib import Path
-from typing import List, Optional, Union, Tuple
+from typing import List, Optional, Union
 
 import nbformat
 import traitlets
 from nbconvert.exporters.notebook import NotebookExporter
 from nbconvert.preprocessors.clearoutput import ClearOutputPreprocessor
-from traitlets.config import Config
 
 import urnc.logger as log
 from urnc.preprocessor.add_tags import AddTags
@@ -29,7 +28,7 @@ solution_converter = NotebookExporter(solution_config)
 
 
 class NbPath(object):
-    def __init__(self, path: str, rootpath: str = None):
+    def __init__(self, path: Union[str, Path], rootpath: Union[str, Path]):
         """Path to a jupyter notebook inside a arbitrarily nested directory structure.
 
         Attributes:
@@ -69,12 +68,14 @@ class NbPath(object):
         self.ext = path.suffix[1:] if path.suffix.startswith(".") else path.suffix
 
 
-def convert(input: str = ".",
-            output: str = "out/",
-            solution: Optional[str] = None,
-            force: bool = False,
-            dry_run: bool = False,
-            ask: bool = True) -> None:
+def convert(
+    input: str = ".",
+    output: str = "out/",
+    solution: Optional[str] = None,
+    force: bool = False,
+    dry_run: bool = False,
+    ask: bool = True,
+) -> None:
     """Convert one or multiple notebooks to its student version with and/or without solutions removed.
 
     Args:
@@ -170,15 +171,19 @@ def convert(input: str = ".",
         inb = nb.abspath
         onb = Path(str(output).format(nb=nb)) if output else None
         snb = Path(str(solution).format(nb=nb)) if solution else None
-        convert_nb(input=inb, output=onb, solution=snb, force=force, dry_run=dry_run, ask=ask)
+        convert_nb(
+            input=inb, output=onb, solution=snb, force=force, dry_run=dry_run, ask=ask
+        )
 
 
-def convert_nb(input: Union[str, Path],
-               output: Optional[Union[str, Path]] = None,
-               solution: Optional[Union[str, Path]] = None,
-               force: bool = False,
-               dry_run: bool = False,
-               ask: bool = True) -> None:
+def convert_nb(
+    input: Union[str, Path],
+    output: Optional[Union[str, Path]] = None,
+    solution: Optional[Union[str, Path]] = None,
+    force: bool = False,
+    dry_run: bool = False,
+    ask: bool = True,
+) -> None:
     """Convert a single notebook to its student version with and/or without solutions removed.
 
     Args:
@@ -211,10 +216,9 @@ def convert_nb(input: Union[str, Path],
     in_relpath = in_path.relative_to(cwd) if in_path.is_relative_to(cwd) else in_path
     out_path = Path(output) if output else None
     sol_path = Path(solution) if solution else None
-    if out_path or sol_path:
-        log.log(f"Reading {in_relpath}")
-        in_text = nbformat.read(in_path, as_version=4)
-        resources = {"path": in_path}
+    log.log(f"Reading {in_relpath}")
+    in_text = nbformat.read(in_path, as_version=4)
+    resources = {"path": in_path}
     if out_path:
         log.log(f"Converting {in_relpath} to student version without solutions")
         out_text = student_converter.from_notebook_node(in_text, resources)[0]
@@ -227,7 +231,7 @@ def convert_nb(input: Union[str, Path],
             write(text=sol_text, path=sol_path, force=force, ask=ask)
 
 
-def get_nb_paths(input: str) -> List[NbPath]:
+def get_nb_paths(input: Union[str, Path]) -> List[NbPath]:
     """Creates `NbPath` objects from all notebook files in input and returns them as list."""
     input = Path(os.path.abspath(input))
     nbs = []
@@ -246,7 +250,7 @@ def get_nb_paths(input: str) -> List[NbPath]:
     return nbs
 
 
-def write(text: str, path: str, force: bool = False, ask=True) -> None:
+def write(text: str, path: Union[str, Path], force: bool = False, ask=True) -> None:
     """
     Write text to path.
     If the parent directory does not exist, it will be created.
@@ -270,11 +274,13 @@ def write(text: str, path: str, force: bool = False, ask=True) -> None:
             f.write(text)
         return
     if not sys.stdout.isatty() or not ask:
-        log.log(f"Skipped writing {relpath} because it exists already and force is False.")
+        log.log(
+            f"Skipped writing {relpath} because it exists already and force is False."
+        )
         return
-    overwrite = ''
-    while overwrite.lower() not in ['y', 'n']:
+    overwrite = ""
+    while overwrite.lower() not in ["y", "n"]:
         overwrite = input(f"File {path} exists. Overwrite? (y/n): ")
-    if overwrite.lower() == 'y':
+    if overwrite.lower() == "y":
         with open(path, "w", newline="\n") as f:
             f.write(text)

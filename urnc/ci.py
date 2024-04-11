@@ -12,7 +12,7 @@ import git
 
 import urnc
 from urnc.logger import critical, log, setup_logger, warn
-from urnc.util import get_config_value, update_repo_config
+from urnc.util import get_config_string, get_config_value, update_repo_config
 
 
 def clone_student_repo(config: dict) -> git.Repo:
@@ -35,13 +35,15 @@ def clone_student_repo(config: dict) -> git.Repo:
     # Get info about main repo
     main_path = urnc.util.get_course_root()
     main_name = basename(main_path)
-    stud_url = get_config_value(config, "git", "student")
+    stud_url = get_config_string(config, "git", "student")
 
     # Init and return new repo if no student repo is specified
-    if (stud_url is None):
+    if stud_url is None:
         stud_name = f"{main_name}-student"
         stud_path = main_path.parent.joinpath(stud_name)
-        log(f"Property git.student not found in config. Initializing new student repo at {stud_path}")
+        log(
+            f"Property git.student not found in config. Initializing new student repo at {stud_path}"
+        )
         stud_repo = git.Repo.init(stud_path)
         return stud_repo
 
@@ -59,7 +61,10 @@ def clone_student_repo(config: dict) -> git.Repo:
         except Exception:
             critical(f"Folder '{stud_path}' exists but is not a git repo")
         if stud_repo.remote().url != stud_url:
-            critical(f"Repo remote mismatch. Expected: {stud_url}. Observed: {stud_repo.remote().url}.")
+            critical(
+                f"Repo remote mismatch. Expected: {stud_url}. Observed: {stud_repo.remote().url}."
+            )
+        stud_repo.remote().pull()
         return stud_repo
 
     # Clone and return repo if not available locally
@@ -73,7 +78,7 @@ def clear_repo(repo):
     path = repo.working_dir
     entries = os.listdir(path)
     for entry in entries:
-        if (entry.startswith(".")):
+        if entry.startswith("."):
             continue
         entry_path = join(path, entry)
         if isfile(entry_path):
@@ -85,7 +90,7 @@ def clear_repo(repo):
 def copy_files(path, target_path):
     entries = os.listdir(path)
     for entry in entries:
-        if (entry.startswith(".")):
+        if entry.startswith("."):
             continue
         entry_path = join(path, entry)
         copy_path = join(target_path, entry)
@@ -95,7 +100,9 @@ def copy_files(path, target_path):
             shutil.copytree(entry_path, copy_path)
 
 
-def write_gitignore(main_gitignore: Optional[str], student_gitignore: str, config: Dict) -> None:
+def write_gitignore(
+    main_gitignore: Optional[str], student_gitignore: str, config: Dict
+) -> None:
     """
     Writes a ``.gitignore`` file in the student repository.
 
@@ -116,8 +123,11 @@ def write_gitignore(main_gitignore: Optional[str], student_gitignore: str, confi
     if main_gitignore and exists(main_gitignore):
         shutil.copy(main_gitignore, student_gitignore)
     exclude = get_config_value(config, "git", "exclude", default=[])
+    if not isinstance(exclude, list):
+        critical("config.git.exclude must be a list")
     now = datetime.now()
     with open(student_gitignore, "a", newline="\n") as gitignore:
+        gitignore.write("\n")
         for value in exclude:
             if isinstance(value, str):
                 gitignore.write(f"{value}\n")
@@ -131,7 +141,7 @@ def write_gitignore(main_gitignore: Optional[str], student_gitignore: str, confi
 
 def update_index(repo):
     cached_files_str = repo.git.ls_files("-ci", "--exclude-standard")
-    if (cached_files_str != ''):
+    if cached_files_str != "":
         cached_files = cached_files_str.split("\n")
         log(f"Removing excluded files {cached_files}")
         repo.index.remove(cached_files, working_tree=False)
@@ -169,7 +179,7 @@ def ci(commit=True):
     if commit:
         course_repo = urnc.util.get_course_repo()
         if course_repo.is_dirty():
-            raise Exception(f"Repo is not clean. Commit your changes first.")
+            raise Exception("Repo is not clean. Commit your changes first.")
 
     # Clone and clear student repo. Then copy over files from main repo
     student_repo = clone_student_repo(course_config)
@@ -178,8 +188,10 @@ def ci(commit=True):
     copy_files(course_root, student_root)
 
     # Convert notebooks
-    solution_relpath = get_config_value(course_config, "ci", "solution", default=None)
-    solution_pattern = student_root.joinpath(solution_relpath) if solution_relpath else None
+    solution_relpath = get_config_string(course_config, "ci", "solution", default=None)
+    solution_pattern = (
+        student_root.joinpath(solution_relpath) if solution_relpath else None
+    )
     with urnc.util.chdir(student_root):
         # Paths printed as info messages by urnc.convert.convert are relative to the current working directory, so we change the working directory to the student repo root in order to get the shorter paths in the log messages.
         urnc.convert.convert(
@@ -187,7 +199,7 @@ def ci(commit=True):
             output=student_root,
             solution=solution_pattern,
             force=True,
-            dry_run=False
+            dry_run=False,
         )
     log("Notebooks converted")
 
@@ -196,7 +208,7 @@ def ci(commit=True):
     write_gitignore(
         main_gitignore=course_root.joinpath(".gitignore"),
         student_gitignore=student_root.joinpath(".gitignore"),
-        config=course_config
+        config=course_config,
     )
     log("Dropping cached files...")
     update_index(student_repo)
