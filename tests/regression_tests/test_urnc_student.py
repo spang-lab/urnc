@@ -24,7 +24,7 @@ def test_urnc_student__data_science():
     git.Repo(output).git.clean("-xdf")
     expected = f"{outputs_dir}/data-science-student-expected"
     left_only, right_only, diff_size, same_size = conftest.compare_dirs(output, expected)
-    left_only = [path.replace("\\", "/") for path in left_only]
+    left_only = {path.replace("\\", "/") for path in left_only}
     print("left_only", left_only)
     print("right_only", right_only)
     assert all([
