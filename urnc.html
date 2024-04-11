@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>urnc package &mdash; urnc 1.10.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2adc3bb3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="urnc.preprocessor package" href="urnc.preprocessor.html" />
+    <link rel="prev" title="Modules" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">urnc package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html">urnc.preprocessor package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-urnc.ci">urnc.ci module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.ci.ci"><code class="docutils literal notranslate"><span class="pre">ci()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.ci.clear_repo"><code class="docutils literal notranslate"><span class="pre">clear_repo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.ci.clone_student_repo"><code class="docutils literal notranslate"><span class="pre">clone_student_repo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.ci.copy_files"><code class="docutils literal notranslate"><span class="pre">copy_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.ci.update_index"><code class="docutils literal notranslate"><span class="pre">update_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.ci.write_gitignore"><code class="docutils literal notranslate"><span class="pre">write_gitignore()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-urnc.convert">urnc.convert module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.convert.NbPath"><code class="docutils literal notranslate"><span class="pre">NbPath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.convert.convert"><code class="docutils literal notranslate"><span class="pre">convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.convert.convert_nb"><code class="docutils literal notranslate"><span class="pre">convert_nb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.convert.get_nb_paths"><code class="docutils literal notranslate"><span class="pre">get_nb_paths()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.convert.write"><code class="docutils literal notranslate"><span class="pre">write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-urnc.logger">urnc.logger module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.logger.CustomFormatter"><code class="docutils literal notranslate"><span class="pre">CustomFormatter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.logger.critical"><code class="docutils literal notranslate"><span class="pre">critical()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.logger.dbg"><code class="docutils literal notranslate"><span class="pre">dbg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.logger.error"><code class="docutils literal notranslate"><span class="pre">error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.logger.get_handler"><code class="docutils literal notranslate"><span class="pre">get_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.logger.log"><code class="docutils literal notranslate"><span class="pre">log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.logger.setup_logger"><code class="docutils literal notranslate"><span class="pre">setup_logger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.logger.warn"><code class="docutils literal notranslate"><span class="pre">warn()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-urnc.main">urnc.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-urnc.pull">urnc.pull module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.get_course_info"><code class="docutils literal notranslate"><span class="pre">get_course_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.get_repo"><code class="docutils literal notranslate"><span class="pre">get_repo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.get_upstream_added"><code class="docutils literal notranslate"><span class="pre">get_upstream_added()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.get_upstream_changes"><code class="docutils literal notranslate"><span class="pre">get_upstream_changes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.get_upstream_deleted"><code class="docutils literal notranslate"><span class="pre">get_upstream_deleted()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.merge"><code class="docutils literal notranslate"><span class="pre">merge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.pull"><code class="docutils literal notranslate"><span class="pre">pull()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.pull_admin"><code class="docutils literal notranslate"><span class="pre">pull_admin()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.rename_file_with_timestamp"><code class="docutils literal notranslate"><span class="pre">rename_file_with_timestamp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.rename_local_untracked"><code class="docutils literal notranslate"><span class="pre">rename_local_untracked()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.pull.reset_deleted_files"><code class="docutils literal notranslate"><span class="pre">reset_deleted_files()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-urnc.util">urnc.util module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.branch_exists"><code class="docutils literal notranslate"><span class="pre">branch_exists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.chdir"><code class="docutils literal notranslate"><span class="pre">chdir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.get_config_string"><code class="docutils literal notranslate"><span class="pre">get_config_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.get_config_value"><code class="docutils literal notranslate"><span class="pre">get_config_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.get_course_repo"><code class="docutils literal notranslate"><span class="pre">get_course_repo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.get_course_root"><code class="docutils literal notranslate"><span class="pre">get_course_root()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.get_urnc_repo"><code class="docutils literal notranslate"><span class="pre">get_urnc_repo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.get_urnc_root"><code class="docutils literal notranslate"><span class="pre">get_urnc_root()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.read_pyproject"><code class="docutils literal notranslate"><span class="pre">read_pyproject()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.tag_exists"><code class="docutils literal notranslate"><span class="pre">tag_exists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.update_repo_config"><code class="docutils literal notranslate"><span class="pre">update_repo_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.write_config"><code class="docutils literal notranslate"><span class="pre">write_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.util.write_pyproject"><code class="docutils literal notranslate"><span class="pre">write_pyproject()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-urnc.version">urnc.version module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.version.bump"><code class="docutils literal notranslate"><span class="pre">bump()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.version.tag"><code class="docutils literal notranslate"><span class="pre">tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.version.version_course"><code class="docutils literal notranslate"><span class="pre">version_course()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urnc.version.version_self"><code class="docutils literal notranslate"><span class="pre">version_self()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Modules</a></li>
+      <li class="breadcrumb-item active">urnc package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/urnc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-urnc">
+<span id="urnc-package"></span><h1>urnc package<a class="headerlink" href="#module-urnc" title="Link to this heading"></a></h1>
+<p>University of Regensburg Notebook Converter</p>
+<p>Package for converting jupyter notebook files within a course directory into a
+format suitable for student use. It simplifies the process of preparing and
+maintaining course materials by providing easy-to-use commands to check,
+convert, and manage course versions.</p>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="urnc.preprocessor.html">urnc.preprocessor package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="urnc.preprocessor.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="urnc.preprocessor.html#module-urnc.preprocessor.add_tags">urnc.preprocessor.add_tags module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.add_tags.AddTags"><code class="docutils literal notranslate"><span class="pre">AddTags</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.add_tags.AddTags.preprocess"><code class="docutils literal notranslate"><span class="pre">AddTags.preprocess()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.add_tags.is_assignment_end"><code class="docutils literal notranslate"><span class="pre">is_assignment_end()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.add_tags.is_assignment_start"><code class="docutils literal notranslate"><span class="pre">is_assignment_start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.add_tags.is_solution"><code class="docutils literal notranslate"><span class="pre">is_solution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="urnc.preprocessor.html#module-urnc.preprocessor.lint">urnc.preprocessor.lint module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.lint.Linter"><code class="docutils literal notranslate"><span class="pre">Linter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.lint.Linter.preprocess"><code class="docutils literal notranslate"><span class="pre">Linter.preprocess()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.lint.check_image"><code class="docutils literal notranslate"><span class="pre">check_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.lint.url_is_valid"><code class="docutils literal notranslate"><span class="pre">url_is_valid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="urnc.preprocessor.html#module-urnc.preprocessor.solutions">urnc.preprocessor.solutions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.solutions.SkeletonRemover"><code class="docutils literal notranslate"><span class="pre">SkeletonRemover</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.solutions.SkeletonRemover.preprocess"><code class="docutils literal notranslate"><span class="pre">SkeletonRemover.preprocess()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.solutions.SolutionRemover"><code class="docutils literal notranslate"><span class="pre">SolutionRemover</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.solutions.SolutionRemover.preprocess"><code class="docutils literal notranslate"><span class="pre">SolutionRemover.preprocess()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.solutions.remove_skeleton_lines"><code class="docutils literal notranslate"><span class="pre">remove_skeleton_lines()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.solutions.remove_solution_lines"><code class="docutils literal notranslate"><span class="pre">remove_solution_lines()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="urnc.preprocessor.html#module-urnc.preprocessor.util">urnc.preprocessor.util module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords"><code class="docutils literal notranslate"><span class="pre">Keywords</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.ASSIGNMENT_DEPRECATED"><code class="docutils literal notranslate"><span class="pre">Keywords.ASSIGNMENT_DEPRECATED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.ASSIGNMENT_LINK"><code class="docutils literal notranslate"><span class="pre">Keywords.ASSIGNMENT_LINK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.ASSIGNMENT_REPLACE"><code class="docutils literal notranslate"><span class="pre">Keywords.ASSIGNMENT_REPLACE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.ASSIGNMENT_START"><code class="docutils literal notranslate"><span class="pre">Keywords.ASSIGNMENT_START</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.HEADER"><code class="docutils literal notranslate"><span class="pre">Keywords.HEADER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.IMAGE_TAG"><code class="docutils literal notranslate"><span class="pre">Keywords.IMAGE_TAG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.MD_IMAGE_TAG"><code class="docutils literal notranslate"><span class="pre">Keywords.MD_IMAGE_TAG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.SKELETON"><code class="docutils literal notranslate"><span class="pre">Keywords.SKELETON</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.SOLUTION"><code class="docutils literal notranslate"><span class="pre">Keywords.SOLUTION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Keywords.SOLUTION_END"><code class="docutils literal notranslate"><span class="pre">Keywords.SOLUTION_END</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Tags"><code class="docutils literal notranslate"><span class="pre">Tags</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Tags.ASSIGNMENT"><code class="docutils literal notranslate"><span class="pre">Tags.ASSIGNMENT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Tags.ASSIGNMENT_START"><code class="docutils literal notranslate"><span class="pre">Tags.ASSIGNMENT_START</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Tags.NORMAL"><code class="docutils literal notranslate"><span class="pre">Tags.NORMAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Tags.SKELETON"><code class="docutils literal notranslate"><span class="pre">Tags.SKELETON</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.Tags.SOLUTION"><code class="docutils literal notranslate"><span class="pre">Tags.SOLUTION</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.cell_preview"><code class="docutils literal notranslate"><span class="pre">cell_preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.has_tag"><code class="docutils literal notranslate"><span class="pre">has_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.set_tag"><code class="docutils literal notranslate"><span class="pre">set_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.string_to_byte"><code class="docutils literal notranslate"><span class="pre">string_to_byte()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.preprocessor.html#urnc.preprocessor.util.to_snake_case"><code class="docutils literal notranslate"><span class="pre">to_snake_case()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-urnc.ci">
+<span id="urnc-ci-module"></span><h2>urnc.ci module<a class="headerlink" href="#module-urnc.ci" title="Link to this heading"></a></h2>
+<p>Functions to be used by CI pipelines</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.ci.ci">
+<span class="sig-name descname"><span class="pre">ci</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.ci.ci" title="Link to this definition"></a></dt>
+<dd><p>Perform a continuous integration run on a student repository.</p>
+<p>This function</p>
+<ol class="arabic simple">
+<li><p>Clones the student repository</p></li>
+<li><p>Clears it</p></li>
+<li><p>Copies over all files from the course repository</p></li>
+<li><p>Converts the notebooks</p></li>
+<li><p>Updates the .gitignore file according to the <cite>git.exclude</cite> setting from the <cite>config.yaml</cite></p></li>
+<li><p>Commits and pushes the changes if <cite>commit</cite> is True</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>commit</strong> (<em>bool</em>) – commit and push updates?</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the repository is dirty and commit is True, an exception is raised.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>   <span class="c1"># This will commit and push the changes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># This will not commit or push the changes</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.ci.clear_repo">
+<span class="sig-name descname"><span class="pre">clear_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.ci.clear_repo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.ci.clone_student_repo">
+<span class="sig-name descname"><span class="pre">clone_student_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.ci.clone_student_repo" title="Link to this definition"></a></dt>
+<dd><p>Clones the student repository if it doesn’t exist locally, or returns the existing local repository.
+If the ‘student’ key is not found in the ‘git’ section of the config, it initializes a new student repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em>) – The configuration dictionary.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The cloned, existing, or newly initialized local git repository.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>git.Repo</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – If the ‘student’ key is not found in the ‘git’ section of the config and the initialization of a new repository fails.</p></li>
+<li><p><strong>Exception</strong> – If the local repository exists but is not a git repository.</p></li>
+<li><p><strong>Exception</strong> – If there is a mismatch between the remote URL and the local repository’s URL.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.ci.copy_files">
+<span class="sig-name descname"><span class="pre">copy_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.ci.copy_files" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.ci.update_index">
+<span class="sig-name descname"><span class="pre">update_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.ci.update_index" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.ci.write_gitignore">
+<span class="sig-name descname"><span class="pre">write_gitignore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">main_gitignore</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">student_gitignore</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.ci.write_gitignore" title="Link to this definition"></a></dt>
+<dd><p>Writes a <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> file in the student repository.</p>
+<p>This function copies the <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> file from the main repository (if it exists) and appends additional patterns to exclude based on the configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>main_gitignore</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – The path to the .gitignore file in the main repository. If None, no .gitignore file is copied.</p></li>
+<li><p><strong>student_gitignore</strong> (<em>str</em>) – The path to the .gitignore file in the student repository.</p></li>
+<li><p><strong>config</strong> (<em>Dict</em>) – <p>The configuration dictionary. Can contain a <code class="docutils literal notranslate"><span class="pre">git</span></code> key with a <code class="docutils literal notranslate"><span class="pre">exclude</span></code> key, which should be a list of patterns to exclude. Each pattern can be a string or a dictionary with a <code class="docutils literal notranslate"><span class="pre">pattern</span></code> key and optional <code class="docutils literal notranslate"><span class="pre">after</span></code> and <code class="docutils literal notranslate"><span class="pre">until</span></code> keys specifying a date range, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span><span class="p">:</span>
+    <span class="n">exclude</span><span class="p">:</span>
+        <span class="o">-</span> <span class="o">*.</span><span class="n">pyc</span>
+        <span class="o">-</span> <span class="o">/</span><span class="n">tutorials</span><span class="o">/*.*</span>
+        <span class="o">-</span> <span class="p">{</span><span class="n">pattern</span><span class="p">:</span> <span class="s1">&#39;!tutorials/Tutorial_1.ipynb&#39;</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="s1">&#39;2023-10-25 9:30 CET&#39;</span><span class="p">}</span>
+        <span class="o">-</span> <span class="p">{</span><span class="n">pattern</span><span class="p">:</span> <span class="s1">&#39;!tutorials/Tutorial21.ipynb&#39;</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="s1">&#39;2023-10-25 9:30 CET&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-urnc.convert">
+<span id="urnc-convert-module"></span><h2>urnc.convert module<a class="headerlink" href="#module-urnc.convert" title="Link to this heading"></a></h2>
+<p>Create student version of one or more Jupyter notebooks</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.convert.NbPath">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NbPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootpath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.convert.NbPath" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Path to a jupyter notebook inside a arbitrarily nested directory structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>Path</em>) – </p></li>
+<li><p><strong>rootpath</strong> (<em>str</em><em> | </em><em>Path</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.path">
+<span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#urnc.convert.NbPath.path" title="Link to this definition"></a></dt>
+<dd><p>Path object initialized from the provided path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.abspath">
+<span class="sig-name descname"><span class="pre">abspath</span></span><a class="headerlink" href="#urnc.convert.NbPath.abspath" title="Link to this definition"></a></dt>
+<dd><p>Absolute path to the notebook.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.absdirpath">
+<span class="sig-name descname"><span class="pre">absdirpath</span></span><a class="headerlink" href="#urnc.convert.NbPath.absdirpath" title="Link to this definition"></a></dt>
+<dd><p>Absolute path to the directory containing the notebook.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.rootpath">
+<span class="sig-name descname"><span class="pre">rootpath</span></span><a class="headerlink" href="#urnc.convert.NbPath.rootpath" title="Link to this definition"></a></dt>
+<dd><p>Absolute path to the root directory of the notebook.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.relpath">
+<span class="sig-name descname"><span class="pre">relpath</span></span><a class="headerlink" href="#urnc.convert.NbPath.relpath" title="Link to this definition"></a></dt>
+<dd><p>Relative path to the notebook from the root directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.reldirpath">
+<span class="sig-name descname"><span class="pre">reldirpath</span></span><a class="headerlink" href="#urnc.convert.NbPath.reldirpath" title="Link to this definition"></a></dt>
+<dd><p>Relative path to the directory containing the notebook from the root directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#urnc.convert.NbPath.name" title="Link to this definition"></a></dt>
+<dd><p>Name of the notebook including extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.basename">
+<span class="sig-name descname"><span class="pre">basename</span></span><a class="headerlink" href="#urnc.convert.NbPath.basename" title="Link to this definition"></a></dt>
+<dd><p>Name of the notebook without extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.convert.NbPath.ext">
+<span class="sig-name descname"><span class="pre">ext</span></span><a class="headerlink" href="#urnc.convert.NbPath.ext" title="Link to this definition"></a></dt>
+<dd><p>Extension of the notebook without the dot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;C:/Users/max/mycourse/lectures/week2/lecture1.ipynb&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rootpath</span> <span class="o">=</span> <span class="s2">&quot;C:/Users/max/mycourse&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span> <span class="o">=</span> <span class="n">NbPath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rootpath</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span><span class="o">.</span><span class="n">abspath</span>    <span class="o">==</span> <span class="s2">&quot;C:/Users/max/mycourse/lectures/week2/lecture1.ipynb&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span><span class="o">.</span><span class="n">absdirpath</span> <span class="o">==</span> <span class="s2">&quot;C:/Users/max/mycourse/lectures/week2&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span><span class="o">.</span><span class="n">rootpath</span>   <span class="o">==</span> <span class="s2">&quot;C:/Users/max/mycourse&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span><span class="o">.</span><span class="n">relpath</span>    <span class="o">==</span> <span class="s2">&quot;lectures/week2/lecture1.ipynb&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span><span class="o">.</span><span class="n">reldirpath</span> <span class="o">==</span> <span class="s2">&quot;lectures/week2&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span><span class="o">.</span><span class="n">name</span>       <span class="o">==</span> <span class="s2">&quot;lecture1.ipynb&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span><span class="o">.</span><span class="n">basename</span>   <span class="o">==</span> <span class="s2">&quot;lecture1&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nb</span><span class="o">.</span><span class="n">ext</span>        <span class="o">==</span> <span class="s2">&quot;ipynb&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.convert.convert">
+<span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'out/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.convert.convert" title="Link to this definition"></a></dt>
+<dd><p>Convert one or multiple notebooks to its student version with and/or without solutions removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>str</em>) – The input path. Can be either the path to a single ipynb file or the path to a directory containing ipynb files.</p></li>
+<li><p><strong>output</strong> (<em>str</em>) – Path for storing the student notebooks with solutions removed. Directories will be created if necessary. If <code class="docutils literal notranslate"><span class="pre">output</span></code> is None, the conversion will be skipped. Supports placeholder variables. For details see section “Details” below.</p></li>
+<li><p><strong>solution</strong> (<em>str</em><em> | </em><em>None</em>) – Path for storing the student notebooks with solutions kept. Directories will be created if necessary. If <code class="docutils literal notranslate"><span class="pre">solution</span></code> is None, the conversion will be skipped. Supports placeholder variables. For details see section “Details” below.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – If true, existing output files will be overwritten.</p></li>
+<li><p><strong>dry_run</strong> (<em>bool</em>) – If true, input files will be converted but not written to disk. This is useful for checking if the conversion works without changing any files.</p></li>
+<li><p><strong>ask</strong> (<em>bool</em>) – Should the user be asked if existing files should be overwritten?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<dl>
+<dt>Details:</dt><dd><p>A call like <code class="docutils literal notranslate"><span class="pre">convert(&quot;C:/Users/max/mycourse&quot;,</span> <span class="pre">...)</span></code> will search <code class="docutils literal notranslate"><span class="pre">C:/Users/max/mycourse</span></code> recursively for notebooks and convert each notebook to student versions. To be able to specify output paths in a simple yet flexible way, the following placeholder variables are provided: <code class="docutils literal notranslate"><span class="pre">nb.abspath</span></code>, <code class="docutils literal notranslate"><span class="pre">nb.absdirpath</span></code>, <code class="docutils literal notranslate"><span class="pre">nb.rootpath</span></code>, <code class="docutils literal notranslate"><span class="pre">nb.relpath</span></code>, <code class="docutils literal notranslate"><span class="pre">nb.reldirpath</span></code>, <code class="docutils literal notranslate"><span class="pre">nb.name</span></code>, <code class="docutils literal notranslate"><span class="pre">nb.basename</span></code> and <code class="docutils literal notranslate"><span class="pre">nb.ext</span></code>. To understand the meaning of each placeholder mean, consider the following folder structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C:/Users/max/mycourse
+├── lectures
+│   ├── week1
+│   │   ├── lecture1.ipynb
+│   │   └── lecture2.ipynb
+│   └── week2
+│       ├── lecture3.ipynb
+│       └── lecture4.ipynb
+└── assignments
+    ├── week1.ipynb
+    └── week2.ipynb
+</pre></div>
+</div>
+<p>The above course contains the following six notebooks: <code class="docutils literal notranslate"><span class="pre">lecture1.ipynb</span></code>, <code class="docutils literal notranslate"><span class="pre">lecture2.ipynb</span></code>, <code class="docutils literal notranslate"><span class="pre">lecture3.ipynb</span></code>, <code class="docutils literal notranslate"><span class="pre">lecture4.ipynb</span></code>, <code class="docutils literal notranslate"><span class="pre">week1.ipynb</span></code> and <code class="docutils literal notranslate"><span class="pre">week2.ipynb</span></code>. The following table shows the value of each placeholder variable exemplarily for notebook <code class="docutils literal notranslate"><span class="pre">C:/Users/max/mycourse/lectures/week2/lecture1.ipynb</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span> <span class="n">nb</span><span class="o">.</span><span class="n">abspath</span>    <span class="o">|</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="nb">max</span><span class="o">/</span><span class="n">mycourse</span><span class="o">/</span><span class="n">lectures</span><span class="o">/</span><span class="n">week2</span><span class="o">/</span><span class="n">lecture1</span><span class="o">.</span><span class="n">ipynb</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">nb</span><span class="o">.</span><span class="n">absdirpath</span> <span class="o">|</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="nb">max</span><span class="o">/</span><span class="n">mycourse</span><span class="o">/</span><span class="n">lectures</span><span class="o">/</span><span class="n">week2</span>                <span class="o">|</span>
+<span class="o">|</span> <span class="n">nb</span><span class="o">.</span><span class="n">rootpath</span>   <span class="o">|</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="nb">max</span><span class="o">/</span><span class="n">mycourse</span>                               <span class="o">|</span>
+<span class="o">|</span> <span class="n">nb</span><span class="o">.</span><span class="n">relpath</span>    <span class="o">|</span>                       <span class="n">lectures</span><span class="o">/</span><span class="n">week2</span><span class="o">/</span><span class="n">lecture1</span><span class="o">.</span><span class="n">ipynb</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">nb</span><span class="o">.</span><span class="n">reldirpath</span> <span class="o">|</span>                       <span class="n">lectures</span><span class="o">/</span><span class="n">week2</span><span class="o">/</span>               <span class="o">|</span>
+<span class="o">|</span> <span class="n">nb</span><span class="o">.</span><span class="n">name</span>       <span class="o">|</span>                                      <span class="n">lecture1</span><span class="o">.</span><span class="n">ipynb</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">nb</span><span class="o">.</span><span class="n">basename</span>   <span class="o">|</span>                                      <span class="n">lecture1</span>       <span class="o">|</span>
+<span class="o">|</span> <span class="n">nb</span><span class="o">.</span><span class="n">ext</span>        <span class="o">|</span>                                               <span class="n">ipynb</span> <span class="o">|</span>
+</pre></div>
+</div>
+<p>I.e. the following function call:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">convert</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">input</span> <span class="o">=</span> <span class="s2">&quot;C:/Users/max/mycourse&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;C:/converted/</span><span class="si">{nb.relpath}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">solution</span> <span class="o">=</span> <span class="s2">&quot;C:/converted/</span><span class="si">{nb.reldirpath}</span><span class="s2">/solutions/</span><span class="si">{nb.name}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>would create the following output structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C:/converted
+├── lectures
+│   ├── week1
+│   │   ├── lecture1.ipynb
+│   │   ├── lecture1.ipynb
+│   │   └── solutions
+│   │       └── lecture1.ipynb
+│   │       └── lecture2.ipynb
+│   └── week2
+│       ├── lecture3.ipynb
+│       ├── lecture4.ipynb
+│       └── solutions
+│           └── lecture3.ipynb
+│           └── lecture4.ipynb
+└── assignments
+    ├── week1.ipynb
+    ├── week2.ipynb
+    └── solutions
+        ├── week1.ipynb
+        └── week2.ipynb
+</pre></div>
+</div>
+<p>To make specifying output paths less verbose and to maintain backwards compatibility, the following shortcuts are provided:</p>
+<ol class="arabic">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">output</span></code> does not end with <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> and does not contain any placeholders, the provided path will be interpreted as a directory and the notebooks will be saved in <code class="docutils literal notranslate"><span class="pre">{output}/{nb.relpath}</span></code>, i.e. the following calls are equivalent:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;mycourse&#39;</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;out&#39;</span><span class="p">)</span>
+<span class="n">convert</span><span class="p">(</span><span class="s1">&#39;mycourse&#39;</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;out/</span><span class="si">{nb.relpath}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">solution</span></code> does not end with <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> and does not contain any placeholders, the provided path will be interpreted as a directory and the notebooks will be saved in <code class="docutils literal notranslate"><span class="pre">{solution}/{nb.reldirpath}/{nb.basename}-solution.{nb.ext}</span></code>, i.e. the following calls are equivalent:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;mycourse&#39;</span><span class="p">,</span> <span class="n">solution</span> <span class="o">=</span> <span class="s1">&#39;out&#39;</span><span class="p">)</span>
+<span class="n">convert</span><span class="p">(</span><span class="s1">&#39;mycourse&#39;</span><span class="p">,</span> <span class="n">solution</span> <span class="o">=</span> <span class="s1">&#39;out/</span><span class="si">{nb.reldirpath}</span><span class="s1">/</span><span class="si">{nb.basename}</span><span class="s1">-solution.</span><span class="si">{nb.ext}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;/path/to/single_notebook.ipynb&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/output&quot;</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;/path/to/notebooks&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/output&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.convert.convert_nb">
+<span class="sig-name descname"><span class="pre">convert_nb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.convert.convert_nb" title="Link to this definition"></a></dt>
+<dd><p>Convert a single notebook to its student version with and/or without solutions removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>str</em><em> | </em><em>Path</em>) – Path of input notebook.</p></li>
+<li><p><strong>output</strong> (<em>str</em><em> | </em><em>Path</em><em> | </em><em>None</em>) – Path for storing the student notebook without solutions. If the parent directory does not exist, it will be created. If output is None, the conversion will be skipped.</p></li>
+<li><p><strong>solution</strong> (<em>str</em><em> | </em><em>Path</em><em> | </em><em>None</em>) – Path for storing the student notebook with solutions. If the parent directory does not exist, it will be created. If solution is None, the conversion will be skipped.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – Overwrite existing output files without asking?</p></li>
+<li><p><strong>dry_run</strong> (<em>bool</em>) – Skip writing to disk after performing conversions? Useful for testing without file changes.</p></li>
+<li><p><strong>ask</strong> (<em>bool</em>) – Should the user be asked if existing files should be overwritten?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create student version with solutions removed/kept from dummy.ipynb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_nb</span><span class="p">(</span><span class="s2">&quot;dummy.ipynb&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;dummy-converted.ipynb&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_nb</span><span class="p">(</span><span class="s2">&quot;dummy.ipynb&quot;</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="s2">&quot;dummy-solution.ipynb&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Same as above but in one line</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_nb</span><span class="p">(</span><span class="s2">&quot;dummy.ipynb&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;dummy-converted.ipynb&quot;</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="s2">&quot;dummy-solution.ipynb&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Absolute paths work as well</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_nb</span><span class="p">(</span><span class="s2">&quot;C:/Users/max/dummy.ipynb&quot;</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="s2">&quot;C:/Users/max/dummy-solution.ipynb&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Overwrite existing files without asking</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_nb</span><span class="p">(</span><span class="s2">&quot;dummy.ipynb&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;dummy-converted.ipynb&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Don&#39;t write converted files to disk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_nb</span><span class="p">(</span><span class="s2">&quot;dummy.ipynb&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;dummy-converted.ipynb&quot;</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.convert.get_nb_paths">
+<span class="sig-name descname"><span class="pre">get_nb_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.convert.get_nb_paths" title="Link to this definition"></a></dt>
+<dd><p>Creates <cite>NbPath</cite> objects from all notebook files in input and returns them as list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> (<em>str</em><em> | </em><em>Path</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List</em>[<a class="reference internal" href="#urnc.convert.NbPath" title="urnc.convert.NbPath"><em>NbPath</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.convert.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.convert.write" title="Link to this definition"></a></dt>
+<dd><p>Write text to path.
+If the parent directory does not exist, it will be created.
+If the path exists already and force is False, the user will be asked if they want to overwrite the file.
+If stdout is not a tty or ask is False, a warning message will be printed instead.
+If force is True, the file will be overwritten without asking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – The text to write.</p></li>
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>Path</em>) – The path of the file to write to. If the parent directory does not exist, it will be created.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – Overwrite existing files without asking?</p></li>
+<li><p><strong>ask</strong> – Ask the user if they want to overwrite the file if it exists already and force is False?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-urnc.logger">
+<span id="urnc-logger-module"></span><h2>urnc.logger module<a class="headerlink" href="#module-urnc.logger" title="Link to this heading"></a></h2>
+<p>Logging functionality for URNC</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.logger.CustomFormatter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CustomFormatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datefmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.CustomFormatter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Formatter</span></code></p>
+<p>Initialize the formatter with specified format strings.</p>
+<p>Initialize the formatter either with the specified format string, or a
+default as described above. Allow for specialized date formatting with
+the optional datefmt argument. If datefmt is omitted, you get an
+ISO8601-like (or RFC 3339-like) format.</p>
+<p>Use a style parameter of ‘%’, ‘{’ or ‘$’ to specify that you want to
+use one of %-formatting, <code class="xref py py-meth docutils literal notranslate"><span class="pre">str.format()</span></code> (<code class="docutils literal notranslate"><span class="pre">{}</span></code>) formatting or
+<code class="xref py py-class docutils literal notranslate"><span class="pre">string.Template</span></code> formatting in your format string.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>Added the <code class="docutils literal notranslate"><span class="pre">style</span></code> parameter.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.logger.CustomFormatter.format">
+<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.CustomFormatter.format" title="Link to this definition"></a></dt>
+<dd><p>Format the specified record as text.</p>
+<p>The record’s attribute dictionary is used as the operand to a
+string formatting operation which yields the returned string.
+Before formatting the dictionary, a couple of preparatory steps
+are carried out. The message attribute of the record is computed
+using LogRecord.getMessage(). If the formatting string uses the
+time (as determined by a call to usesTime(), formatTime() is
+called to format the event time. If there is exception information,
+it is formatted using formatException() and appended to the message.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.logger.critical">
+<span class="sig-name descname"><span class="pre">critical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.critical" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>NoReturn</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.logger.dbg">
+<span class="sig-name descname"><span class="pre">dbg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.dbg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.logger.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.logger.get_handler">
+<span class="sig-name descname"><span class="pre">get_handler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.get_handler" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.logger.log">
+<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.log" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.logger.setup_logger">
+<span class="sig-name descname"><span class="pre">setup_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.setup_logger" title="Link to this definition"></a></dt>
+<dd><p>Sets up a logger with a custom handler and formatter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>use_file</strong> (<em>bool</em>) – If True, a file handler is added to the logger.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, the logger’s level is set to DEBUG. Otherwise, to INFO.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.logger.warn">
+<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.logger.warn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-urnc.main">
+<span id="urnc-main-module"></span><h2>urnc.main module<a class="headerlink" href="#module-urnc.main" title="Link to this heading"></a></h2>
+<p>Main entry point for urnc when called from command line</p>
+</section>
+<section id="module-urnc.pull">
+<span id="urnc-pull-module"></span><h2>urnc.pull module<a class="headerlink" href="#module-urnc.pull" title="Link to this heading"></a></h2>
+<p>Fetch and merge the student repo</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.get_course_info">
+<span class="sig-name descname"><span class="pre">get_course_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.get_course_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.get_repo">
+<span class="sig-name descname"><span class="pre">get_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.get_repo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.get_upstream_added">
+<span class="sig-name descname"><span class="pre">get_upstream_added</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.get_upstream_added" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.get_upstream_changes">
+<span class="sig-name descname"><span class="pre">get_upstream_changes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.get_upstream_changes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.get_upstream_deleted">
+<span class="sig-name descname"><span class="pre">get_upstream_deleted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.get_upstream_deleted" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.merge">
+<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.merge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.pull">
+<span class="sig-name descname"><span class="pre">pull</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.pull" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.pull_admin">
+<span class="sig-name descname"><span class="pre">pull_admin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.pull_admin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.rename_file_with_timestamp">
+<span class="sig-name descname"><span class="pre">rename_file_with_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.rename_file_with_timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.rename_local_untracked">
+<span class="sig-name descname"><span class="pre">rename_local_untracked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.rename_local_untracked" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.pull.reset_deleted_files">
+<span class="sig-name descname"><span class="pre">reset_deleted_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.pull.reset_deleted_files" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-urnc.util">
+<span id="urnc-util-module"></span><h2>urnc.util module<a class="headerlink" href="#module-urnc.util" title="Link to this heading"></a></h2>
+<p>Utility functions for urnc</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.branch_exists">
+<span class="sig-name descname"><span class="pre">branch_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.branch_exists" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.util.chdir">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.chdir" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Non thread-safe context manager to change the current working directory.</p>
+<p>Same as <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#contextlib.chdir">contextlib.chdir</a>. We implement it ourselves because <code class="docutils literal notranslate"><span class="pre">contextlib.chdir</span></code> is only available for python versions &gt;=3.11 and we want to support versions &gt;=3.8.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># This code will be executed in the parent directory of the current working directory</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.get_config_string">
+<span class="sig-name descname"><span class="pre">get_config_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.get_config_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.get_config_value">
+<span class="sig-name descname"><span class="pre">get_config_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.get_config_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.get_course_repo">
+<span class="sig-name descname"><span class="pre">get_course_repo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.get_course_repo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.get_course_root">
+<span class="sig-name descname"><span class="pre">get_course_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.get_course_root" title="Link to this definition"></a></dt>
+<dd><p>This function navigates up the directory tree from the current working directory until it finds a <cite>config.yaml</cite> file or it reaches the root directory. If it doesn’t find a ‘config.yaml’ file, it raises an Exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>path of the course directory.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – If no ‘config.yaml’ file is found in the directory hierarchy.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.get_urnc_repo">
+<span class="sig-name descname"><span class="pre">get_urnc_repo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.get_urnc_repo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.get_urnc_root">
+<span class="sig-name descname"><span class="pre">get_urnc_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.get_urnc_root" title="Link to this definition"></a></dt>
+<dd><p>This function navigates up the directory tree from the current working directory until it finds a ‘pyproject.toml’ file that belongs to the ‘urnc’ package, or it reaches the root directory. If it doesn’t find a suitable    ‘pyproject.toml’ file, it raises an Exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The path of the directory containing the ‘pyproject.toml’ file of the ‘urnc’ package.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Exception</strong> – If no ‘pyproject.toml’ file is found in the directory hierarchy.</p></li>
+<li><p><strong>Exception</strong> – If the found ‘pyproject.toml’ file does not belong to the ‘urnc’ package.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.read_config">
+<span class="sig-name descname"><span class="pre">read_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.read_config" title="Link to this definition"></a></dt>
+<dd><p>Reads the configuration from a YAML file named ‘config.yaml’ located at the root of the git repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>course_root</strong> (<em>str</em><em> | </em><em>None</em>) – The root directory of the course. Defaults to the root of the git repository when called from within a git repository.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>click.UsageError</strong> – If the ‘config.yaml’ file does not exist in the git root folder.</p></li>
+<li><p><strong>click.FileError</strong> – If there is an error reading the file or processing its content.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The configuration dictionary.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.read_pyproject">
+<span class="sig-name descname"><span class="pre">read_pyproject</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.read_pyproject" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.tag_exists">
+<span class="sig-name descname"><span class="pre">tag_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.tag_exists" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.update_repo_config">
+<span class="sig-name descname"><span class="pre">update_repo_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.update_repo_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.write_config">
+<span class="sig-name descname"><span class="pre">write_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.write_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.util.write_pyproject">
+<span class="sig-name descname"><span class="pre">write_pyproject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.util.write_pyproject" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-urnc.version">
+<span id="urnc-version-module"></span><h2>urnc.version module<a class="headerlink" href="#module-urnc.version" title="Link to this heading"></a></h2>
+<p>Manage the semantic version of your course</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.version.bump">
+<span class="sig-name descname"><span class="pre">bump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.version.bump" title="Link to this definition"></a></dt>
+<dd><p>Bump the version based on the action</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>version</strong> (<em>str</em>) – The current version.</p></li>
+<li><p><strong>action</strong> (<em>str</em>) – The action to perform (show, patch, minor, major).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new version after bumping, or None if action is ‘show’.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.version.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urnc.version.tag" title="Link to this definition"></a></dt>
+<dd><p>Tag the current commit with the current version of the course.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.version.version_course">
+<span class="sig-name descname"><span class="pre">version_course</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.version.version_course" title="Link to this definition"></a></dt>
+<dd><p>Bump the version of the course.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>action</strong> (<em>str</em>) – The action to perform (show, patch, minor, major).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.version.version_self">
+<span class="sig-name descname"><span class="pre">version_self</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.version.version_self" title="Link to this definition"></a></dt>
+<dd><p>Bump the version of the urnc project itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>action</strong> (<em>str</em>) – The action to perform (show, patch, minor, major).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="urnc.preprocessor.html" class="btn btn-neutral float-right" title="urnc.preprocessor package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
