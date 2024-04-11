@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.10.3 (2024-04-11)
+--------------------
+
+- Fixed a bug in which student repos could not be pushed by `urnc ci` if the repo already existed on the CI runner machine and was older than the corresponding remote repo (as could occur when using multiple runners which use different drives for caching). Now, whenever the repo already exists a `git pull` is executed before starting the conversion.
+
 v1.10.2 (2024-01-04)
 --------------------
 
