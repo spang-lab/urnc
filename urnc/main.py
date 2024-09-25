@@ -70,7 +70,7 @@ def check(ctx, input, quiet):
 @click.option("--self", is_flag=True, help="Echo the version of urnc")
 @click.argument(
     "action",
-    type=click.Choice(["show", "patch", "minor", "major"]),
+    type=click.Choice(["show", "patch", "minor", "major", "prerelease"]),
     required=False,
     default="show",
 )
