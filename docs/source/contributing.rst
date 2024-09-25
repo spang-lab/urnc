@@ -8,7 +8,7 @@ First check that you have the latest version of this repo:
    git pull
    urnc version --self
 
-If you want to make changes to `urnc` update the python files in `urnc` and test your changes as described in page `Testing <testing.rst>`_. When you are happy with your changes, push them to Github. Afterwards use the following commands to create a tagged commit and trigger the Github actions:
+If you want to make changes to `urnc` update the python files in `urnc` and test your changes as described in page `Testing <testing>`_. When you are happy with your changes, push them to Github. Afterwards use the following commands to create a tagged commit and trigger the Github actions:
 
 .. code-block:: sh
 
