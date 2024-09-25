@@ -22,6 +22,13 @@ yaml = YAML(typ="rt")
 # Git related functions
 
 
+def git_folder_name(git_url):
+    name = git_url.split("/")[-1]
+    if name.endswith(".git"):
+        name = name[:-4]
+    return name
+
+
 def branch_exists(repo, branch):
     origin_branch = f"origin/{branch}"
     for ref in repo.references:

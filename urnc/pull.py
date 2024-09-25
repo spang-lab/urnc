@@ -41,51 +41,6 @@ def get_upstream_added(repo):
     return files
 
 
-def get_course_info(course_name, output):
-    base_url = os.getenv("GIT_URL")
-    if not base_url:
-        log.error("Failed to pull. Missing env var GIT_URL")
-        return (None, None)
-
-    if not course_name:
-        try:
-            git_repo = git.Repo(os.getcwd(), search_parent_directories=True)
-            git_url = git_repo.remote().url
-            if not git_url.startswith(base_url):
-                log.error(f"Failed to pull. Invalid git remote_url {git_url}")
-                return (None, None)
-            folder_name = git_repo.working_dir
-            return (git_url, folder_name)
-        except Exception:
-            log.error("Failed to pull no course_name given and not in a git repo")
-            return (None, None)
-    folder_name = output
-    if not output:
-        folder_name = course_name
-
-    git_url = f"{base_url}{course_name}.git"
-    return (git_url, folder_name)
-
-
-def get_repo(folder_name):
-    base_url = os.getenv("GIT_URL")
-    if not base_url:
-        log.error("Missing env var GIT_URL")
-        return None
-    try:
-        git_repo = git.Repo(folder_name)
-        git_url = git_repo.remote().url
-        if not git_url.startswith(base_url):
-            log.error(
-                f"Invalid git remote_url {git_url} needs to start with {base_url}"
-            )
-            return None
-        return git_repo
-    except Exception:
-        log.error(f"{folder_name} is not a git repo")
-        return None
-
-
 def reset_deleted_files(repo):
     branch = repo.active_branch
     deleted_files = repo.git.ls_files("--deleted").split("\n")
@@ -137,59 +92,42 @@ def merge(repo):
         raise
 
 
-def pull_admin(course_name, output, branch, depth):
-    isAdmin = os.getenv("IS_ADMIN") == "1"
-    if not isAdmin:
-        return
-    if not course_name:
-        return
-    base_url = os.getenv("GIT_URL_ADMIN")
-    if not base_url:
-        log.error("Missing env var GIT_URL_ADMIN")
-        return
-    git_url = f"{base_url}{course_name}.git"
+def get_repo(git_url, output, branch, depth):
+    if not git_url:
+        try:
+            repo = git.Repo(os.getcwd(), search_parent_directories=True)
+            return repo
+        except Exception:
+            log.error("Failed to pull: no git_url given and not in a git repo")
+            return
     folder_name = output
     if not output:
-        folder_name = f"{course_name}-admin"
-
+        folder_name = util.git_folder_name(git_url)
     if not os.path.exists(folder_name):
         log.log(f"{folder_name} does not exists. Cloning repo {git_url}")
         try:
             git.Repo.clone_from(git_url, folder_name, branch=branch, depth=depth)
             log.log("Cloned successfully.")
+            return None
         except Exception as err:
             log.error("Failed to clone repo. Error:")
             log.error(err)
-    else:
-        log.log(f"{folder_name} exists.")
-        try:
-            repo = git.Repo(folder_name)
-            log.log("Pulling...")
-            repo.git.pull("--ff-only")
-            log.log("Done")
+            return None
+    try:
+        repo = git.Repo(folder_name)
+        if git_url != repo.remote().url:
+            log.error(
+                f"Remote url {repo.remote().url} of folder {folder_name} does not match {git_url}"
+            )
+            return None
+        return repo
+    except Exception:
+        log.error(f"Failed to pull: {folder_name} exists but is not a git repo")
+        return None
 
-        except Exception:
-            log.error(f"{folder_name} is not a git repo")
 
-
-def pull(course_name, output, branch, depth):
-    pull_admin(course_name, output, branch, depth)
-
-    (git_url, folder_name) = get_course_info(course_name, output)
-    if not git_url or not folder_name:
-        return
-
-    if not os.path.exists(folder_name):
-        log.log(f"{folder_name} does not exists. Cloning repo {git_url}")
-        try:
-            git.Repo.clone_from(git_url, folder_name, branch=branch, depth=depth)
-            log.log("Cloned successfully.")
-        except Exception as err:
-            log.error("Failed to clone repo. Error:")
-            log.error(err)
-        return
-    log.log(f"{folder_name} exists. Updating the repo")
-    repo = get_repo(folder_name)
+def pull(git_url, output, branch, depth):
+    repo = get_repo(git_url, output, branch, depth)
     if not repo:
         return
 
@@ -201,7 +139,6 @@ def pull(course_name, output, branch, depth):
     reset_deleted_files(repo)
     log.log("Unstaging all changes")
     repo.git.reset("--mixed")
-
     util.update_repo_config(repo)
     if repo.is_dirty():
         log.log("Repo is dirty. Commiting....")
@@ -211,3 +148,12 @@ def pull(course_name, output, branch, depth):
     log.log("Merging from remote...")
     merge(repo)
     log.log("Done.")
+
+
+def clone(git_url, output, branch, depth):
+    repo = get_repo(git_url, output, branch, depth)
+    if not repo:
+        return
+    log.log("Pulling...")
+    repo.git.pull("--ff-only")
+    log.log("Done")

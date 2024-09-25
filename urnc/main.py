@@ -98,21 +98,39 @@ def student(ctx):
         urnc.ci.ci(commit=False)
 
 
-@click.command(help="Pull the course repo")
-@click.argument("course_name", type=str, default=None, required=False)
+@click.command(help="Pull the repo and automatically merge local changes")
+@click.argument("git_url", type=str, default=None, required=False)
 @click.option(
     "-o", "--output", type=str, help="The name of the output folder", default=None
 )
 @click.option("-b", "--branch", help="The branch to pull", default="main")
 @click.option("-d", "--depth", help="The depth for git fetch", default=1)
 @click.pass_context
-def pull(ctx, course_name, output, branch, depth):
+def pull(ctx, git_url, output, branch, depth):
     with urnc.util.chdir(ctx.obj["root"]):
         urnc.logger.setup_logger()
         try:
-            urnc.pull.pull(course_name, output, branch, depth)
+            urnc.pull.pull(git_url, output, branch, depth)
         except Exception as err:
             urnc.logger.error("pull failed with unexpected error.")
+            urnc.logger.error(err)
+
+
+@click.command(help="Clone/Pull the repo")
+@click.argument("git_url", type=str, default=None, required=False)
+@click.option(
+    "-o", "--output", type=str, help="The name of the output folder", default=None
+)
+@click.option("-b", "--branch", help="The branch to pull", default="main")
+@click.option("-d", "--depth", help="The depth for git fetch", default=1)
+@click.pass_context
+def clone(ctx, git_url, output, branch, depth):
+    with urnc.util.chdir(ctx.obj["root"]):
+        urnc.logger.setup_logger()
+        try:
+            urnc.pull.clone(git_url, output, branch, depth)
+        except Exception as err:
+            urnc.logger.error("clone failed with unexpected error.")
             urnc.logger.error(err)
 
 
@@ -122,4 +140,5 @@ main.add_command(ci)
 main.add_command(check)
 main.add_command(student)
 main.add_command(pull)
+main.add_command(clone)
 main.add_command(tag)
