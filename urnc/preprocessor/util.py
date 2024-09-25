@@ -8,10 +8,9 @@ class Keywords(str, enum.Enum):
     SOLUTION = r"^###+\s+Solution"
     SKELETON = r"^###+\s+Skeleton"
     SOLUTION_END = r"^###+\s*$"
-    HEADER = r'^#'
+    HEADER = r"^#"
     IMAGE_TAG = r'<img[^>]*src="([^"]*)"'
     MD_IMAGE_TAG = r"!\[([^\]]*)\]\(([^)]*)\)"
-    ASSIGNMENT_LINK = r"\(#Assignment-.*\)"
     ASSIGNMENT_REPLACE = r"#Assignment-"
 
 
@@ -48,22 +47,22 @@ def set_tag(cell, tag):
 
 
 def to_snake_case(string):
-    return string.replace(r'\s+', '_').lower()
+    return string.replace(r"\s+", "_").lower()
 
 
 def string_to_byte(input):
     units = {
-        'B': 1,
-        'KB': 1024,
-        'MB': 1024 ** 2,
-        'GB': 1024 ** 3,
-        'TB': 1024 ** 4,
-        'KiB': 1024,
-        'MiB': 1024 ** 2,
-        'GiB': 1024 ** 3,
-        'TiB': 1024 ** 4,
+        "B": 1,
+        "KB": 1024,
+        "MB": 1024**2,
+        "GB": 1024**3,
+        "TB": 1024**4,
+        "KiB": 1024,
+        "MiB": 1024**2,
+        "GiB": 1024**3,
+        "TiB": 1024**4,
     }
-    match = re.match(r'(\d+(\.\d+)?)\s*(\w+)', input)
+    match = re.match(r"(\d+(\.\d+)?)\s*(\w+)", input)
     if match:
         value, _, unit = match.groups()
         value = float(value)

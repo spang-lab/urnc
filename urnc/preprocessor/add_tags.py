@@ -71,7 +71,7 @@ class AddTags(Preprocessor):
             if is_solution(cell):
                 preview = util.cell_preview(cell)
                 if assignment_id is None:
-                    log.warn(f"Solution cell is not part of an assignment: {preview}")
+                    log.dbg(f"Solution cell is not part of an assignment: {preview}")
                 log.dbg(f"Detected Solution cell {preview}")
                 util.set_tag(cell, Tags.SOLUTION)
                 has_solution = True
