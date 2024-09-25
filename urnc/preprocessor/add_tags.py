@@ -43,12 +43,12 @@ def is_assignment_end(cell, assignment_id):
 
 
 class AddTags(Preprocessor):
-    def preprocess(self, notebook, resources):
+    def preprocess(self, nb, resources):
         assignment_ids = set()
         assignment_id = None
         has_solution = False
 
-        for cell in notebook.cells:
+        for cell in nb.cells:
             if is_assignment_end(cell, assignment_id):
                 if not has_solution:
                     log.warn(f"Assignment {assignment_id} has no solution")
@@ -79,4 +79,4 @@ class AddTags(Preprocessor):
         if assignment_id is not None and not has_solution:
             log.warn(f"Assignment {assignment_id} has no solution")
 
-        return notebook, resources
+        return nb, resources

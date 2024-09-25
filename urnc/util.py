@@ -13,7 +13,7 @@ from ruamel.yaml import YAML
 
 try:
     import tomllib
-except:
+except Exception:
     tomllib = None
 
 yaml = YAML(typ="rt")
@@ -144,7 +144,7 @@ class chdir(abc.ABC):
 # Functions for reading/writing course configs
 
 
-def read_config(course_root: Optional[str] = None) -> dict:
+def read_config(course_root: Optional[Path] = None) -> dict:
     """
     Reads the configuration from a YAML file named 'config.yaml' located at the root of the git repository.
 

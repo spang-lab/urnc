@@ -1,4 +1,5 @@
 """Manage the semantic version of your course"""
+
 import click
 
 import semver
@@ -7,24 +8,26 @@ import urnc.logger as log
 import urnc.util as util
 
 
-def bump(version: str, action: str) -> None:
+def bump(version: str, action: str):
     """Bump the version based on the action
 
     :param version: The current version.
-    :param action: The action to perform (show, patch, minor, major).
+    :param action: The action to perform (show, patch, minor, major, prerelease).
     :return: The new version after bumping, or None if action is 'show'.
     """
     v = semver.Version.parse(version)
     print(v)
     match action:
         case "show":
-            return None
+            return
         case "patch":
             return v.bump_patch()
         case "minor":
             return v.bump_minor()
         case "major":
             return v.bump_major()
+        case "prerelease":
+            return v.bump_prerelease()
     raise click.UsageError("Invalid action")
 
 
@@ -40,7 +43,7 @@ def version_self(action: str) -> None:
     if not new_version:
         return
     if repo is not None and repo.is_dirty():
-        log.error(f"Repo is not clean, commit your changes before calling version")
+        log.error("Repo is not clean, commit your changes before calling version")
         return
     log.log(f"New Version: {new_version}")
     config["project"]["version"] = str(new_version)
@@ -59,7 +62,12 @@ def version_course(action: str) -> None:
 
     :param action: The action to perform (show, patch, minor, major).
     """
-    config = util.read_config()
+    try:
+        config = util.read_config()
+    except Exception:
+        raise click.UsageError(
+            "Could not find a config.yaml in the current directory. Use 'urnc version --self' to get the version of urnc."
+        )
     v = config["version"]
     new_version = bump(v, action)
     if new_version:
@@ -75,6 +83,8 @@ def tag():
     v = config["version"]
     tag = f"v{v}"
     if util.tag_exists(repo, tag):
-        raise click.UsageError(f"Tag {tag} exists already. Make sure to increment the version in config.yaml.")
+        raise click.UsageError(
+            f"Tag {tag} exists already. Make sure to increment the version in config.yaml."
+        )
     repo.create_tag(tag, "HEAD", tag)
     log.log(f"Tagged the current commit with {tag}.")
