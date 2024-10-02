@@ -4,6 +4,7 @@
 import os
 import click
 import urnc
+from pathlib import Path
 
 
 @click.group(help="Uni Regensburg Notebook Converter")
@@ -58,7 +59,7 @@ def check(ctx, input, quiet):
         urnc.logger.setup_logger(use_file=False, verbose=not quiet)
         urnc.convert.convert(
             input=input,
-            output="out",
+            output=Path("out"),
             solution=None,
             force=False,
             dry_run=True,

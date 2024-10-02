@@ -127,6 +127,24 @@ def get_repo(git_url, output, branch, depth):
 
 
 def pull(git_url, output, branch, depth):
+    """
+    Pull (or clone) a remote git repository and try to automatically merge local changes.
+    This is essentially a wrapper around git pull and git merge -Xours.
+
+    Args:
+        git_url (str): The URL of the git repository to pull.
+        output (str): The name of the output folder.
+        branch (str): The branch to pull.
+        depth (int): The depth for git fetch.
+
+    Returns:
+        None
+
+    Raises:
+        Does not raise any exceptions, but logs errors and warnings.
+        This is required because this function may be called from a jupyter postStart hook,
+        and exception would prevent the notebook from starting.
+    """
     repo = get_repo(git_url, output, branch, depth)
     if not repo:
         return
@@ -151,6 +169,23 @@ def pull(git_url, output, branch, depth):
 
 
 def clone(git_url, output, branch, depth):
+    """
+    Pull (or clone) a remote git repository, but only do a fast-forward pull.
+
+    Args:
+        git_url (str): The URL of the git repository to pull.
+        output (str): The name of the output folder.
+        branch (str): The branch to pull.
+        depth (int): The depth for git fetch.
+
+    Returns:
+        None
+
+    Raises:
+        Does not raise any exceptions, but logs errors and warnings.
+        This is required because this function may be called from a jupyter postStart hook,
+        and exception would prevent the notebook from starting.
+    """
     repo = get_repo(git_url, output, branch, depth)
     if not repo:
         return

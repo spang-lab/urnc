@@ -69,8 +69,8 @@ class NbPath(object):
 
 
 def convert(
-    input: str = ".",
-    output: str = "out/",
+    input: Path = Path("."),
+    output: Path = Path("out/"),
     solution: Optional[str] = None,
     force: bool = False,
     dry_run: bool = False,
