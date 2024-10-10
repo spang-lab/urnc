@@ -3,7 +3,7 @@
 import os
 import shutil
 from datetime import datetime
-from os.path import basename, dirname, exists, isdir, isfile, join, splitext
+from os.path import basename, exists, isdir, isfile, join, splitext
 from pathlib import Path
 from typing import Optional, Dict
 
@@ -11,7 +11,7 @@ import dateutil.parser
 import git
 
 import urnc
-from urnc.logger import critical, log, setup_logger, warn
+from urnc.logger import critical, log, setup_logger
 from urnc.util import get_config_string, get_config_value, update_repo_config
 
 
@@ -36,22 +36,23 @@ def clone_student_repo(config: dict) -> git.Repo:
     main_path = urnc.util.get_course_root()
     main_name = basename(main_path)
     stud_url = get_config_string(config, "git", "student")
+    output_dir = get_config_string(config, "git", "output_dir", default=None)
+    if not output_dir:
+        if not stud_url:
+            output_dir = f"../{main_name}-student"
+        else:
+            output_dir_name = splitext(basename(stud_url))[0]
+            output_dir = f"../{output_dir_name}"
+
+    stud_path = main_path.joinpath(output_dir)
 
     # Init and return new repo if no student repo is specified
     if stud_url is None:
-        stud_name = f"{main_name}-student"
-        stud_path = main_path.parent.joinpath(stud_name)
         log(
             f"Property git.student not found in config. Initializing new student repo at {stud_path}"
         )
         stud_repo = git.Repo.init(stud_path)
         return stud_repo
-
-    # Collect info about student repo if specified in config.yaml
-    stud_name = splitext(basename(stud_url))[0]
-    if stud_name == main_name:
-        stud_name = f"{main_name}-student"
-    stud_path = main_path.parent.joinpath(stud_name)
 
     # Return existing repo if already available at local filesystem
     if stud_path.exists():
@@ -85,19 +86,6 @@ def clear_repo(repo):
             os.remove(entry_path)
         if isdir(entry_path):
             shutil.rmtree(entry_path)
-
-
-def copy_files(path, target_path):
-    entries = os.listdir(path)
-    for entry in entries:
-        if entry.startswith("."):
-            continue
-        entry_path = join(path, entry)
-        copy_path = join(target_path, entry)
-        if isfile(entry_path):
-            shutil.copy2(entry_path, copy_path)
-        if isdir(entry_path):
-            shutil.copytree(entry_path, copy_path)
 
 
 def write_gitignore(
@@ -185,7 +173,17 @@ def ci(commit=True):
     student_repo = clone_student_repo(course_config)
     student_root = Path(student_repo.working_dir)
     clear_repo(student_repo)
-    copy_files(course_root, student_root)
+
+    student_dir = Path(student_repo.working_dir)
+
+    def ignore_fn(dir, files):
+        ignore_list = [".git"] if ".git" in files else []
+        if Path(dir) == student_dir.parent:
+            log(f"Skipping copy of {student_dir}")
+            ignore_list.append(basename(student_dir))
+        return ignore_list
+
+    shutil.copytree(course_root, student_root, ignore=ignore_fn, dirs_exist_ok=True)
 
     # Convert notebooks
     solution_relpath = get_config_string(course_config, "ci", "solution", default=None)
