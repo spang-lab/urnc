@@ -11,14 +11,12 @@ class Keywords(str, enum.Enum):
     HEADER = r"^#"
     IMAGE_TAG = r'<img[^>]*src="([^"]*)"'
     MD_IMAGE_TAG = r"!\[([^\]]*)\]\(([^)]*)\)"
-    ASSIGNMENT_REPLACE = r"#Assignment-"
 
 
 class Tags(str, enum.Enum):
     SOLUTION = "solution"
     ASSIGNMENT = "assignment"
     ASSIGNMENT_START = "assignment-start"
-    SKELETON = "skeleton"
     NORMAL = "normal"
 
 
@@ -30,6 +28,8 @@ def cell_preview(cell):
 
 def has_tag(cell, tag):
     ltag = tag.lower()
+    if "metadata" not in cell:
+        return False
     if "tags" not in cell.metadata:
         return False
     for tag in cell.metadata.tags:

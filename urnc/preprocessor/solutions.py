@@ -30,11 +30,11 @@ def remove_solution_lines(cell: NotebookNode) -> Union[NotebookNode, None]:
     tagged_lines = []
     for line in lines:
         if re.match(Keywords.SOLUTION, line, re.IGNORECASE):
-            last_tag = Tags.SOLUTION
+            last_tag = "solution"
             found_tag = True
             continue
         if re.match(Keywords.SKELETON, line, re.IGNORECASE):
-            last_tag = Tags.SKELETON
+            last_tag = "skeleton"
             found_tag = True
             continue
         if re.match(Keywords.SOLUTION_END, line, re.IGNORECASE):
@@ -47,9 +47,9 @@ def remove_solution_lines(cell: NotebookNode) -> Union[NotebookNode, None]:
     for line, tag in tagged_lines:
         if tag is None:
             skeleton_lines.append(line)
-        if tag == Tags.SOLUTION:
+        if tag == "solution":
             continue
-        if tag == Tags.SKELETON:
+        if tag == "skeleton":
             uncom = re.sub(r"^#\s?", "", line)
             skeleton_lines.append(uncom)
     if len(skeleton_lines) == 0:
@@ -88,9 +88,9 @@ def remove_skeleton_lines(text: str) -> str:
 
 
 class SolutionRemover(Preprocessor):
-    def preprocess(self,
-                   notebook: NotebookNode,
-                   resources: Union[Dict, None] = None) -> Tuple[NotebookNode, Union[NotebookNode, None]]:
+    def preprocess(
+        self, nb: NotebookNode, resources: Union[Dict, None] = None
+    ) -> Tuple[NotebookNode, Union[Dict, None]]:
         """
         Preprocess the notebook by removing solutions lines from solution cells and uncommenting skeleton lines within solution cells.
 
@@ -104,32 +104,20 @@ class SolutionRemover(Preprocessor):
             The preprocessed notebook and the resources.
         """
         cells = []
-        for cell in notebook.cells:
+        for cell in nb.cells:
             if util.has_tag(cell, Tags.SOLUTION):
                 cell = remove_solution_lines(cell)
             if cell is not None:
                 cells.append(cell)
-        notebook.cells = cells
-        return notebook, resources
+        nb.cells = cells
+        return nb, resources
 
 
 class SkeletonRemover(Preprocessor):
-    def preprocess(self,
-                   notebook: NotebookNode,
-                   resources: Union[Dict, None] = None) -> Tuple[NotebookNode, Union[NotebookNode, None]]:
+    def preprocess_cell(self, cell, resources, index):
         """
-        Preprocess the notebook by removing skeleton lines from solution cells.
-
-        This function takes a notebook and resources as input, removes the solution lines from notebook cells  and returns the notebook and resources.
-
-        Parameters:
-            notebook: The notebook to preprocess.
-            resources: The resources associated with the notebook.
-
-        Returns:
-            The preprocessed notebook and the resources.
+        Preprocess the notebook cells by removing skeleton lines from solution cells.
         """
-        for cell in notebook.cells:
-            if util.has_tag(cell, Tags.SOLUTION):
-                cell.source = remove_skeleton_lines(text = cell.source)
-        return notebook, resources
+        if util.has_tag(cell, Tags.SOLUTION):
+            cell.source = remove_skeleton_lines(text=cell.source)
+        return cell, resources
