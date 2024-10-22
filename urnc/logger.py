@@ -1,9 +1,9 @@
 """Logging functionality for URNC"""
 
 import logging
-import os
 import sys
 from typing import NoReturn
+from pathlib import Path
 
 GREY = "\x1b[38;20m"
 YELLOW = "\x1b[33;20m"
@@ -14,7 +14,6 @@ RESET = "\x1b[0m"
 
 class CustomFormatter(logging.Formatter):
     def format(self, record):
-        # log_fmt = "%(asctime)s %(levelname)s: %(message)s" # introduce with separate issue
         log_fmt = "%(levelname)s - %(message)s"
         formats = {
             logging.DEBUG: f"{GREY}{log_fmt}{RESET}",
@@ -28,25 +27,7 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def get_handler():
-    try:
-        log_file = "/var/log/urnc.log"
-        h = logging.FileHandler(log_file)
-        print(f"Logging to {log_file}")
-        return h
-    except Exception:
-        pass
-    try:
-        log_file = os.path.expanduser("~/.urnc.log")
-        h = logging.FileHandler(log_file)
-        print(f"Logging to {log_file}")
-        return h
-    except Exception:
-        pass
-    return None
-
-
-def setup_logger(use_file: bool = True, verbose: bool = False) -> None:
+def setup_logger(verbose: bool = False) -> None:
     """
     Sets up a logger with a custom handler and formatter.
 
@@ -62,13 +43,19 @@ def setup_logger(use_file: bool = True, verbose: bool = False) -> None:
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
-    if use_file:
-        handler = get_handler()
-        if handler is not None:
-            logger.addHandler(handler)
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.setFormatter(CustomFormatter())
     logger.addHandler(stdout_handler)
+
+
+def add_file_handler(log_file: Path):
+    logger = logging.getLogger(__name__)
+    try:
+        logger.info(f"Writing logs to file {log_file}")
+        handler = logging.FileHandler(log_file)
+        logger.addHandler(handler)
+    except Exception as e:
+        logger.error(f"Failed to add file logger: {e}")
 
 
 def dbg(msg):

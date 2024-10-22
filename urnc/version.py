@@ -1,11 +1,51 @@
 """Manage the semantic version of your course"""
 
 import click
-
+import os
 import semver
+import urnc
 import urnc.logger as log
+import tomli_w
 
-import urnc.util as util
+try:
+    import tomllib
+except Exception:
+    tomllib = None
+
+
+def get_urnc_repo():
+    path = util.get_urnc_root()
+    try:
+        git_repo = git.Repo(path, search_parent_directories=False)
+        return git_repo
+    except Exception:
+        raise click.UsageError(f"Path '{path}' is not a git repo")
+
+
+def read_pyproject():
+    if tomllib is None:
+        raise click.UsageError("tomllib (python3.11) is required")
+    filename = "pyproject.toml"
+    base_path = util.get_urnc_root()
+    path = os.path.join(base_path, filename)
+    try:
+        with open(path, "rb") as f:
+            config = tomllib.load(f)
+            return config
+    except Exception as e:
+        raise click.FileError(path, str(e))
+
+
+def write_pyproject(data):
+    filename = "pyproject.toml"
+    base_path = util.get_urnc_root()
+    path = os.path.join(base_path, filename)
+    try:
+        with open(path, "wb") as f:
+            tomli_w.dump(data, f)
+            return path
+    except Exception as e:
+        raise click.FileError(path, str(e))
 
 
 def bump(version: str, action: str):
@@ -36,8 +76,8 @@ def version_self(action: str) -> None:
 
     :param action: The action to perform (show, patch, minor, major).
     """
-    repo = util.get_urnc_repo()
-    config = util.read_pyproject()
+    repo = get_urnc_repo()
+    config = read_pyproject()
     v = config["project"]["version"]
     new_version = bump(v, action)
     if not new_version:
@@ -47,7 +87,7 @@ def version_self(action: str) -> None:
         return
     log.log(f"New Version: {new_version}")
     config["project"]["version"] = str(new_version)
-    path = util.write_pyproject(config)
+    path = write_pyproject(config)
     if repo is not None:
         message = f"v{new_version}"
         log.log("Committing new version and tagging the commit...")
@@ -63,7 +103,7 @@ def version_course(action: str) -> None:
     :param action: The action to perform (show, patch, minor, major).
     """
     try:
-        config = util.read_config()
+        config = urnc.config.read()
     except Exception:
         raise click.UsageError(
             "Could not find a config.yaml in the current directory. Use 'urnc version --self' to get the version of urnc."
@@ -74,17 +114,3 @@ def version_course(action: str) -> None:
         print(f"New Version: {new_version}")
         config["version"] = str(new_version)
         util.write_config(config)
-
-
-def tag():
-    """Tag the current commit with the current version of the course."""
-    repo = util.get_course_repo()
-    config = util.read_config()
-    v = config["version"]
-    tag = f"v{v}"
-    if util.tag_exists(repo, tag):
-        raise click.UsageError(
-            f"Tag {tag} exists already. Make sure to increment the version in config.yaml."
-        )
-    repo.create_tag(tag, "HEAD", tag)
-    log.log(f"Tagged the current commit with {tag}.")

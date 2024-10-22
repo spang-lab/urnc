@@ -8,13 +8,7 @@ from typing import Optional
 
 import click
 import git
-import tomli_w
 from ruamel.yaml import YAML
-
-try:
-    import tomllib
-except Exception:
-    tomllib = None
 
 yaml = YAML(typ="rt")
 
@@ -65,15 +59,6 @@ def update_repo_config(repo):
 
 def get_course_repo():
     path = get_course_root()
-    try:
-        git_repo = git.Repo(path, search_parent_directories=False)
-        return git_repo
-    except Exception:
-        raise click.UsageError(f"Path '{path}' is not a git repo")
-
-
-def get_urnc_repo():
-    path = get_urnc_root()
     try:
         git_repo = git.Repo(path, search_parent_directories=False)
         return git_repo
@@ -146,103 +131,3 @@ class chdir(abc.ABC):
 
     def __exit__(self, exc_type, exc_value, traceback):
         os.chdir(self._old_cwd.pop())
-
-
-# Functions for reading/writing course configs
-
-
-def read_config(course_root: Optional[Path] = None) -> dict:
-    """
-    Reads the configuration from a YAML file named 'config.yaml' located at the root of the git repository.
-
-    Args:
-        course_root: The root directory of the course. Defaults to the root of the git repository when called from within a git repository.
-
-    Raises:
-        click.UsageError: If the 'config.yaml' file does not exist in the git root folder.
-        click.FileError: If there is an error reading the file or processing its content.
-
-    Returns:
-        dict: The configuration dictionary.
-    """
-    filename = "config.yaml"
-    if course_root is None:
-        course_root = get_course_root()
-    path = os.path.join(course_root, filename)
-    if not os.path.isfile(path):
-        raise click.UsageError(
-            f"urnc expects a config file called '{filename}' in the course root folder '{course_root}'"
-        )
-    try:
-        with open(path, "r") as f:
-            config = yaml.load(f)
-        if "git" in config and "student" in config["git"]:
-            config["git"]["student"] = config["git"]["student"].format(**os.environ)
-    except Exception as e:
-        raise click.FileError(path, str(e))
-    return config
-
-
-def write_config(data):
-    filename = "config.yaml"
-    base_path = get_course_root()
-
-    path = os.path.join(base_path, filename)
-    try:
-        with open(path, "w", newline="\n") as f:
-            yaml.dump(data, f)
-            return path
-    except Exception as e:
-        raise click.FileError(path, str(e))
-
-
-def get_config_value(config, *args, default=None, required=False):
-    value = config
-    full_key = "config"
-    for key in args:
-        full_key = f"{full_key}.{key}"
-        if key not in value:
-            if required:
-                raise Exception(f"{full_key} is required")
-            return default
-        value = value[key]
-    return value
-
-
-def get_config_string(config, *args, default=None, required=False):
-    value = get_config_value(config, *args, default=default, required=required)
-    if value is None:
-        return default
-    if not isinstance(value, str):
-        full_key = ".".join(args)
-        raise Exception(f"config value config.{full_key} must be a string")
-    return str(value)
-
-
-# Functions for reading/writing urnc's pyproject.toml
-
-
-def read_pyproject():
-    if tomllib is None:
-        raise click.UsageError("tomllib (python3.11) is required")
-    filename = "pyproject.toml"
-    base_path = get_urnc_root()
-    path = os.path.join(base_path, filename)
-    try:
-        with open(path, "rb") as f:
-            config = tomllib.load(f)
-            return config
-    except Exception as e:
-        raise click.FileError(path, str(e))
-
-
-def write_pyproject(data):
-    filename = "pyproject.toml"
-    base_path = get_urnc_root()
-    path = os.path.join(base_path, filename)
-    try:
-        with open(path, "wb") as f:
-            tomli_w.dump(data, f)
-            return path
-    except Exception as e:
-        raise click.FileError(path, str(e))

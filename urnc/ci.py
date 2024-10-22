@@ -3,19 +3,19 @@
 import os
 import shutil
 from datetime import datetime
-from os.path import basename, exists, isdir, isfile, join, splitext
+from os.path import basename, exists, isdir, isfile, join
 from pathlib import Path
 from typing import Optional, Dict
 
 import dateutil.parser
 import git
-
+import click
+from traitlets.config import Config
 import urnc
-from urnc.logger import critical, log, setup_logger
-from urnc.util import get_config_string, get_config_value, update_repo_config
+from urnc.logger import critical, log, warn
 
 
-def clone_student_repo(config: dict) -> git.Repo:
+def clone_student_repo(config: Config) -> git.Repo:
     """
     Clones the student repository if it doesn't exist locally, or returns the existing local repository.
     If the 'student' key is not found in the 'git' section of the config, it initializes a new student repository.
@@ -31,28 +31,12 @@ def clone_student_repo(config: dict) -> git.Repo:
         Exception: If the local repository exists but is not a git repository.
         Exception: If there is a mismatch between the remote URL and the local repository's URL.
     """
+    repo_url = config.get("git.student", None)
+    if not repo_url:
+        raise click.UsageError("No student repository git.student specified in config")
 
-    # Get info about main repo
-    main_path = urnc.util.get_course_root()
-    main_name = basename(main_path)
-    stud_url = get_config_string(config, "git", "student")
-    output_dir = get_config_string(config, "git", "output_dir", default=None)
-    if not output_dir:
-        if not stud_url:
-            output_dir = f"../{main_name}-student"
-        else:
-            output_dir_name = splitext(basename(stud_url))[0]
-            output_dir = f"../{output_dir_name}"
-
-    stud_path = main_path.joinpath(output_dir)
-
-    # Init and return new repo if no student repo is specified
-    if stud_url is None:
-        log(
-            f"Property git.student not found in config. Initializing new student repo at {stud_path}"
-        )
-        stud_repo = git.Repo.init(stud_path)
-        return stud_repo
+    output_dir = config.get("git.output_dir", "out")
+    stud_path = Path(config.base_path).joinpath(output_dir)
 
     # Return existing repo if already available at local filesystem
     if stud_path.exists():
@@ -61,17 +45,17 @@ def clone_student_repo(config: dict) -> git.Repo:
             stud_repo = git.Repo(stud_path)
         except Exception:
             critical(f"Folder '{stud_path}' exists but is not a git repo")
-        if stud_repo.remote().url != stud_url:
+        if stud_repo.remote().url != repo_url:
             critical(
-                f"Repo remote mismatch. Expected: {stud_url}. Observed: {stud_repo.remote().url}."
+                f"Repo remote mismatch. Expected: {repo_url}. Observed: {stud_repo.remote().url}."
             )
         stud_repo.remote().pull()
         return stud_repo
 
     # Clone and return repo if not available locally
-    log(f"Cloning student repo {stud_url} to {stud_path}")
-    stud_repo = git.Repo.clone_from(url=stud_url, to_path=stud_path)
-    update_repo_config(stud_repo)
+    log(f"Cloning student repo {repo_url} to {stud_path}")
+    stud_repo = git.Repo.clone_from(url=repo_url, to_path=stud_path)
+    urnc.git.set_commit_names(stud_repo)
     return stud_repo
 
 
@@ -79,7 +63,7 @@ def clear_repo(repo):
     path = repo.working_dir
     entries = os.listdir(path)
     for entry in entries:
-        if entry.startswith("."):
+        if entry == ".git":
             continue
         entry_path = join(path, entry)
         if isfile(entry_path):
@@ -89,7 +73,7 @@ def clear_repo(repo):
 
 
 def write_gitignore(
-    main_gitignore: Optional[str], student_gitignore: str, config: Dict
+    main_gitignore: Optional[Path], student_gitignore: Path, config: Config
 ) -> None:
     """
     Writes a ``.gitignore`` file in the student repository.
@@ -110,7 +94,8 @@ def write_gitignore(
     """
     if main_gitignore and exists(main_gitignore):
         shutil.copy(main_gitignore, student_gitignore)
-    exclude = get_config_value(config, "git", "exclude", default=[])
+
+    exclude = config.get("git.exclude", [])
     if not isinstance(exclude, list):
         critical("config.git.exclude must be a list")
     now = datetime.now()
@@ -136,7 +121,7 @@ def update_index(repo):
         repo.index.write()
 
 
-def ci(commit=True):
+def ci(config):
     """
     Perform a continuous integration run on a student repository.
 
@@ -150,69 +135,61 @@ def ci(commit=True):
     6. Commits and pushes the changes if `commit` is True
 
     Parameters:
-        commit (bool): commit and push updates?
+        config (dict): The configuration object.
 
     Raises:
         Exception: If the repository is dirty and commit is True, an exception is raised.
-
-    Examples:
-        >>> ci(commit=True)   # This will commit and push the changes
-        >>> ci(commit=False)  # This will not commit or push the changes
     """
-    setup_logger(use_file=False)
-    course_root = urnc.util.get_course_root()
-    course_config = urnc.util.read_config()
+    repo = urnc.git.get_repo(config.base_path)
+    if not repo:
+        warn("Not in a git repository")
 
     # Make sure main repo is clean if we want to commit and push to student remote
-    if commit:
-        course_repo = urnc.util.get_course_repo()
-        if course_repo.is_dirty():
-            raise Exception("Repo is not clean. Commit your changes first.")
+    if config.ci.commit and repo and repo.is_dirty():
+        raise click.UsageError("Repo is not clean. Commit your changes first.")
 
     # Clone and clear student repo. Then copy over files from main repo
-    student_repo = clone_student_repo(course_config)
-    student_root = Path(student_repo.working_dir)
+    student_repo = clone_student_repo(config)
+    student_path = Path(student_repo.working_dir)
     clear_repo(student_repo)
-
-    student_dir = Path(student_repo.working_dir)
 
     def ignore_fn(dir, files):
         ignore_list = [".git"] if ".git" in files else []
-        if Path(dir) == student_dir.parent:
-            log(f"Skipping copy of {student_dir}")
-            ignore_list.append(basename(student_dir))
+        if Path(dir) == student_path.parent:
+            log(f"Skipping copy of {student_path}")
+            ignore_list.append(basename(student_path))
         return ignore_list
 
-    shutil.copytree(course_root, student_root, ignore=ignore_fn, dirs_exist_ok=True)
-
-    # Convert notebooks
-    solution_relpath = get_config_string(course_config, "ci", "solution", default=None)
-    solution_pattern = (
-        student_root.joinpath(solution_relpath) if solution_relpath else None
+    shutil.copytree(
+        config.base_path, student_path, ignore=ignore_fn, dirs_exist_ok=True
     )
-    with urnc.util.chdir(student_root):
-        # Paths printed as info messages by urnc.convert.convert are relative to the current working directory, so we change the working directory to the student repo root in order to get the shorter paths in the log messages.
-        urnc.convert.convert(
-            input=student_root,
-            output=student_root,
-            solution=solution_pattern,
-            force=True,
-            dry_run=False,
-        )
-    log("Notebooks converted")
 
+    targets = config.get(
+        "ci.targets",
+        [
+            {
+                "type": "student",
+                "path": "{nb.relpath}",
+            }
+        ],
+    )
+    config.convert.input = student_path
+    config.convert.targets = targets
+    urnc.convert.convert(config)
+
+    log("Notebooks converted")
     # Update .gitignore and drop cached files
     log("Updating .gitignore from config")
     write_gitignore(
-        main_gitignore=course_root.joinpath(".gitignore"),
-        student_gitignore=student_root.joinpath(".gitignore"),
-        config=course_config,
+        main_gitignore=config.base_path.joinpath(".gitignore"),
+        student_gitignore=student_path.joinpath(".gitignore"),
+        config=config,
     )
     log("Dropping cached files...")
     update_index(student_repo)
 
     # Commit and push
-    if commit:
+    if config.ci.commit:
         log("Adding files and commiting")
         student_repo.git.add(all=True)
         student_repo.index.commit("urnc convert")

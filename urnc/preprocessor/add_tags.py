@@ -6,6 +6,19 @@ from urnc.preprocessor.util import Keywords, Tags
 import urnc.logger as log
 
 
+def extract_header(cell):
+    opts = re.IGNORECASE | re.MULTILINE
+    if match := re.match(r"^(#{1,6})\s*(.+)", cell.source, opts):
+        level = len(match.group(1))
+        title = match.group(2)
+        return level, title
+    if match := re.match(r"<h([1-6])>((.+)(?:\n.+)*)<\/h\1>", cell.source, opts):
+        level = int(match.group(1))
+        title = match.group(2).strip()
+        return level, title
+    return None, None
+
+
 def is_assignment_start(cell):
     if util.has_tag(cell, Tags.NORMAL):
         return None
