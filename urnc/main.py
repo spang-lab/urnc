@@ -4,10 +4,10 @@
 import os
 import click
 import urnc
-from pathlib import Path
 
 
 @click.group(help="Uni Regensburg Notebook Converter")
+@click.version_option(prog_name="urnc", message="%(version)s")
 @click.option(
     "-f",
     "--root",
@@ -15,11 +15,13 @@ from pathlib import Path
     default=os.getcwd(),
     type=click.Path(),
 )
-@click.version_option(prog_name="urnc", message="%(version)s")
+@click.option("-v", "--verbose", is_flag=True, help="Enable verbose output")
 @click.pass_context
-def main(ctx, root):
+def main(ctx, root, verbose):
     ctx.ensure_object(dict)
-    ctx.obj["root"] = root
+    config = urnc.config.read(root)
+    urnc.logger.setup_logger(verbose)
+    ctx.obj = config
 
 
 @click.command(
@@ -28,8 +30,23 @@ def main(ctx, root):
 )
 @click.pass_context
 def ci(ctx):
-    with urnc.util.chdir(ctx.obj["root"]):
-        urnc.ci.ci(True)
+    config = ctx.obj
+    config.convert.force = True
+    config.convert.dry_run = False
+    config.convert.ask = False
+    config.ci.commit = True
+    urnc.ci.ci(config)
+
+
+@click.command(help="Build and show the student version")
+@click.pass_context
+def student(ctx):
+    config = ctx.obj
+    config.convert.force = True
+    config.convert.dry_run = False
+    config.convert.ask = False
+    config.ci.commit = False
+    urnc.ci.ci(config)
 
 
 @click.command(
@@ -47,7 +64,14 @@ def ci(ctx):
 def convert(ctx, input, output, solution, verbose, force, dry_run):
     with urnc.util.chdir(ctx.obj["root"]):
         urnc.logger.setup_logger(False, verbose)
-        urnc.convert.convert(input, output, solution, force, dry_run)
+        config = urnc.util.get_config()
+        cli_config = {
+            "force": force,
+            "dry_run": dry_run,
+            "ask": True,
+        }
+        config["cli"] = cli_config
+        urnc.convert.convert(input, output, solution, config)
 
 
 @click.command(help="Check notebooks for errors")
@@ -57,13 +81,18 @@ def convert(ctx, input, output, solution, verbose, force, dry_run):
 def check(ctx, input, quiet):
     with urnc.util.chdir(ctx.obj["root"]):
         urnc.logger.setup_logger(use_file=False, verbose=not quiet)
+        config = urnc.util.get_config()
+        cli_config = {
+            "force": False,
+            "dry_run": True,
+            "ask": False,
+        }
+        config["cli"] = cli_config
         urnc.convert.convert(
             input=input,
-            output=Path("out"),
+            output="out",
             solution=None,
-            force=False,
-            dry_run=True,
-            ask=False,
+            config=config,
         )
 
 
@@ -85,20 +114,6 @@ def version(ctx, self, action):
             urnc.version.version_course(action)
 
 
-@click.command(help="Tag the current commit with the current version of the course")
-@click.pass_context
-def tag(ctx):
-    with urnc.util.chdir(ctx.obj["root"]):
-        urnc.version.tag()
-
-
-@click.command(help="Build and show the student version")
-@click.pass_context
-def student(ctx):
-    with urnc.util.chdir(ctx.obj["root"]):
-        urnc.ci.ci(commit=False)
-
-
 @click.command(help="Pull the repo and automatically merge local changes")
 @click.argument("git_url", type=str, default=None, required=False)
 @click.option(
@@ -106,10 +121,14 @@ def student(ctx):
 )
 @click.option("-b", "--branch", help="The branch to pull", default="main")
 @click.option("-d", "--depth", help="The depth for git fetch", default=1)
+@click.option(
+    "-l", "--log-file", type=click.Path(), help="The path to the log file", default=None
+)
 @click.pass_context
-def pull(ctx, git_url, output, branch, depth):
+def pull(ctx, git_url, output, branch, depth, log_file):
+    if log_file:
+        urnc.logger.add_file_handler(log_file)
     with urnc.util.chdir(ctx.obj["root"]):
-        urnc.logger.setup_logger()
         try:
             urnc.pull.pull(git_url, output, branch, depth)
         except Exception as err:
@@ -124,8 +143,14 @@ def pull(ctx, git_url, output, branch, depth):
 )
 @click.option("-b", "--branch", help="The branch to pull", default="main")
 @click.option("-d", "--depth", help="The depth for git fetch", default=1)
+@click.option(
+    "-l", "--log-file", type=click.Path(), help="The path to the log file", default=None
+)
 @click.pass_context
-def clone(ctx, git_url, output, branch, depth):
+def clone(ctx, git_url, output, branch, depth, log_file):
+    if log_file:
+        urnc.logger.add_file_handler(log_file)
+
     with urnc.util.chdir(ctx.obj["root"]):
         urnc.logger.setup_logger()
         try:
@@ -142,4 +167,3 @@ main.add_command(check)
 main.add_command(student)
 main.add_command(pull)
 main.add_command(clone)
-main.add_command(tag)
