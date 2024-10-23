@@ -44,6 +44,7 @@ def read(root: Path) -> Config:
     Returns:
         dict: The configuration dictionary.
     """
+    root = Path(root)
     filename = "config.yaml"
     config_path = find_file(root, filename)
 
@@ -76,15 +77,16 @@ def write_version(root: Path, version: str):
     yaml = YAML(typ="rt")
     yaml.preserve_quotes = True
     try:
-        with open(config_path, "rw", newline="\n") as f:
+        with open(config_path, "r+", newline="\n") as f:
             config_data = yaml.load(f)
             config_data["version"] = version
+            f.seek(0)
             yaml.dump(config_data, f)
     except Exception as e:
         raise click.FileError(str(config_path), str(e))
 
 
-def resolve_path(config: Config, path: Path) -> Path:
+def resolve_path(config: Config, pathstr: Path) -> Path:
     """
     Resolves a path relative to the course root.
 
@@ -95,6 +97,7 @@ def resolve_path(config: Config, path: Path) -> Path:
     Returns:
         The resolved absolute path.
     """
+    path = Path(pathstr)
     if path.is_absolute():
         return path
     new_path = Path(config.base_path).joinpath(path)

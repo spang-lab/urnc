@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pathlib import Path
 import os
 import sys
@@ -30,19 +30,20 @@ def find_notebooks(input: Path) -> List[Path]:
     return notebooks
 
 
-def write_notebook(notebook, path, config):
-    dry_run = config.get("convert.dry_run", False)
+def write_notebook(notebook, path: Optional[Path], config):
+    dry_run = config.convert.get("dry_run", False)
+    if not path:
+        return
     if dry_run:
         log(f"Would write notebook to {path}. Skipping, because dry_run is set.")
         return
 
-    ask = config.get("convert.ask", False)
+    ask = config.convert.get("ask", False)
     if not sys.stdout.isatty():
         warn("Not a tty. Skipping prompt.")
         ask = False
 
-    force = config.get("convert.force", False)
-
+    force = config.convert.get("force", False)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if path.exists():
@@ -63,15 +64,10 @@ def write_notebook(notebook, path, config):
         log(f"Wrote notebook to {path}")
 
 
-def convert(config: Config):
-    input = config.get("convert.input", None)
-    if input is None:
-        raise click.UsageError("No input specified in convert.config")
-    targets = config.get("convert.targets", [])
+def convert(config: Config, input: Path, targets: List[dict]):
     if len(targets) == 0:
         warn("No targets specified in convert.config. Exiting.")
         return
-
     for target in targets:
         type = target.get("type", None)
         path = target.get("path", None)
