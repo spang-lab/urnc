@@ -16,15 +16,6 @@ def branch_exists(repo, branch):
     return False
 
 
-def tag_exists(repo, tag):
-    ref = f"refs/tags/{tag}"
-    try:
-        repo.git.rev_parse("--quiet", "--verify", ref)
-        return True
-    except Exception:
-        return False
-
-
 def get_repo(path):
     try:
         git_repo = git.Repo(path, search_parent_directories=True)

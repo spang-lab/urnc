@@ -3,7 +3,9 @@
 #!/usr/bin/env python3
 import os
 import click
+from traitlets.config import Config
 import urnc
+from urnc import logger
 
 
 @click.group(help="Uni Regensburg Notebook Converter")
@@ -79,21 +81,20 @@ def convert(ctx, input, output, solution, verbose, force, dry_run):
 @click.pass_context
 @click.option("-q", "--quiet", is_flag=True)
 def check(ctx, input, quiet):
-    with urnc.util.chdir(ctx.obj["root"]):
-        urnc.logger.setup_logger(use_file=False, verbose=not quiet)
-        config = urnc.util.get_config()
-        cli_config = {
-            "force": False,
-            "dry_run": True,
-            "ask": False,
+    config = ctx.obj
+    config.convert.dry_run = True
+    targets = [
+        {
+            "type": "student",
+            "path": None,
         }
-        config["cli"] = cli_config
-        urnc.convert.convert(
-            input=input,
-            output="out",
-            solution=None,
-            config=config,
-        )
+    ]
+
+    input_path = urnc.config.resolve_path(config, input)
+    urnc.convert.convert(config, input_path, targets)
+
+    if not quiet:
+        logger.set_verbose()
 
 
 @click.command(help="Manage the semantic version of your course")
@@ -106,12 +107,11 @@ def check(ctx, input, quiet):
 )
 @click.pass_context
 def version(ctx, self, action):
-    with urnc.util.chdir(ctx.obj["root"]):
-        urnc.logger.setup_logger(use_file=False, verbose=False)
-        if self:
-            urnc.version.version_self(action)
-        else:
-            urnc.version.version_course(action)
+    config = ctx.obj
+    if self:
+        urnc.version.version_self(config, action)
+    else:
+        urnc.version.version_course(config, action)
 
 
 @click.command(help="Pull the repo and automatically merge local changes")

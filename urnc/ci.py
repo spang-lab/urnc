@@ -31,11 +31,11 @@ def clone_student_repo(config: Config) -> git.Repo:
         Exception: If the local repository exists but is not a git repository.
         Exception: If there is a mismatch between the remote URL and the local repository's URL.
     """
-    repo_url = config.get("git.student", None)
+    repo_url = config.git.get("student", None)
     if not repo_url:
         raise click.UsageError("No student repository git.student specified in config")
 
-    output_dir = config.get("git.output_dir", "out")
+    output_dir = config.git.get("output_dir", "out")
     stud_path = Path(config.base_path).joinpath(output_dir)
 
     # Return existing repo if already available at local filesystem
@@ -95,7 +95,7 @@ def write_gitignore(
     if main_gitignore and exists(main_gitignore):
         shutil.copy(main_gitignore, student_gitignore)
 
-    exclude = config.get("git.exclude", [])
+    exclude = config.git.get("exclude", [])
     if not isinstance(exclude, list):
         critical("config.git.exclude must be a list")
     now = datetime.now()
@@ -164,8 +164,8 @@ def ci(config):
         config.base_path, student_path, ignore=ignore_fn, dirs_exist_ok=True
     )
 
-    targets = config.get(
-        "ci.targets",
+    targets = config.ci.get(
+        "targets",
         [
             {
                 "type": "student",
@@ -173,9 +173,7 @@ def ci(config):
             }
         ],
     )
-    config.convert.input = student_path
-    config.convert.targets = targets
-    urnc.convert.convert(config)
+    urnc.convert.convert(config, student_path, targets)
 
     log("Notebooks converted")
     # Update .gitignore and drop cached files

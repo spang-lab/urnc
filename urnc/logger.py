@@ -58,6 +58,11 @@ def add_file_handler(log_file: Path):
         logger.error(f"Failed to add file logger: {e}")
 
 
+def set_verbose():
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
+
 def dbg(msg):
     logger = logging.getLogger(__name__)
     logger.debug(msg)
