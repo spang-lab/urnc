@@ -2,10 +2,11 @@
 
 #!/usr/bin/env python3
 import os
+import sys
 import click
-from traitlets.config import Config
 import urnc
-from urnc import logger
+from urnc.convert import WriteMode, TargetType
+from urnc.logger import warn
 
 
 @click.group(help="Uni Regensburg Notebook Converter")
@@ -33,9 +34,7 @@ def main(ctx, root, verbose):
 @click.pass_context
 def ci(ctx):
     config = ctx.obj
-    config.convert.force = True
-    config.convert.dry_run = False
-    config.convert.ask = False
+    config.convert.write_mode = WriteMode.OVERWRITE
     config.ci.commit = True
     urnc.ci.ci(config)
 
@@ -44,9 +43,7 @@ def ci(ctx):
 @click.pass_context
 def student(ctx):
     config = ctx.obj
-    config.convert.force = True
-    config.convert.dry_run = False
-    config.convert.ask = False
+    config.convert.write_mode = WriteMode.OVERWRITE
     config.ci.commit = False
     urnc.ci.ci(config)
 
@@ -54,25 +51,60 @@ def student(ctx):
 @click.command(
     name="convert",
     short_help="Convert notebooks",
-    help="Convert notebooks to student version. For details see https://spang-lab.github.io/urnc/urnc.html#urnc.convert.convert.",
+    help="Convert notebooks to other versions. For details see https://spang-lab.github.io/urnc/urnc.html#urnc.convert.convert.",
 )
 @click.argument("input", type=click.Path(exists=True), default=".")
-@click.option("-o", "--output", type=str, default="out")
+@click.option("-o", "--output", type=str, default=None)
 @click.option("-s", "--solution", type=str, default=None)
 @click.option("-f", "--force", is_flag=True)
 @click.option("-n", "--dry-run", is_flag=True)
+@click.option("-i", "--interactive", is_flag=True)
 @click.pass_context
-def convert(ctx, input, output, solution, verbose, force, dry_run):
-    with urnc.util.chdir(ctx.obj["root"]):
-        urnc.logger.setup_logger(False, verbose)
-        config = urnc.util.get_config()
-        cli_config = {
-            "force": force,
-            "dry_run": dry_run,
-            "ask": True,
-        }
-        config["cli"] = cli_config
-        urnc.convert.convert(input, output, solution, config)
+def convert(ctx, input, output, solution, force, dry_run, interactive):
+    config = ctx.obj
+    if sum([force, dry_run, interactive]) > 1:
+        raise click.UsageError(
+            "Only one of --force, --dry-run, --interactive can be set at a time."
+        )
+    config.convert.write_mode = WriteMode.SKIP_EXISTING
+    if force:
+        config.convert.write_mode = WriteMode.OVERWRITE
+    if dry_run:
+        config.convert.write_mode = WriteMode.DRY_RUN
+    if interactive:
+        if sys.stdout.isatty():
+            config.convert.write_mode = WriteMode.INTERACTIVE
+        else:
+            raise click.UsageError(
+                "Interactive mode is only available when stdout is a tty."
+            )
+    targets = []
+    if output is not None:
+        targets.append(
+            {
+                "type": TargetType.STUDENT,
+                "path": output,
+            }
+        )
+    if solution is not None:
+        targets.append(
+            {
+                "type": TargetType.SOLUTION,
+                "path": solution,
+            }
+        )
+
+    if len(targets) == 0:
+        warn("No targets specified for convert. Running check only.")
+        config.convert.write_mode = WriteMode.DRY_RUN
+        targets.append(
+            {
+                "type": TargetType.STUDENT,
+                "path": None,
+            }
+        )
+    input_path = urnc.config.resolve_path(config, input)
+    urnc.convert.convert(config, input_path, targets)
 
 
 @click.command(help="Check notebooks for errors")
@@ -81,10 +113,10 @@ def convert(ctx, input, output, solution, verbose, force, dry_run):
 @click.option("-q", "--quiet", is_flag=True)
 def check(ctx, input, quiet):
     config = ctx.obj
-    config.convert.dry_run = True
+    config.convert.write_mode = "dry-run"
     targets = [
         {
-            "type": "student",
+            "type": TargetType.STUDENT,
             "path": None,
         }
     ]
@@ -93,7 +125,7 @@ def check(ctx, input, quiet):
     urnc.convert.convert(config, input_path, targets)
 
     if not quiet:
-        logger.set_verbose()
+        urnc.logger.set_verbose()
 
 
 @click.command(help="Manage the semantic version of your course")

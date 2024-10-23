@@ -50,6 +50,8 @@ def read(root: Path) -> Config:
 
     config = Config()
     config.base_path = root
+    config.convert = Config()
+    config.ci = Config()
 
     if not config_path or not os.path.isfile(config_path):
         logger.warn(f"No config.yaml found in {root} or its parent directories.")

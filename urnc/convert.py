@@ -16,6 +16,20 @@ from urnc.preprocessor.lint import Linter
 from urnc.preprocessor.solutions import SolutionRemover, SkeletonRemover
 from urnc.preprocessor.clear_outputs import ClearOutputs
 
+from enum import StrEnum
+
+
+class WriteMode(StrEnum):
+    DRY_RUN = "dry-run"
+    OVERWRITE = "overwrite"
+    INTERACTIVE = "interactive"
+    SKIP_EXISTING = "skip-existing"
+
+
+class TargetType(StrEnum):
+    STUDENT = "student"
+    SOLUTION = "solution"
+
 
 def find_notebooks(input: Path) -> List[Path]:
     notebooks = []
@@ -31,33 +45,28 @@ def find_notebooks(input: Path) -> List[Path]:
 
 
 def write_notebook(notebook, path: Optional[Path], config):
-    dry_run = config.convert.get("dry_run", False)
+    write_mode = config.convert.get("write_mode", WriteMode.SKIP_EXISTING)
     if not path:
         return
-    if dry_run:
+    if write_mode == WriteMode.DRY_RUN:
         log(f"Would write notebook to {path}. Skipping, because dry_run is set.")
         return
-
-    ask = config.convert.get("ask", False)
-    if not sys.stdout.isatty():
-        warn("Not a tty. Skipping prompt.")
-        ask = False
-
-    force = config.convert.get("force", False)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if path.exists():
-        if force:
+        if write_mode == WriteMode.OVERWRITE:
             log(f"Overwriting existing file {path}")
-        elif ask:
+        elif write_mode == WriteMode.INTERACTIVE:
             if click.confirm(f"Overwrite existing file {path}?"):
                 log(f"Overwriting existing file {path}")
             else:
                 log(f"Skipping existing file {path}")
                 return
-        else:
+        elif write_mode == WriteMode.SKIP_EXISTING:
             log(f"Skipping existing file {path}")
             return
+        else:
+            raise ValueError(f"Unknown write_mode '{write_mode}' in convert.config")
 
     with open(path, "w", newline="\n") as f:
         f.write(notebook)
@@ -78,6 +87,7 @@ def convert_target(input: Path, path: str, type: str, config: Config):
     jobs = []
     if input.is_file():
         out_file = format_path(input, path, input.parent)
+        print(out_file)
         jobs.append((input, out_file))
     else:
         input_notebooks = find_notebooks(input)
@@ -86,10 +96,12 @@ def convert_target(input: Path, path: str, type: str, config: Config):
             jobs.append((nb, out_file))
 
     preprocessors = None
-    if type == "student":
+    if type == TargetType.STUDENT:
         preprocessors = [Linter, AddTags, SolutionRemover, ClearOutputs]
-    elif type == "solution":
+    elif type == TargetType.SOLUTION:
         preprocessors = [AddTags, SkeletonRemover, ClearOutputs]
+    else:
+        critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")
     if preprocessors is None:
         critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")
 
