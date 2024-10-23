@@ -36,7 +36,7 @@ def clone_student_repo(config: Config) -> git.Repo:
         raise click.UsageError("No student repository git.student specified in config")
 
     output_dir = config.git.get("output_dir", "out")
-    stud_path = Path(config.base_path).joinpath(output_dir)
+    stud_path = config.base_path.joinpath(output_dir)
 
     # Return existing repo if already available at local filesystem
     if stud_path.exists():

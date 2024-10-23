@@ -60,7 +60,7 @@ def version_self(config: Config, action: str) -> str:
     :param config: The configuration object.
     :param action: The action to perform (show, patch, minor, major).
     """
-    pyproject = Path(config.base_path).joinpath("pyproject.toml")
+    pyproject = config.base_path.joinpath("pyproject.toml")
     if not pyproject.is_file():
         raise click.UsageError(f"No pyproject.toml found in {config.base_path}")
     version = read_pyproject_version(pyproject)
