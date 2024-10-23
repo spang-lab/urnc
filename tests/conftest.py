@@ -11,7 +11,6 @@
 import shutil
 import re
 import os
-import re
 from os import chmod, getcwd, listdir, makedirs, remove
 from os.path import dirname, join, exists, isdir, normpath, getsize, isfile
 from stat import S_IWRITE
@@ -20,7 +19,7 @@ import git
 import pytest
 
 
-ur_git_url = os.environ.get("UR_GIT_URL", default = "git@git.uni-regensburg.de:") # 1)
+ur_git_url = os.environ.get("UR_GIT_URL", default="git@git.uni-regensburg.de:")  # 1)
 # 1) In our github actions we set UR_GIT_URL to "https://{token_name}:{token_value}/git.uni-regensburg.de/". Locally, where we usually don't have a token defined, we use SSH by default.
 
 
@@ -29,7 +28,9 @@ def pytest_addoption(parser):
     Add the --runslow option to the pytest command-line parser.
     The option is stored as a boolean value, with a default of False.
     """
-    parser.addoption("--runslow", action="store_true", default=False, help="run slow tests")
+    parser.addoption(
+        "--runslow", action="store_true", default=False, help="run slow tests"
+    )
 
 
 def pytest_configure(config):
@@ -56,11 +57,13 @@ def pytest_collection_modifyitems(config, items):
                 item.add_marker(skip_slow)
 
 
-def init_outputs_dir(test_module: str,
-                     test_function: str,
-                     test_case: str,
-                     inputs: List[str] = [],
-                     input_sources: List[Union[str, Callable]] = []) -> str:
+def init_outputs_dir(
+    test_module: str,
+    test_function: str,
+    test_case: str,
+    inputs: List[str] = [],
+    input_sources: List[Union[str, Callable]] = [],
+) -> str:
     """
     Initialize the outputs directory for a specific test case.
 
@@ -99,8 +102,10 @@ def init_outputs_dir(test_module: str,
     return outputs
 
 
-def clone_urnc_example_course(path: str = "urnc-example-course",
-                              hash: str = "9c277cdc7c7985f433f2c7f6fabcba1eefd2f844") -> git.Repo:
+def clone_urnc_example_course(
+    path: str = "urnc-example-course",
+    hash: str = "9c277cdc7c7985f433f2c7f6fabcba1eefd2f844",
+) -> git.Repo:
     """
     Initialize the urnc-example-course directory.
 
@@ -129,45 +134,50 @@ def clone_urnc_example_course(path: str = "urnc-example-course",
     # clone/pull/checkout during the tests, but not push, this is fine.
     yaml = open(f"{path}/config.yaml").read()
     yaml = yaml.replace("urncbot:{URNC_ACCESS_TOKEN_STUDENT_REPO}@", "")
-    open(f"{path}/config.yaml", "w", newline = "\n").write(yaml)
-    return (repo)
+    open(f"{path}/config.yaml", "w", newline="\n").write(yaml)
+    return repo
 
 
-def clone_urnc_example_course_public(path: str = "urnc-example-course-public",
-                                     hash: str = "38e5c1169266dd50f13912c0546779ddb2f71c3d"
-                                     ) -> git.Repo:
+def clone_urnc_example_course_public(
+    path: str = "urnc-example-course-public",
+    hash: str = "38e5c1169266dd50f13912c0546779ddb2f71c3d",
+) -> git.Repo:
     url = "https://github.com/spang-lab/urnc-example-course-public.git"
     repo = clone(path, url, hash)
     return repo
 
 
-def clone_data_science(path: str = "data-science",
-                       hash: str = "496cdba07c68d9e781fa837c82dd70576186dec4"  # 2024-01-01 (approx. 8 am)
-                       ) -> git.Repo:
+def clone_data_science(
+    path: str = "data-science",
+    hash: str = "496cdba07c68d9e781fa837c82dd70576186dec4",  # 2024-01-01 (approx. 8 am)
+) -> git.Repo:
     url = f"{ur_git_url}fids/data-science.git"
     repo = clone(path, url, hash)
     return repo
 
 
-def clone_data_science_student(path: str = "data-science-student",
-                               hash: str = "9d66b436a882c40a0cf763fa4c363bfc633303b2"  # 2024-01-01 (approx. 8 am)
-                               ) -> git.Repo:
+def clone_data_science_student(
+    path: str = "data-science-student",
+    hash: str = "9d66b436a882c40a0cf763fa4c363bfc633303b2",  # 2024-01-01 (approx. 8 am)
+) -> git.Repo:
     url = f"{ur_git_url}fids-public/data-science.git"
     repo = clone(path, url, hash)
     return repo
 
 
-def clone_developer_skills(path: str = "developer-skills",
-                           hash: str = "93a33b4b19747df66d818b70643ce5279956b195"  # 2024-01-01 (approx. 8 am)
-                           ) -> git.Repo:
+def clone_developer_skills(
+    path: str = "developer-skills",
+    hash: str = "93a33b4b19747df66d818b70643ce5279956b195",  # 2024-01-01 (approx. 8 am)
+) -> git.Repo:
     url = f"{ur_git_url}fids/developer-skills.git"
     repo = clone(path, url, hash)
     return repo
 
 
-def clone_developer_skills_student(path: str = "developer-skills-student",
-                                   hash: str = "1c53c8cd032d69d9faabe8b9284587caa487b7e7"  # 2024-01-01 (approx. 8 am)
-                                   ) -> git.Repo:
+def clone_developer_skills_student(
+    path: str = "developer-skills-student",
+    hash: str = "1c53c8cd032d69d9faabe8b9284587caa487b7e7",  # 2024-01-01 (approx. 8 am)
+) -> git.Repo:
     url = f"{ur_git_url}fids-public/developer-skills.git"
     repo = clone(path, url, hash)
     return repo
@@ -197,8 +207,7 @@ def clone(path: str, url: str, hash: str) -> git.Repo:
     if "https://git.uni-regensburg.de" in url and "UR_GIT_TOKEN" in os.environ:
         token = os.environ["UR_GIT_TOKEN"]
         url = url.replace(
-            f"https://git.uni-regensburg.de",
-            f"https://{token}@git.uni-regensburg.de"
+            f"https://git.uni-regensburg.de", f"https://{token}@git.uni-regensburg.de"
         )
     if not isdir(path):
         git.Repo.clone_from(url=url, to_path=path)
@@ -261,9 +270,9 @@ def get_urnc_root():
     """
     path = getcwd()
     while path != dirname(path):  # Stop at the root directory
-        pyproject_path = join(path, 'pyproject.toml')
+        pyproject_path = join(path, "pyproject.toml")
         if exists(pyproject_path):
-            pyproject = open(pyproject_path, 'r').read()
+            pyproject = open(pyproject_path, "r").read()
             if re.search(r'name\s*=\s*"?urnc"?', pyproject):
                 return path
             else:
@@ -287,20 +296,25 @@ def remove_readonly_attribute(func, path, _):
 
 def disable_solution_generation(config_yaml_path: str = "config.yaml"):
     # Open the file
-    yaml = open(config_yaml_path, 'r').read()
-    yaml = re.sub(r'solution: .*', 'solution: null', yaml)
-    open(config_yaml_path, 'w', newline = "\n").write(yaml)
+    yaml = open(config_yaml_path, "r").read()
+    yaml = re.sub(r"solution: .*", "solution: null", yaml)
+    open(config_yaml_path, "w", newline="\n").write(yaml)
 
 
 def compare_dirs(x, y):
     import glob
+
     xs = set(glob.glob(f"**", recursive=True, root_dir=x))
     ys = set(glob.glob(f"**", recursive=True, root_dir=y))
     left_only = xs - ys
     right_only = ys - xs
     common_files = xs & ys
-    common_dirs = set((d for d in common_files if isdir(join(x, d)) and isdir(join(y, d))))
+    common_dirs = set(
+        (d for d in common_files if isdir(join(x, d)) and isdir(join(y, d)))
+    )
     common_files = common_files - common_dirs
-    diff_size = set((f for f in common_files if getsize(join(x, f)) != getsize(join(y, f))))
+    diff_size = set(
+        (f for f in common_files if getsize(join(x, f)) != getsize(join(y, f)))
+    )
     same_size = common_files - diff_size
     return left_only, right_only, diff_size, same_size

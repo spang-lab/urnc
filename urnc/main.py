@@ -57,9 +57,8 @@ def student(ctx):
     help="Convert notebooks to student version. For details see https://spang-lab.github.io/urnc/urnc.html#urnc.convert.convert.",
 )
 @click.argument("input", type=click.Path(exists=True), default=".")
-@click.argument("output", type=str, default="out")
+@click.option("-o", "--output", type=str, default="out")
 @click.option("-s", "--solution", type=str, default=None)
-@click.option("-v", "--verbose", is_flag=True)
 @click.option("-f", "--force", is_flag=True)
 @click.option("-n", "--dry-run", is_flag=True)
 @click.pass_context
