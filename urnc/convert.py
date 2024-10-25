@@ -5,30 +5,17 @@ import sys
 
 import nbformat
 import click
-from traitlets.config import Config
 
 from urnc.logger import log, warn, critical
 from urnc.format import format_path
+from urnc.config import WriteMode, TargetType
 
+from traitlets.config import Config
 from nbconvert.exporters.notebook import NotebookExporter
 from urnc.preprocessor.add_tags import AddTags
 from urnc.preprocessor.lint import Linter
 from urnc.preprocessor.solutions import SolutionRemover, SkeletonRemover
 from urnc.preprocessor.clear_outputs import ClearOutputs
-
-from enum import StrEnum
-
-
-class WriteMode(StrEnum):
-    DRY_RUN = "dry-run"
-    OVERWRITE = "overwrite"
-    INTERACTIVE = "interactive"
-    SKIP_EXISTING = "skip-existing"
-
-
-class TargetType(StrEnum):
-    STUDENT = "student"
-    SOLUTION = "solution"
 
 
 def find_notebooks(input: Path) -> List[Path]:
@@ -45,7 +32,7 @@ def find_notebooks(input: Path) -> List[Path]:
 
 
 def write_notebook(notebook, path: Optional[Path], config):
-    write_mode = config.convert.get("write_mode", WriteMode.SKIP_EXISTING)
+    write_mode = config.convert.write_mode
     if not path:
         return
     if write_mode == WriteMode.DRY_RUN:
@@ -73,7 +60,7 @@ def write_notebook(notebook, path: Optional[Path], config):
         log(f"Wrote notebook to {path}")
 
 
-def convert(config: Config, input: Path, targets: List[dict]):
+def convert(config: dict, input: Path, targets: List[dict]):
     if len(targets) == 0:
         warn("No targets specified in convert.config. Exiting.")
         return
@@ -83,7 +70,7 @@ def convert(config: Config, input: Path, targets: List[dict]):
         convert_target(input, path, type, config)
 
 
-def convert_target(input: Path, path: str, type: str, config: Config):
+def convert_target(input: Path, path: str, type: str, config: dict):
     jobs = []
     if input.is_file():
         out_file = format_path(input, path, input.parent)
@@ -105,8 +92,9 @@ def convert_target(input: Path, path: str, type: str, config: Config):
     if preprocessors is None:
         critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")
 
-    config.NotebookExporter.preprocessors = preprocessors
-    converter = NotebookExporter(config=config)
+    nb_config = Config()
+    nb_config.NotebookExporter.preprocessors = preprocessors
+    converter = NotebookExporter(config=nb_config)
 
     for notebook_path, output_path in jobs:
         nb_node = nbformat.read(notebook_path, as_version=4)
