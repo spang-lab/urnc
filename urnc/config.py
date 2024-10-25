@@ -3,13 +3,62 @@ from pathlib import Path
 from typing import Optional
 import os
 import click
-
-from traitlets.config import Config
-
 from urnc import logger
+from enum import StrEnum
 
 
-# Functions for reading/writing course configs
+class WriteMode(StrEnum):
+    DRY_RUN = "dry-run"
+    OVERWRITE = "overwrite"
+    INTERACTIVE = "interactive"
+    SKIP_EXISTING = "skip-existing"
+
+
+class TargetType(StrEnum):
+    STUDENT = "student"
+    SOLUTION = "solution"
+
+
+def merge_dict(source, target):
+    for key in source:
+        if (
+            key in target
+            and isinstance(source[key], dict)
+            and isinstance(target[key], dict)
+        ):
+            merge_dict(source[key], target[key])
+        else:
+            target[key] = source[key]
+    return target
+
+
+def default_config(root) -> dict:
+    """
+    Create a default configuration object with the base path set to the root of the course.
+
+    Args:
+        root: The root directory of the course.
+
+    Returns:
+        config: The configuration dictionary.
+    """
+    config = {
+        "version": None,
+        "base_path": root,
+        "convert": {
+            "write_mode": WriteMode.SKIP_EXISTING,
+            "targets": [],
+        },
+        "git": {
+            "output_dir": "out",
+            "exclude": [],
+        },
+        "ci": {
+            "student": None,
+            "output_dir": "out",
+        },
+    }
+    return config
 
 
 def find_file(path: Path, filename: str) -> Optional[Path]:
@@ -30,7 +79,7 @@ def find_file(path: Path, filename: str) -> Optional[Path]:
     return None
 
 
-def read(root: Path) -> Config:
+def read(root: Path) -> dict:
     """
     Reads the configuration from a YAML file named 'config.yaml' located at the root of the git repository.
 
@@ -45,13 +94,9 @@ def read(root: Path) -> Config:
         dict: The configuration dictionary.
     """
     root = Path(root)
+    config = default_config(root)
     filename = "config.yaml"
     config_path = find_file(root, filename)
-
-    config = Config()
-    config.base_path = root
-    config.convert = Config()
-    config.ci = Config()
 
     if not config_path or not os.path.isfile(config_path):
         logger.warn(f"No config.yaml found in {root} or its parent directories.")
@@ -63,7 +108,7 @@ def read(root: Path) -> Config:
     try:
         with open(config_path, "r") as f:
             config_data = yaml.load(f)
-            config.merge(config_data)
+            config = merge_dict(config_data, config)
             return config
     except Exception as e:
         raise click.FileError(str(config_path), str(e))
@@ -88,7 +133,7 @@ def write_version(root: Path, version: str):
         raise click.FileError(str(config_path), str(e))
 
 
-def resolve_path(config: Config, pathstr: Path) -> Path:
+def resolve_path(config: dict, pathstr: Path) -> Path:
     """
     Resolves a path relative to the course root.
 
@@ -102,5 +147,5 @@ def resolve_path(config: Config, pathstr: Path) -> Path:
     path = Path(pathstr)
     if path.is_absolute():
         return path
-    new_path = Path(config.base_path).joinpath(path)
+    new_path = Path(config["base_path"]).joinpath(path)
     return new_path.resolve()

@@ -1,8 +1,10 @@
 import enum
 import re
 
+from enum import StrEnum
 
-class Keywords(str, enum.Enum):
+
+class Keywords(StrEnum):
     ASSIGNMENT_DEPRECATED = r"^#+\s+Exercise `?([\w-]+)`?"
     ASSIGNMENT_START = r"^#+\s+Assignment `?([\w-]+)`?"
     SOLUTION = r"^###+\s+Solution"
@@ -13,7 +15,7 @@ class Keywords(str, enum.Enum):
     MD_IMAGE_TAG = r"!\[([^\]]*)\]\(([^)]*)\)"
 
 
-class Tags(str, enum.Enum):
+class Tags(StrEnum):
     SOLUTION = "solution"
     ASSIGNMENT = "assignment"
     ASSIGNMENT_START = "assignment-start"

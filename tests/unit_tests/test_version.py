@@ -35,10 +35,6 @@ def test_version():
 
         assert version.version_course(config, "patch") == "1.2.4"
         with open(config_path, "r") as f:
-            print("Content:")
-            print(f.read())
-            print(":")
-        with open(config_path, "r") as f:
             data = yaml.load(f)
             assert data["version"] == "1.2.4"
 

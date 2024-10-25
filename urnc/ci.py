@@ -5,17 +5,16 @@ import shutil
 from datetime import datetime
 from os.path import basename, exists, isdir, isfile, join
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Optional
 
 import dateutil.parser
 import git
 import click
-from traitlets.config import Config
 import urnc
 from urnc.logger import critical, log, warn
 
 
-def clone_student_repo(config: Config) -> git.Repo:
+def clone_student_repo(config: dict) -> git.Repo:
     """
     Clones the student repository if it doesn't exist locally, or returns the existing local repository.
     If the 'student' key is not found in the 'git' section of the config, it initializes a new student repository.
@@ -31,12 +30,13 @@ def clone_student_repo(config: Config) -> git.Repo:
         Exception: If the local repository exists but is not a git repository.
         Exception: If there is a mismatch between the remote URL and the local repository's URL.
     """
-    repo_url = config.git.get("student", None)
+    base_path = config["base_path"]
+    repo_url = config["git"]["student"]
+    output_dir = config["git"]["output_dir"]
     if not repo_url:
         raise click.UsageError("No student repository git.student specified in config")
 
-    output_dir = config.git.get("output_dir", "out")
-    stud_path = config.base_path.joinpath(output_dir)
+    stud_path = base_path.joinpath(output_dir)
 
     # Return existing repo if already available at local filesystem
     if stud_path.exists():
@@ -73,7 +73,7 @@ def clear_repo(repo):
 
 
 def write_gitignore(
-    main_gitignore: Optional[Path], student_gitignore: Path, config: Config
+    main_gitignore: Optional[Path], student_gitignore: Path, config: dict
 ) -> None:
     """
     Writes a ``.gitignore`` file in the student repository.
@@ -95,7 +95,7 @@ def write_gitignore(
     if main_gitignore and exists(main_gitignore):
         shutil.copy(main_gitignore, student_gitignore)
 
-    exclude = config.git.get("exclude", [])
+    exclude = config["git"]["exclude"]
     if not isinstance(exclude, list):
         critical("config.git.exclude must be a list")
     now = datetime.now()
@@ -164,15 +164,14 @@ def ci(config):
         config.base_path, student_path, ignore=ignore_fn, dirs_exist_ok=True
     )
 
-    targets = config.ci.get(
-        "targets",
-        [
+    targets = config.ci.targets
+    if not targets:
+        targets = [
             {
                 "type": "student",
                 "path": "{nb.relpath}",
             }
-        ],
-    )
+        ]
     urnc.convert.convert(config, student_path, targets)
 
     log("Notebooks converted")

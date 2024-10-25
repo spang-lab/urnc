@@ -2,7 +2,6 @@
 
 import click
 import semver
-from traitlets.config import Config
 import urnc
 import re
 from urnc.logger import log
@@ -54,22 +53,23 @@ def write_pyproject_version(path: Path, version: str):
             f.write(line)
 
 
-def version_self(config: Config, action: str) -> str:
+def version_self(config: dict, action: str) -> str:
     """Bump the version of the urnc project itself.
 
     :param config: The configuration object.
     :param action: The action to perform (show, patch, minor, major).
     """
-    pyproject = config.base_path.joinpath("pyproject.toml")
+    base_path = config["base_path"]
+    pyproject = base_path.joinpath("pyproject.toml")
     if not pyproject.is_file():
-        raise click.UsageError(f"No pyproject.toml found in {config.base_path}")
+        raise click.UsageError(f"No pyproject.toml found in {base_path}")
     version = read_pyproject_version(pyproject)
     new_version = bump(version, action)
     if not new_version:
         return version
-    repo = urnc.git.get_repo(config.base_path)
+    repo = urnc.git.get_repo(base_path)
     if not repo:
-        raise click.UsageError(f"Current path {config.base_path} is not a git repo")
+        raise click.UsageError(f"Current path {base_path} is not a git repo")
     if repo.is_dirty():
         raise click.UsageError(
             "Repo is dirty, commit your changes before calling version"
@@ -86,19 +86,20 @@ def version_self(config: Config, action: str) -> str:
     return new_version
 
 
-def version_course(config: Config, action: str) -> str:
+def version_course(config: dict, action: str) -> str:
     """Bump the version of the course.
 
     :param config: The configuration object.
     :param action: The action to perform (show, patch, minor, major).
     """
-    config = urnc.config.read(config.base_path)
+    base_path = config["base_path"]
+    config = urnc.config.read(base_path)
 
-    v = config.get("version", None)
+    v = config["version"]
     if v is None:
         raise click.UsageError(
             "No config.yaml found or no version field in config.yaml"
-            f'urnc requires a config.yaml file in the current folder "{config.base_path}" (or its parents) '
+            f'urnc requires a config.yaml file in the current folder "{base_path}" (or its parents) '
             "with a version field to manage versions"
         )
     v = config["version"]
@@ -106,5 +107,5 @@ def version_course(config: Config, action: str) -> str:
     if not new_version:
         return v
     print(f"New Version: {new_version}")
-    urnc.config.write_version(config.base_path, new_version)
+    urnc.config.write_version(base_path, new_version)
     return new_version
