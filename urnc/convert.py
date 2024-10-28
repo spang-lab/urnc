@@ -1,7 +1,6 @@
 from typing import List, Optional
 from pathlib import Path
 import os
-import sys
 
 import nbformat
 import click
@@ -13,7 +12,7 @@ from urnc.config import WriteMode, TargetType
 from traitlets.config import Config
 from nbconvert.exporters.notebook import NotebookExporter
 from urnc.preprocessor.add_tags import AddTags
-from urnc.preprocessor.lint import Linter
+from urnc.preprocessor.image import ImageChecker
 from urnc.preprocessor.solutions import SolutionRemover, SkeletonRemover
 from urnc.preprocessor.clear_outputs import ClearOutputs
 
@@ -32,7 +31,7 @@ def find_notebooks(input: Path) -> List[Path]:
 
 
 def write_notebook(notebook, path: Optional[Path], config):
-    write_mode = config.convert.write_mode
+    write_mode = config["convert"]["write_mode"]
     if not path:
         return
     if write_mode == WriteMode.DRY_RUN:
@@ -82,9 +81,10 @@ def convert_target(input: Path, path: str, type: str, config: dict):
             out_file = format_path(nb, path, input)
             jobs.append((nb, out_file))
 
+    nb_config = Config()
     preprocessors = None
     if type == TargetType.STUDENT:
-        preprocessors = [Linter, AddTags, SolutionRemover, ClearOutputs]
+        preprocessors = [ImageChecker, AddTags, SolutionRemover, ClearOutputs]
     elif type == TargetType.SOLUTION:
         preprocessors = [AddTags, SkeletonRemover, ClearOutputs]
     else:
@@ -92,7 +92,6 @@ def convert_target(input: Path, path: str, type: str, config: dict):
     if preprocessors is None:
         critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")
 
-    nb_config = Config()
     nb_config.NotebookExporter.preprocessors = preprocessors
     converter = NotebookExporter(config=nb_config)
 

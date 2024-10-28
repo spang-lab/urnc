@@ -34,8 +34,8 @@ def main(ctx, root, verbose):
 @click.pass_context
 def ci(ctx):
     config = ctx.obj
-    config.convert.write_mode = WriteMode.OVERWRITE
-    config.ci.commit = True
+    config["convert"]["write_mode"] = WriteMode.OVERWRITE
+    config["ci"]["commit"] = False
     urnc.ci.ci(config)
 
 
@@ -43,8 +43,8 @@ def ci(ctx):
 @click.pass_context
 def student(ctx):
     config = ctx.obj
-    config.convert.write_mode = WriteMode.OVERWRITE
-    config.ci.commit = False
+    config["convert"]["write_mode"] = WriteMode.OVERWRITE
+    config["ci"]["commit"] = False
     urnc.ci.ci(config)
 
 
@@ -66,14 +66,14 @@ def convert(ctx, input, output, solution, force, dry_run, interactive):
         raise click.UsageError(
             "Only one of --force, --dry-run, --interactive can be set at a time."
         )
-    config.convert.write_mode = WriteMode.SKIP_EXISTING
+    config["convert"]["write_mode"] = WriteMode.SKIP_EXISTING
     if force:
-        config.convert.write_mode = WriteMode.OVERWRITE
+        config["convert"]["write_mode"] = WriteMode.OVERWRITE
     if dry_run:
-        config.convert.write_mode = WriteMode.DRY_RUN
+        config["convert"]["write_mode"] = WriteMode.DRY_RUN
     if interactive:
         if sys.stdout.isatty():
-            config.convert.write_mode = WriteMode.INTERACTIVE
+            config["convert"]["write_mode"] = WriteMode.INTERACTIVE
         else:
             raise click.UsageError(
                 "Interactive mode is only available when stdout is a tty."
@@ -96,7 +96,7 @@ def convert(ctx, input, output, solution, force, dry_run, interactive):
 
     if len(targets) == 0:
         warn("No targets specified for convert. Running check only.")
-        config.convert.write_mode = WriteMode.DRY_RUN
+        config["convert"]["write_mode"] = WriteMode.DRY_RUN
         targets.append(
             {
                 "type": TargetType.STUDENT,
@@ -112,8 +112,10 @@ def convert(ctx, input, output, solution, force, dry_run, interactive):
 @click.pass_context
 @click.option("-q", "--quiet", is_flag=True)
 def check(ctx, input, quiet):
+    if not quiet:
+        urnc.logger.set_verbose()
     config = ctx.obj
-    config.convert.write_mode = "dry-run"
+    config["convert"]["write_mode"] = WriteMode.DRY_RUN
     targets = [
         {
             "type": TargetType.STUDENT,
@@ -123,9 +125,6 @@ def check(ctx, input, quiet):
 
     input_path = urnc.config.resolve_path(config, input)
     urnc.convert.convert(config, input_path, targets)
-
-    if not quiet:
-        urnc.logger.set_verbose()
 
 
 @click.command(help="Manage the semantic version of your course")

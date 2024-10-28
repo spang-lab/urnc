@@ -51,29 +51,30 @@ class AddTags(Preprocessor):
     solution_tag = Unicode("solution", help="Tag to assign to solution cells").tag(
         config=True
     )
-    ingore_tag = Unicode(
+    ignore_tag = Unicode(
         "normal", help="Tag to assign to cells that should be ignored"
     ).tag(config=True)
 
     def is_assignment_start(self, cell, header):
-        if util.has_tag(cell, self.ingore_tag):
+        if util.has_tag(cell, self.ignore_tag):
             return False
         return contains(header, self.assignment_keywords)
 
     def is_solution(self, cell, header):
-        if util.has_tag(cell, self.ingore_tag):
+        if util.has_tag(cell, self.ignore_tag):
             return False
         if util.has_tag(cell, self.solution_tag):
             return True
         return contains(header, self.solution_keywords)
 
     def is_assignment_end(self, cell, header):
-        if util.has_tag(cell, self.ingore_tag):
+        if util.has_tag(cell, self.ignore_tag):
             return False
         if not header:
             return False
         if self.is_solution(cell, header):
             return False
+        return True
 
     def preprocess(self, nb, resources):
         assignment_ids = set()
