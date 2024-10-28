@@ -1,11 +1,8 @@
-from ruamel import yaml
-from urnc import config
 import textwrap
 import urnc.version as version
 import click
-
-
 import tempfile
+
 from ruamel.yaml import YAML
 from pathlib import Path
 from traitlets.config import Config
@@ -25,8 +22,9 @@ def test_bump():
 
 def test_version():
     with tempfile.TemporaryDirectory() as tmp:
-        config = Config()
-        config.base_path = Path(tmp)
+        config = {
+            "base_path": Path(tmp),
+        }
         config_path = Path(tmp).joinpath("config.yaml")
         yaml = YAML(typ="rt")
         with open(config_path, "w", newline="\n") as f:
@@ -52,8 +50,6 @@ def test_version_self():
     """
     )
     with tempfile.TemporaryDirectory() as tmp:
-        config = Config()
-        config.base_path = Path(tmp)
         config_path = Path(tmp).joinpath("pyproject.toml")
         with open(config_path, "w", newline="\n") as f:
             f.write(file_content)

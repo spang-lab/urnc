@@ -3,6 +3,8 @@ import re
 
 from enum import StrEnum
 
+import nbformat
+
 
 class Keywords(StrEnum):
     ASSIGNMENT_DEPRECATED = r"^#+\s+Exercise `?([\w-]+)`?"
@@ -11,8 +13,6 @@ class Keywords(StrEnum):
     SKELETON = r"^###+\s+Skeleton"
     SOLUTION_END = r"^###+\s*$"
     HEADER = r"^#"
-    IMAGE_TAG = r'<img[^>]*src="([^"]*)"'
-    MD_IMAGE_TAG = r"!\[([^\]]*)\]\(([^)]*)\)"
 
 
 class Tags(StrEnum):
@@ -40,12 +40,25 @@ def has_tag(cell, tag):
     return False
 
 
+def has_tags(cell, tags):
+    for tag in tags:
+        if not has_tag(cell, tag):
+            return False
+    return True
+
+
 def set_tag(cell, tag):
     if has_tag(cell, tag):
         return
     if "tags" not in cell.metadata:
         cell.metadata.tags = []
     cell.metadata.tags.append(tag)
+
+
+def remove_tag(cell, tag):
+    if not has_tag(cell, tag):
+        return
+    cell.metadata.tags.remove(tag)
 
 
 def to_snake_case(string):
