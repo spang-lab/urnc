@@ -147,3 +147,38 @@ def test_strip_skeleton():
     cell = nbformat.v4.new_markdown_cell("Random")
     stripped = processor.strip_cell(cell)
     assert stripped is None
+
+
+def test_multiple_solutions():
+    processor = SolutionProcessor()
+    code = textwrap.dedent(
+        """
+        line 1
+        ## Solution
+        solution
+        ## Skeleton 
+        # skeleton
+        ## End
+        line 2
+        ## Solution
+        solution2
+        ## Skeleton
+        # skeleton2
+        ## End
+        """
+    ).strip()
+    cell = nbformat.v4.new_code_cell(code)
+    stripped = processor.strip_cell(cell)
+    desired = textwrap.dedent(
+        """
+        line 1
+        skeleton
+        line 2
+        skeleton2
+        """
+    ).strip()
+    assert stripped and stripped.source == desired
+
+    cell = nbformat.v4.new_markdown_cell("Random")
+    stripped = processor.strip_cell(cell)
+    assert stripped is None

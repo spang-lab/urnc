@@ -55,7 +55,7 @@ def default_config(root) -> dict:
         },
         "ci": {
             "student": None,
-            "output_dir": "out",
+            "commit": False,
         },
     }
     return config

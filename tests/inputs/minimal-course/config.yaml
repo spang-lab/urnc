@@ -1,7 +1,0 @@
-name: Minimal Course
-version: 1.0.0
-description: Minimal Course for testing URNC's functionality
-ci:
-  solution: "{nb.reldirpath}/solutions/{nb.name}"
-  # Path where solutions should be copied to, when converting a notebook. If not
-  # specified, no solution will be created. Support placeholders TODO. For details see TODO.
