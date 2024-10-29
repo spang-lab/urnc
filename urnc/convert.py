@@ -73,7 +73,6 @@ def convert_target(input: Path, path: str, type: str, config: dict):
     jobs = []
     if input.is_file():
         out_file = format_path(input, path, input.parent)
-        print(out_file)
         jobs.append((input, out_file))
     else:
         input_notebooks = find_notebooks(input)

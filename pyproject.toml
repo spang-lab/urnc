@@ -32,6 +32,7 @@ dependencies = [
     "semver >= 3.0.1",
     "ruamel.yaml >= 0.18.4",
     "requests >= 2.31.0",
+    "papermill >= 2.3.0",
 ]
 
 [project.scripts]
@@ -41,3 +42,9 @@ urnc = "urnc.main:main"
 Homepage = "https://spang-lab.github.io/urnc"
 Source = "https://github.com/spang-lab/urnc"
 "Bug Tracker" = "https://github.com/spang-lab/urnc/issues"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+  'ignore:.*Jupyter is migrating its paths',
+  'ignore:.*utcnow\(\) is deprecated'
+]
