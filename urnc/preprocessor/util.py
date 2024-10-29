@@ -1,9 +1,9 @@
-import enum
 import re
 
 from enum import StrEnum
+from typing import List, Optional
 
-import nbformat
+from nbformat.notebooknode import NotebookNode
 
 
 class Keywords(StrEnum):
@@ -22,13 +22,22 @@ class Tags(StrEnum):
     NORMAL = "normal"
 
 
-def cell_preview(cell):
+def contains(string: Optional[str], keywords: List[str]) -> bool:
+    if string is None:
+        return False
+    for keyword in keywords:
+        if re.search(keyword, string, re.IGNORECASE):
+            return True
+    return False
+
+
+def cell_preview(cell: NotebookNode):
     short = cell.source[0:100]
     text = re.sub(r"[\s\n]+", " ", short)
     return "'%s...'" % text[0:50]
 
 
-def has_tag(cell, tag):
+def has_tag(cell: NotebookNode, tag: str) -> bool:
     ltag = tag.lower()
     if "metadata" not in cell:
         return False
@@ -40,14 +49,14 @@ def has_tag(cell, tag):
     return False
 
 
-def has_tags(cell, tags):
+def has_tags(cell: NotebookNode, tags: List[str]) -> bool:
     for tag in tags:
         if not has_tag(cell, tag):
             return False
     return True
 
 
-def set_tag(cell, tag):
+def set_tag(cell: NotebookNode, tag: str):
     if has_tag(cell, tag):
         return
     if "tags" not in cell.metadata:
@@ -55,17 +64,17 @@ def set_tag(cell, tag):
     cell.metadata.tags.append(tag)
 
 
-def remove_tag(cell, tag):
+def remove_tag(cell: NotebookNode, tag: str):
     if not has_tag(cell, tag):
         return
     cell.metadata.tags.remove(tag)
 
 
-def to_snake_case(string):
+def to_snake_case(string: str) -> str:
     return string.replace(r"\s+", "_").lower()
 
 
-def string_to_byte(input):
+def string_to_byte(input: str) -> int:
     units = {
         "B": 1,
         "KB": 1024,

@@ -13,7 +13,7 @@ from traitlets.config import Config
 from nbconvert.exporters.notebook import NotebookExporter
 from urnc.preprocessor.add_tags import AddTags
 from urnc.preprocessor.image import ImageChecker
-from urnc.preprocessor.solutions import SolutionRemover, SkeletonRemover
+from urnc.preprocessor.solutions import SolutionProcessor
 from urnc.preprocessor.clear_outputs import ClearOutputs
 
 
@@ -84,9 +84,10 @@ def convert_target(input: Path, path: str, type: str, config: dict):
     nb_config = Config()
     preprocessors = None
     if type == TargetType.STUDENT:
-        preprocessors = [ImageChecker, AddTags, SolutionRemover, ClearOutputs]
+        preprocessors = [ImageChecker, AddTags, SolutionProcessor, ClearOutputs]
     elif type == TargetType.SOLUTION:
-        preprocessors = [AddTags, SkeletonRemover, ClearOutputs]
+        nb_config.SolutionProcessor.output = "solution"
+        preprocessors = [AddTags, SolutionProcessor, ClearOutputs]
     else:
         critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")
     if preprocessors is None:

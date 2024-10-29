@@ -25,15 +25,6 @@ def extract_header(cell):
     return None, None, None
 
 
-def contains(string: t.Optional[str], keywords: t.List[str]) -> bool:
-    if string is None:
-        return False
-    for keyword in keywords:
-        if re.search(keyword, string, re.IGNORECASE):
-            return True
-    return False
-
-
 class AddTags(Preprocessor):
     assignment_keywords = List(
         ["assignment"], help="Keywords to search for in the notebook headers"
@@ -58,14 +49,14 @@ class AddTags(Preprocessor):
     def is_assignment_start(self, cell, header):
         if util.has_tag(cell, self.ignore_tag):
             return False
-        return contains(header, self.assignment_keywords)
+        return util.contains(header, self.assignment_keywords)
 
     def is_solution(self, cell, header):
         if util.has_tag(cell, self.ignore_tag):
             return False
         if util.has_tag(cell, self.solution_tag):
             return True
-        return contains(header, self.solution_keywords)
+        return util.contains(header, self.solution_keywords)
 
     def is_assignment_end(self, cell, header):
         if util.has_tag(cell, self.ignore_tag):
