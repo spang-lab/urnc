@@ -1,123 +1,106 @@
-from typing import Tuple, Dict, Union
+import typing as t
+import click
 from nbconvert.preprocessors.base import Preprocessor
+from traitlets import List, Unicode
 
 import urnc.preprocessor.util as util
-from urnc.preprocessor.util import Tags, Keywords
 import re
-
+from enum import StrEnum
 from nbformat.notebooknode import NotebookNode
 
 
-def remove_solution_lines(cell: NotebookNode) -> Union[NotebookNode, None]:
-    """
-    Remove solution lines from a cell.
-
-    This function takes a cell from a Jupyter Notebook as input, removes solution lines, uncomments skeleton lines and returns the cell.
-    If no lines remain after removing the solutions, the function returns None (i.e. the whole cell is removed).
-    If no Solution or Skeleton patterns are found in the cell, the function returns None as well.
-    Solutions and Skeleton pattern are defined at `urnc.preprocessor.util.Keywords <https://spang-lab.github.io/urnc/urnc.preprocessor.html#urnc.preprocessor.util.Keywords>`_.
-
-    Parameters:
-        cell: The cell to process.
-
-    Returns:
-        Either the cell without solutions lines and uncommented skeleton lines or None.
-    """
-    text = cell.source
-    lines = text.split("\n")
-    last_tag = None
-    found_tag = False
-    tagged_lines = []
-    for line in lines:
-        if re.match(Keywords.SOLUTION, line, re.IGNORECASE):
-            last_tag = "solution"
-            found_tag = True
-            continue
-        if re.match(Keywords.SKELETON, line, re.IGNORECASE):
-            last_tag = "skeleton"
-            found_tag = True
-            continue
-        if re.match(Keywords.SOLUTION_END, line, re.IGNORECASE):
-            last_tag = None
-            continue
-        tagged_lines.append((line, last_tag))
-    if not found_tag:
-        return None
-    skeleton_lines = []
-    for line, tag in tagged_lines:
-        if tag is None:
-            skeleton_lines.append(line)
-        if tag == "solution":
-            continue
-        if tag == "skeleton":
-            uncom = re.sub(r"^#\s?", "", line)
-            skeleton_lines.append(uncom)
-    if len(skeleton_lines) == 0:
-        return None
-    cell.source = "\n".join(skeleton_lines)
-    return cell
+class LineTags(StrEnum):
+    SOLUTION_KEY = "solution_key"
+    SOLUTION = "solution"
+    SKELETON_KEY = "skeleton_key"
+    SKELETON = "skeleton"
+    END_KEY = "end_key"
+    NONE = "none"
 
 
-def remove_skeleton_lines(text: str) -> str:
-    """
-    Remove skeleton lines from a string.
+class SolutionProcessor(Preprocessor):
+    solution_keywords = List(
+        ["solution"], help="Keywords to search for in the notebook headers"
+    ).tag(config=True)
+    solution_tag = Unicode("solution", help="Tag to assign to solution cells").tag(
+        config=True
+    )
+    skeleton_keywords = List(
+        ["skeleton"], help="Keywords to search for in the cell source"
+    ).tag(config=True)
+    output = Unicode(
+        "skeleton", help="Which lines to keep. Either 'skeleton', 'solution' of 'none'"
+    ).tag(config=True)
 
-    Parameters:
-        text: The text to process.
+    def tag_line(self, line: str) -> t.Tuple[str, str]:
+        if match := re.match(r"\s*(#{1,6})\s*(.+)", line):
+            level = len(match.group(1))
+            text = match.group(2)
+            if level == 1:
+                return LineTags.NONE, line
+            if util.contains(text, self.solution_keywords):
+                return LineTags.SOLUTION_KEY, line
+            if util.contains(text, self.skeleton_keywords):
+                return LineTags.SKELETON_KEY, line
+            return LineTags.END_KEY, line
+        return LineTags.NONE, line
 
-    Returns:
-        Text without skeleton lines.
+    def scan_lines(self, text: str) -> t.List[t.Tuple[str, str]]:
+        lines = text.split("\n")
+        tagged_lines = [self.tag_line(line) for line in lines]
+        current_tag = LineTags.NONE
+        for i, line in enumerate(tagged_lines):
+            tag, text = line
+            if tag == LineTags.SOLUTION_KEY:
+                current_tag = LineTags.SOLUTION
+                continue
+            if tag == LineTags.SKELETON_KEY:
+                current_tag = LineTags.SKELETON
+                continue
+            if tag == LineTags.END_KEY:
+                current_tag = LineTags.NONE
+                continue
+            tagged_lines[i] = (current_tag, text)
+        return tagged_lines
 
-    Examples::
-        remove_skeleton_lines("### Skeleton\n# # a == ?") == ""
-        remove_skeleton_lines("### Skeleton\n# # a == ?\n###") == "###"
-        remove_skeleton_lines("### Solution\na = 100\n### Skeleton\n# # a == ?\n###") == "### Solution\na = 100\n###"
-    """
-    lines = text.split("\n")
-    keep = []
-    inside_skeleton = False
-    for line in lines:
-        if re.match(Keywords.SKELETON, line, re.IGNORECASE):
-            inside_skeleton = True
-        elif re.match(Keywords.SOLUTION_END, line, re.IGNORECASE):
-            inside_skeleton = False
-            keep.append(line)
-        elif not inside_skeleton:
-            keep.append(line)
-    return "\n".join(keep)
+    def strip_cell(self, cell: NotebookNode) -> t.Optional[NotebookNode]:
+        tagged_lines = self.scan_lines(cell.source)
+        if all(tag == LineTags.NONE for tag, _ in tagged_lines):
+            return None
+        lines = []
+        for tag, line in tagged_lines:
+            if self.output == "skeleton":
+                if tag == LineTags.SOLUTION:
+                    continue
+                if tag == LineTags.SKELETON:
+                    uncommented = re.sub(r"^#\s?", "", line)
+                    lines.append(uncommented)
+                    continue
+                if tag == LineTags.NONE:
+                    lines.append(line)
+            if self.output == "solution":
+                if tag == LineTags.SKELETON:
+                    continue
+                if tag == LineTags.SOLUTION or tag == LineTags.NONE:
+                    lines.append(line)
+            if self.output == "none" and tag == LineTags.NONE:
+                lines.append(line)
+        cell.source = "\n".join(lines)
+        return cell
 
-
-class SolutionRemover(Preprocessor):
     def preprocess(
-        self, nb: NotebookNode, resources: Union[Dict, None] = None
-    ) -> Tuple[NotebookNode, Union[Dict, None]]:
-        """
-        Preprocess the notebook by removing solutions lines from solution cells and uncommenting skeleton lines within solution cells.
+        self, nb: NotebookNode, resources: t.Union[t.Dict, None] = None
+    ) -> t.Tuple[NotebookNode, t.Union[t.Dict, None]]:
+        if self.output not in ["skeleton", "solution", "none"]:
+            click.UsageError(
+                f"solution.output must be one of 'skeleton', 'solution' or 'none', not {self.output}"
+            )
 
-        This function takes a notebook and resources as input, removes the solution lines from notebook cells  and returns the notebook and resources.
-
-        Parameters:
-            notebook: The notebook to preprocess.
-            resources: The resources associated with the notebook.
-
-        Returns:
-            The preprocessed notebook and the resources.
-        """
         cells = []
         for cell in nb.cells:
-            if util.has_tag(cell, Tags.SOLUTION):
-                cell = remove_solution_lines(cell)
+            if util.has_tag(cell, self.solution_tag):
+                cell = self.strip_cell(cell)
             if cell is not None:
                 cells.append(cell)
         nb.cells = cells
         return nb, resources
-
-
-class SkeletonRemover(Preprocessor):
-    def preprocess_cell(self, cell, resources, index):
-        """
-        Preprocess the notebook cells by removing skeleton lines from solution cells.
-        """
-        if util.has_tag(cell, Tags.SOLUTION):
-            cell.source = remove_skeleton_lines(text=cell.source)
-        return cell, resources
