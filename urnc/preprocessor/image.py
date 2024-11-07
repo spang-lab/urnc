@@ -15,7 +15,7 @@ def url_is_valid(url):
         response = requests.head(url, allow_redirects=True)
         is_valid = response.status_code == 200
         if not is_valid:
-            log.warn(f"Got response code {response.status_code}")
+            log.warn(f"Request to {url} failed with code {response.status_code}")
         return is_valid
     except Exception:
         return False
@@ -39,7 +39,6 @@ class ImageChecker(Preprocessor):
         if src.startswith("http"):
             log.warn(f"Remote image detected. {src}")
             if not url_is_valid(src):
-                log.warn(f"Request to {src} failed.")
                 return False, None
             return True, None
         image_path = nb_path.parent.joinpath(src)
@@ -48,8 +47,9 @@ class ImageChecker(Preprocessor):
                 stat = image_path.stat()
                 image_size = stat.st_size
                 if image_size > max_size:
+                    rel_path = image_path.relative_to(Path(self.base_path))
                     log.warn(
-                        f"The image {image_path} is larger than {self.max_image_size} KiB. This will increase the loading time of your notebook. Consider compressing the image."
+                        f"The image {rel_path} is larger than {self.max_image_size} KiB."
                     )
                 return True, None
             except Exception:

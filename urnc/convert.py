@@ -6,18 +6,21 @@ import nbformat
 import click
 
 from urnc.logger import log, warn, critical
-from urnc.format import format_path
+from urnc.format import format_path, is_directory_path
 from urnc.config import WriteMode, TargetType
 
 from traitlets.config import Config
 from nbconvert.exporters.notebook import NotebookExporter
 from urnc.preprocessor.add_tags import AddTags
+from urnc.preprocessor.check_outputs import CheckOutputs
 from urnc.preprocessor.image import ImageChecker
 from urnc.preprocessor.solutions import SolutionProcessor
 from urnc.preprocessor.clear_outputs import ClearOutputs
+from urnc.preprocessor.executor import ExecutePreprocessor
+from urnc.preprocessor.clear_tagged import ClearTaggedCells
 
 
-def find_notebooks(input: Path) -> List[Path]:
+def find_notebooks(input: Path, output_path: Optional[Path]) -> List[Path]:
     notebooks = []
     if not input.is_dir():
         critical(f"Input path '{input}' is not a directory. Aborting.")
@@ -26,8 +29,11 @@ def find_notebooks(input: Path) -> List[Path]:
         files[:] = [f for f in files if f.lower().endswith(".ipynb")]
         for file in files:
             path = Path(root).joinpath(file)
+            if output_path in path.parents:
+                log(f"Skipping notebook {path} because it is in the output directory.")
+                continue
             notebooks.append(path)
-    return notebooks
+    return sorted(notebooks)
 
 
 def write_notebook(notebook, path: Optional[Path], config):
@@ -69,24 +75,56 @@ def convert(config: dict, input: Path, targets: List[dict]):
         convert_target(input, path, type, config)
 
 
+def create_nb_config(config: dict) -> Config:
+    nb_config = Config()
+    convert = config["convert"]
+    keywords = convert["keywords"]
+    tags = convert["tags"]
+
+    nb_config.AddTags.assignment_keywords = keywords["assignment"]
+    nb_config.AddTags.solution_keywords = keywords["solution"]
+    nb_config.AddTags.assignment_tag = tags["assignment"]
+    nb_config.AddTags.assignment_start_tag = tags["assignment-start"]
+    nb_config.AddTags.solution_tag = tags["solution"]
+
+    nb_config.ImageChecker.base_path = str(config["base_path"])
+    nb_config.SolutionProcessor.solution_keywords = keywords["solution"]
+    nb_config.SolutionProcessor.solution_tag = tags["solution"]
+    nb_config.SolutionProcessor.skeleton_keywords = keywords["skeleton"]
+
+    nb_config.ClearTaggedCells.tags = [tags["no-execute"]]
+    return nb_config
+
+
 def convert_target(input: Path, path: str, type: str, config: dict):
     jobs = []
     if input.is_file():
         out_file = format_path(input, path, input.parent)
         jobs.append((input, out_file))
     else:
-        input_notebooks = find_notebooks(input)
+        output_path = None
+        if is_directory_path(path):
+            output_path = config["base_path"].joinpath(path)
+        input_notebooks = find_notebooks(input, output_path)
         for nb in input_notebooks:
             out_file = format_path(nb, path, input)
             jobs.append((nb, out_file))
 
-    nb_config = Config()
+    nb_config = create_nb_config(config)
     preprocessors = None
     if type == TargetType.STUDENT:
         preprocessors = [ImageChecker, AddTags, SolutionProcessor, ClearOutputs]
     elif type == TargetType.SOLUTION:
         nb_config.SolutionProcessor.output = "solution"
         preprocessors = [AddTags, SolutionProcessor, ClearOutputs]
+    elif type == TargetType.EXECUTE:
+        preprocessors = [
+            ClearTaggedCells,
+            ExecutePreprocessor,
+            CheckOutputs,
+            ClearOutputs,
+        ]
+
     else:
         critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")
     if preprocessors is None:
@@ -96,9 +134,13 @@ def convert_target(input: Path, path: str, type: str, config: dict):
     converter = NotebookExporter(config=nb_config)
 
     for notebook_path, output_path in jobs:
+        filename = notebook_path.name
+        print(f"\x1b[94m  ---   {filename}    --- \x1b[0m   \n")
+
         nb_node = nbformat.read(notebook_path, as_version=4)
         resources = {
             "path": notebook_path,
+            "filename": filename,
         }
         body, resources = converter.from_notebook_node(nb_node, resources)
         write_notebook(body, output_path, config)

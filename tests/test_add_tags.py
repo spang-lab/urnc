@@ -1,5 +1,6 @@
 from traitlets.config import Config
 import urnc
+from urnc.preprocessor import util
 import urnc.preprocessor.add_tags as add_tags
 import pytest
 import click
@@ -33,6 +34,27 @@ def test_html_headers():
     cell4 = nbformat.v4.new_markdown_cell("<h2>      Header \n2</h2>")
     level, title, id = add_tags.extract_header(cell4)
     assert level == 2 and title == "Header \n2" and id == "header_2"
+
+
+def test_styled_headers():
+    cell = nbformat.v4.new_markdown_cell(
+        '<h3 style="color: #d97706; font-size: 2em">Assignment test</h3>")'
+    )
+    level, title, id = add_tags.extract_header(cell)
+    assert level == 3 and title == "Assignment test" and id == "assignment_test"
+
+    cell = nbformat.v4.new_markdown_cell(
+        '<h3 style="color: #047857; font-size: 2em">LAB 16</h3>'
+    )
+    level, title, id = add_tags.extract_header(cell)
+    assert level == 3 and title == "LAB 16" and id == "lab_16"
+
+    cell = nbformat.v4.new_markdown_cell(
+        '<h3 style="color: #d97706; font-size: 2em">The following is for you to practice at home, but is not part of the official assignment.</h3>'
+    )
+    level, title, id = add_tags.extract_header(cell)
+    assert level == 3
+    assert util.contains(title, ["assignment"])
 
 
 def test_code_cell():

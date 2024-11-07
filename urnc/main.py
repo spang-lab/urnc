@@ -122,7 +122,23 @@ def check(ctx, input, quiet):
             "path": None,
         }
     ]
+    input_path = urnc.config.resolve_path(config, input)
+    urnc.convert.convert(config, input_path, targets)
 
+
+@click.command(help="Execute notebooks")
+@click.argument("input", type=click.Path(exists=True), default=".")
+@click.option("-o", "--output", type=str, default=None)
+@click.pass_context
+def execute(ctx, input, output):
+    config = ctx.obj
+    config["convert"]["write_mode"] = WriteMode.SKIP_EXISTING
+    targets = [
+        {
+            "type": TargetType.EXECUTE,
+            "path": output,
+        }
+    ]
     input_path = urnc.config.resolve_path(config, input)
     urnc.convert.convert(config, input_path, targets)
 
@@ -190,10 +206,20 @@ def clone(ctx, git_url, output, branch, depth, log_file):
             urnc.logger.error(err)
 
 
+@click.command(help="Init a new course")
+@click.argument("name", type=str, required=True)
+@click.pass_context
+def init(ctx, name):
+    config = ctx.obj
+    urnc.init.init(config, name)
+
+
 main.add_command(version)
 main.add_command(convert)
 main.add_command(ci)
 main.add_command(check)
+main.add_command(execute)
 main.add_command(student)
 main.add_command(pull)
 main.add_command(clone)
+main.add_command(init)

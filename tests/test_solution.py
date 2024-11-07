@@ -27,6 +27,10 @@ def test_tag_line():
     tag, _ = processor.tag_line(line)
     assert tag == LineTags.END_KEY
 
+    line = "###"
+    tag, _ = processor.tag_line(line)
+    assert tag == LineTags.END_KEY
+
     line = "## Random"
     tag, _ = processor.tag_line(line)
     assert tag == LineTags.END_KEY

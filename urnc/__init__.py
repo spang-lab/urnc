@@ -7,4 +7,4 @@ maintaining course materials by providing easy-to-use commands to check,
 convert, and manage course versions.
 """
 
-from urnc import ci, convert, logger, pull, util, version, format, config, git, execute
+from urnc import ci, convert, logger, pull, util, version, format, config, git, init
