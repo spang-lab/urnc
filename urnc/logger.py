@@ -9,18 +9,20 @@ GREY = "\x1b[38;20m"
 YELLOW = "\x1b[33;20m"
 RED = "\x1b[31;20m"
 BOLD_RED = "\x1b[31;1m"
+CYAN = "\x1b[36;20m"
 RESET = "\x1b[0m"
 
 
 class CustomFormatter(logging.Formatter):
     def format(self, record):
-        log_fmt = "%(levelname)s - %(message)s"
+        log_fmt = "%(message)s"
+        log_fmt_name = "%(levelname)s: %(message)s"
         formats = {
             logging.DEBUG: f"{GREY}{log_fmt}{RESET}",
             logging.INFO: f"{GREY}{log_fmt}{RESET}",
-            logging.WARNING: f"{YELLOW}{log_fmt}{RESET}",
-            logging.ERROR: f"{RED}{log_fmt}{RESET}",
-            logging.CRITICAL: f"{BOLD_RED}{log_fmt}{RESET}",
+            logging.WARNING: f"{YELLOW}{log_fmt_name}{RESET}",
+            logging.ERROR: f"{RED}{log_fmt_name}{RESET}",
+            logging.CRITICAL: f"{BOLD_RED}{log_fmt_name}{RESET}",
         }
         log_fmt = formats.get(record.levelno)
         formatter = logging.Formatter(log_fmt, datefmt="%Y-%m-%d %H:%M:%S")

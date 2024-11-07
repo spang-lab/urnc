@@ -6,22 +6,6 @@ from typing import List, Optional
 from nbformat.notebooknode import NotebookNode
 
 
-class Keywords(StrEnum):
-    ASSIGNMENT_DEPRECATED = r"^#+\s+Exercise `?([\w-]+)`?"
-    ASSIGNMENT_START = r"^#+\s+Assignment `?([\w-]+)`?"
-    SOLUTION = r"^###+\s+Solution"
-    SKELETON = r"^###+\s+Skeleton"
-    SOLUTION_END = r"^###+\s*$"
-    HEADER = r"^#"
-
-
-class Tags(StrEnum):
-    SOLUTION = "solution"
-    ASSIGNMENT = "assignment"
-    ASSIGNMENT_START = "assignment-start"
-    NORMAL = "normal"
-
-
 def contains(string: Optional[str], keywords: List[str]) -> bool:
     if string is None:
         return False

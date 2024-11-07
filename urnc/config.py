@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Optional
 import os
 import click
-from urnc import logger
 from enum import StrEnum
 
 
@@ -17,6 +16,7 @@ class WriteMode(StrEnum):
 class TargetType(StrEnum):
     STUDENT = "student"
     SOLUTION = "solution"
+    EXECUTE = "execute"
 
 
 def merge_dict(source, target):
@@ -41,6 +41,8 @@ def default_config(root) -> dict:
 
     Returns:
         config: The configuration dictionary.
+
+
     """
     config = {
         "version": None,
@@ -48,15 +50,29 @@ def default_config(root) -> dict:
         "convert": {
             "write_mode": WriteMode.SKIP_EXISTING,
             "targets": [],
+            "keywords": {
+                "solution": ["solution"],
+                "skeleton": ["skeleton"],
+                "assignment": ["assignment"],
+            },
+            "tags": {
+                "solution": "solution",
+                "skeleton": "skeleton",
+                "assignment": "assignment",
+                "assignment-start": "assignment-start",
+                "ignore": "ignore",
+                "no-execute": "no-execute",
+            },
         },
         "git": {
+            "student": None,
             "output_dir": "out",
             "exclude": [],
         },
         "ci": {
-            "student": None,
             "commit": False,
         },
+        "is_default": True,
     }
     return config
 
@@ -99,8 +115,6 @@ def read(root: Path) -> dict:
     config_path = find_file(root, filename)
 
     if not config_path or not os.path.isfile(config_path):
-        logger.warn(f"No config.yaml found in {root} or its parent directories.")
-        logger.warn("Using default config")
         return config
 
     yaml = YAML(typ="rt")
@@ -109,6 +123,7 @@ def read(root: Path) -> dict:
         with open(config_path, "r") as f:
             config_data = yaml.load(f)
             config = merge_dict(config_data, config)
+            config["is_default"] = False
             return config
     except Exception as e:
         raise click.FileError(str(config_path), str(e))

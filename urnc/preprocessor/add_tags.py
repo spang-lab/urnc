@@ -2,6 +2,7 @@ from nbconvert.preprocessors.base import Preprocessor
 
 import re
 
+from nbformat import NotebookNode
 from traitlets import List, Unicode
 import typing as t
 import urnc.preprocessor.util as util
@@ -18,7 +19,7 @@ def extract_header(cell):
         level = len(match.group(1))
         title = match.group(2)
         return level, title, header_to_id(title)
-    if match := re.match(r"<h([1-6])>((.+)(?:\n.+)*)<\/h\1>", cell.source, opts):
+    if match := re.match(r"<h([1-6]).*>((.+)(?:\n.+)*)<\/h\1>", cell.source, opts):
         level = int(match.group(1))
         title = match.group(2).strip()
         return level, title, header_to_id(title)
@@ -46,22 +47,24 @@ class AddTags(Preprocessor):
         "normal", help="Tag to assign to cells that should be ignored"
     ).tag(config=True)
 
-    def is_assignment_start(self, cell, header):
+    def is_assignment_start(self, cell: NotebookNode, header: t.Optional[str]) -> bool:
         if util.has_tag(cell, self.ignore_tag):
             return False
         return util.contains(header, self.assignment_keywords)
 
-    def is_solution(self, cell, header):
+    def is_solution(self, cell: NotebookNode, header: t.Optional[str]) -> bool:
         if util.has_tag(cell, self.ignore_tag):
             return False
         if util.has_tag(cell, self.solution_tag):
             return True
         return util.contains(header, self.solution_keywords)
 
-    def is_assignment_end(self, cell, header):
+    def is_assignment_end(self, cell: NotebookNode, header: t.Optional[str]) -> bool:
         if util.has_tag(cell, self.ignore_tag):
             return False
         if not header:
+            return False
+        if cell.cell_type != "markdown":
             return False
         if self.is_solution(cell, header):
             return False

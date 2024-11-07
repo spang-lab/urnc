@@ -41,7 +41,9 @@ class NbPath(object):
         self.ext = path.suffix[1:] if path.suffix.startswith(".") else path.suffix
 
 
-def is_directory_path(pattern: str) -> bool:
+def is_directory_path(pattern: Optional[str]) -> bool:
+    if pattern is None:
+        return False
     return "{" not in pattern and not pattern.endswith(".ipynb")
 
 
