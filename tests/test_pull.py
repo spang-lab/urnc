@@ -47,6 +47,14 @@ def test_pull():
     urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
     assert (pull_path / "new_file.txt").is_file()
 
+    # test a merge conflict
+    (repo_path / "conflict.txt").write_text("remote text")
+    update_remote(repo)
+    urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
+    (pull_path / "conflict.txt").write_text("local text")
+    urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
+    assert (pull_path / "conflict.txt").read_text() == "local text"
+
     # test a modify/delete conflict
     (repo_path / "new_file.txt").unlink()
     update_remote(repo)
