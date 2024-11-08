@@ -140,12 +140,13 @@ def ci(config):
     Raises:
         Exception: If the repository is dirty and commit is True, an exception is raised.
     """
-    repo = urnc.git.get_repo(config.base_path)
+    base_path = config["base_path"]
+    repo = urnc.git.get_repo(base_path)
     if not repo:
         warn("Not in a git repository")
 
     # Make sure main repo is clean if we want to commit and push to student remote
-    if config.ci.commit and repo and repo.is_dirty():
+    if config["ci"]["commit"] and repo and repo.is_dirty():
         raise click.UsageError("Repo is not clean. Commit your changes first.")
 
     # Clone and clear student repo. Then copy over files from main repo
@@ -160,11 +161,9 @@ def ci(config):
             ignore_list.append(basename(student_path))
         return ignore_list
 
-    shutil.copytree(
-        config.base_path, student_path, ignore=ignore_fn, dirs_exist_ok=True
-    )
+    shutil.copytree(base_path, student_path, ignore=ignore_fn, dirs_exist_ok=True)
 
-    targets = config.ci.targets
+    targets = config["convert"]["targets"]
     if not targets:
         targets = [
             {
@@ -178,7 +177,7 @@ def ci(config):
     # Update .gitignore and drop cached files
     log("Updating .gitignore from config")
     write_gitignore(
-        main_gitignore=config.base_path.joinpath(".gitignore"),
+        main_gitignore=base_path.joinpath(".gitignore"),
         student_gitignore=student_path.joinpath(".gitignore"),
         config=config,
     )
@@ -186,7 +185,7 @@ def ci(config):
     update_index(student_repo)
 
     # Commit and push
-    if config.ci.commit:
+    if config["ci"]["commit"]:
         log("Adding files and commiting")
         student_repo.git.add(all=True)
         student_repo.index.commit("urnc convert")

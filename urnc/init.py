@@ -32,6 +32,7 @@ def write_config(path: Path, name: str):
             "student": "Link to student repo",
             "output_dir": "out",
             "exclude": [
+                "config.yaml",
                 "container/",
             ],
         },
