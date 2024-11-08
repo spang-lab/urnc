@@ -42,10 +42,22 @@ def test_pull():
     assert (pull_path / "example.ipynb").is_file()
 
     # test the pull of new files
-    (repo_path / "new_file.txt").touch()
+    (repo_path / "new_file.txt").write_text("line 1\nline 2\nline 3\nline 4\n")
     update_remote(repo)
     urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
     assert (pull_path / "new_file.txt").is_file()
+
+    # test merge of changed remote content
+    lines = (repo_path / "new_file.txt").read_text().split("\n")
+    lines[1] = "new line 2"
+    (repo_path / "new_file.txt").write_text("\n".join(lines))
+    update_remote(repo)
+    with open(pull_path / "new_file.txt", "a") as f:
+        f.write("line 5\n")
+    urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
+    assert (
+        pull_path / "new_file.txt"
+    ).read_text() == "line 1\nnew line 2\nline 3\nline 4\nline 5\n"
 
     # test a merge conflict
     (repo_path / "conflict.txt").write_text("remote text")
