@@ -29,6 +29,11 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
+def setup_test_logger():
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
+
 def setup_logger(verbose: bool = False) -> None:
     """
     Sets up a logger with a custom handler and formatter.
