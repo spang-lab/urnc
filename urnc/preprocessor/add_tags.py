@@ -10,7 +10,7 @@ from urnc.logger import warn, dbg
 
 
 def header_to_id(header: str) -> str:
-    return re.sub(r"\W+|^(?=\d)", "_", header.lower())
+    return re.sub(r"\W+|^(?=\d)", "_", header.lower()).strip("_")
 
 
 def extract_header(cell):

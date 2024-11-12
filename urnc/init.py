@@ -62,8 +62,19 @@ def write_gitignore(path: Path):
 
 def write_notebook(path: Path, config: dict):
     cells = [
-        nbformat.v4.new_markdown_cell("# Example Notebook"),
-        nbformat.v4.new_code_cell("print('Hello, World!')"),
+        nbformat.v4.new_markdown_cell(
+            "# Example Notebook \n urnc detects cells by checking for keywords in markdown headers"
+        ),
+        nbformat.v4.new_code_cell("print('This is a normal code cell.')"),
+        nbformat.v4.new_markdown_cell(
+            "### Assignment 1 \n Assignments are detected by urnc."
+        ),
+        nbformat.v4.new_markdown_cell(
+            "### Solution \n Solutions are removed by the urnc ci command."
+        ),
+        nbformat.v4.new_code_cell(
+            "### Solution \n print('Solutions can also be in code cells.')"
+        ),
     ]
     nb = nbformat.v4.new_notebook(cells=cells)
     nb_path = path.joinpath("example.ipynb")

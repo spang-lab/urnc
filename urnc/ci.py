@@ -168,7 +168,7 @@ def ci(config):
         targets = [
             {
                 "type": "student",
-                "path": "{nb.relpath}",
+                "path": "{nb.abspath}",
             }
         ]
     urnc.convert.convert(config, student_path, targets)

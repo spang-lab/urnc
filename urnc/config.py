@@ -17,6 +17,7 @@ class TargetType(StrEnum):
     STUDENT = "student"
     SOLUTION = "solution"
     EXECUTE = "execute"
+    CLEAR = "clear"
 
 
 def merge_dict(source, target):

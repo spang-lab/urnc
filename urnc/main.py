@@ -6,7 +6,7 @@ import sys
 import click
 import urnc
 from urnc.convert import WriteMode, TargetType
-from urnc.logger import warn
+from urnc.logger import log, warn
 
 
 @click.group(help="Uni Regensburg Notebook Converter")
@@ -111,7 +111,8 @@ def convert(ctx, input, output, solution, force, dry_run, interactive):
 @click.argument("input", type=click.Path(exists=True), default=".")
 @click.pass_context
 @click.option("-q", "--quiet", is_flag=True)
-def check(ctx, input, quiet):
+@click.option("-c", "--clear", is_flag=True)
+def check(ctx, input, quiet, clear):
     if not quiet:
         urnc.logger.set_verbose()
     config = ctx.obj
@@ -124,6 +125,16 @@ def check(ctx, input, quiet):
     ]
     input_path = urnc.config.resolve_path(config, input)
     urnc.convert.convert(config, input_path, targets)
+    if clear:
+        log("Clearing cell outputs")
+        config["convert"]["write_mode"] = WriteMode.OVERWRITE
+        targets = [
+            {
+                "type": TargetType.CLEAR,
+                "path": "{nb.relpath}",
+            }
+        ]
+        urnc.convert.convert(config, input_path, targets)
 
 
 @click.command(help="Execute notebooks")

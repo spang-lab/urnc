@@ -5,7 +5,8 @@ import os
 import nbformat
 import click
 
-from urnc.logger import log, warn, critical
+import urnc
+from urnc.logger import dbg, log, warn, critical
 from urnc.format import format_path, is_directory_path
 from urnc.config import WriteMode, TargetType
 
@@ -98,6 +99,7 @@ def create_nb_config(config: dict) -> Config:
 
 def convert_target(input: Path, path: str, type: str, config: dict):
     jobs = []
+
     if input.is_file():
         out_file = format_path(input, path, input.parent)
         jobs.append((input, out_file))
@@ -124,9 +126,9 @@ def convert_target(input: Path, path: str, type: str, config: dict):
             CheckOutputs,
             ClearOutputs,
         ]
+    elif type == TargetType.CLEAR:
+        preprocessors = [ClearOutputs]
 
-    else:
-        critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")
     if preprocessors is None:
         critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")
 
@@ -134,6 +136,7 @@ def convert_target(input: Path, path: str, type: str, config: dict):
     converter = NotebookExporter(config=nb_config)
 
     for notebook_path, output_path in jobs:
+        dbg(f"Converting {notebook_path} to {output_path}")
         filename = notebook_path.name
         print(f"\x1b[94m  ---   {filename}    --- \x1b[0m   \n")
 
