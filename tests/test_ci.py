@@ -1,8 +1,11 @@
 from pathlib import Path
 import git
 import tempfile
+
+import nbformat
 import urnc
 from urnc.config import WriteMode
+import urnc.preprocessor.util as util
 
 
 def test_ci():
@@ -35,7 +38,10 @@ def test_ci():
     assert (student_repo_path / "example.ipynb").is_file()
     assert not (student_repo_path / "config.yaml").exists()
 
-    print((student_repo_path / "example.ipynb").read_text())
-
+    nb = nbformat.read(str(student_repo_path / "example.ipynb"), as_version=4)
+    cells = nb["cells"]
+    print(cells)
+    assert util.has_tag(cells[2], "assignment")
+    assert util.has_tag(cells[2], "assignment-start")
+    assert util.has_tag(cells[3], "assignment")
     tmp.cleanup()
-    assert False

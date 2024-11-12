@@ -70,10 +70,16 @@ def write_notebook(path: Path, config: dict):
             "### Assignment 1 \n Assignments are detected by urnc."
         ),
         nbformat.v4.new_markdown_cell(
+            "Cells after an assignment header are considered part of the assignment."
+        ),
+        nbformat.v4.new_markdown_cell(
             "### Solution \n Solutions are removed by the urnc ci command."
         ),
         nbformat.v4.new_code_cell(
             "### Solution \n print('Solutions can also be in code cells.')"
+        ),
+        nbformat.v4.new_markdown_cell(
+            "## Other headers \n end the previous assignment."
         ),
     ]
     nb = nbformat.v4.new_notebook(cells=cells)

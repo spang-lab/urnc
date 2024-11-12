@@ -4,4 +4,4 @@ import urnc
 
 @pytest.fixture(autouse=True)
 def setup_logger():
-    urnc.logger.setup_logger(True)
+    urnc.logger.setup_test_logger()
