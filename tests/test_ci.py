@@ -2,6 +2,7 @@ from pathlib import Path
 import git
 import tempfile
 import urnc
+from urnc.config import WriteMode
 
 
 def test_ci():
@@ -24,8 +25,8 @@ def test_ci():
     config = urnc.config.read(repo_path)
     config["git"]["student"] = str(student_remote)
     config["git"]["output_dir"] = "out"
+    config["convert"]["write_mode"] = WriteMode.OVERWRITE
     config["ci"]["commit"] = True
-    print(config)
     urnc.ci.ci(config)
 
     student_repo_path = path / "student"
@@ -34,4 +35,7 @@ def test_ci():
     assert (student_repo_path / "example.ipynb").is_file()
     assert not (student_repo_path / "config.yaml").exists()
 
+    print((student_repo_path / "example.ipynb").read_text())
+
     tmp.cleanup()
+    assert False

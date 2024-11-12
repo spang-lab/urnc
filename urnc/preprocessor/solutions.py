@@ -85,6 +85,8 @@ class SolutionProcessor(Preprocessor):
                     lines.append(line)
             if self.output == "none" and tag == LineTags.NONE:
                 lines.append(line)
+        if len(lines) == 0:
+            return None
         cell.source = "\n".join(lines)
         return cell
 
