@@ -47,7 +47,9 @@ class ImageChecker(Preprocessor):
                 stat = image_path.stat()
                 image_size = stat.st_size
                 if image_size > max_size:
-                    rel_path = image_path.relative_to(Path(self.base_path))
+                    rel_path = image_path.relative_to(
+                        Path(self.base_path), walk_up=True
+                    )
                     log.warn(
                         f"The image {rel_path} is larger than {self.max_image_size} KiB."
                     )
@@ -62,7 +64,7 @@ class ImageChecker(Preprocessor):
         matching_files = list(base_path.rglob(filename))
         if len(matching_files) == 1:
             file_path = matching_files[0]
-            new_path = file_path.relative_to(nb_path.parent)
+            new_path = file_path.relative_to(nb_path.parent, walk_up=True)
             log.warn(
                 f"Found a similar file in the base path. Did you mean {file_path}?"
             )
@@ -77,7 +79,8 @@ class ImageChecker(Preprocessor):
 
         if len(matching_files) > 1:
             paths = [
-                file_path.relative_to(nb_path.parent) for file_path in matching_files
+                file_path.relative_to(nb_path.parent, walk_up=True)
+                for file_path in matching_files
             ]
             log.log("Did you mean to write one of these?")
             log.log("[0]: continue")
