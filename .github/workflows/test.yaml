@@ -10,7 +10,7 @@ jobs:
       UR_GIT_URL: ${{ secrets.UR_GIT_URL }}
     strategy:
       matrix:
-        python-version: ['3.11', '3.12']
+        python-version: ['3.12']
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -20,7 +20,7 @@ jobs:
     - name: Test installation
       run: python3 -m pip install .
     - name: Setup test dependencies
-      run: python3 -m pip install pytest pytest-cov freezegun PyYAML
+      run: python3 -m pip install pytest pytest-cov freezegun PyYAML ipykernel
     - name: Run test suite
       run: pytest --cov=urnc --cov-report=xml
     - name: Upload coverage to Codecov
