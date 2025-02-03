@@ -185,7 +185,7 @@ def version(ctx, self, action):
 def pull(ctx, git_url, output, branch, depth, log_file):
     if log_file:
         urnc.logger.add_file_handler(log_file)
-    with urnc.util.chdir(ctx.obj["root"]):
+    with urnc.util.chdir(ctx.obj["base_path"]):
         try:
             urnc.pull.pull(git_url, output, branch, depth)
         except Exception as err:
@@ -208,7 +208,7 @@ def clone(ctx, git_url, output, branch, depth, log_file):
     if log_file:
         urnc.logger.add_file_handler(log_file)
 
-    with urnc.util.chdir(ctx.obj["root"]):
+    with urnc.util.chdir(ctx.obj["base_path"]):
         urnc.logger.setup_logger()
         try:
             urnc.pull.clone(git_url, output, branch, depth)
