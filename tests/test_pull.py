@@ -25,7 +25,7 @@ def test_pull():
     # init remote
     remote_path = path / "remote.git"
     remote_path.mkdir()
-    git.Repo.init(remote_path, bare=True)
+    git.Repo.init(remote_path, bare=True, initial_branch="main")
     origin = repo.create_remote("origin", str(remote_path))
     origin.push(refspec="main:main")
 

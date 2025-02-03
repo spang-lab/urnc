@@ -95,7 +95,7 @@ def init(config, name):
     if path.exists() and any(path.iterdir()):
         raise click.UsageError(f"Directory {path} already exists as is not empty.")
     path.mkdir(parents=True, exist_ok=True)
-    repo = git.Repo.init(path)
+    repo = git.Repo.init(path, initial_branch="main")
     write_gitignore(path)
     write_config(path, name)
     write_notebook(path, config)

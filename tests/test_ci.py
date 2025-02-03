@@ -17,13 +17,13 @@ def test_ci():
 
     remote_path = path / "remote.git"
     remote_path.mkdir()
-    git.Repo.init(remote_path, bare=True)
+    git.Repo.init(remote_path, bare=True, initial_branch="main")
     origin = repo.create_remote("origin", str(remote_path))
     origin.push(refspec="main:main")
 
     student_remote = path / "student.git"
     student_remote.mkdir()
-    git.Repo.init(student_remote, bare=True)
+    git.Repo.init(student_remote, bare=True, initial_branch="main")
 
     config = urnc.config.read(repo_path)
     config["git"]["student"] = str(student_remote)
