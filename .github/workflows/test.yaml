@@ -10,8 +10,7 @@ jobs:
       UR_GIT_URL: ${{ secrets.UR_GIT_URL }}
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
-        # support for '3.8' and '3.9' will be added with issue `https://github.com/spang-lab/urnc/issues/18`
+        python-version: ['3.11', '3.12']
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
