@@ -35,7 +35,7 @@ def main(ctx, root, verbose):
 def ci(ctx):
     config = ctx.obj
     config["convert"]["write_mode"] = WriteMode.OVERWRITE
-    config["ci"]["commit"] = False
+    config["ci"]["commit"] = True
     urnc.ci.ci(config)
 
 
