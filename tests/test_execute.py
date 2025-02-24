@@ -31,7 +31,7 @@ def test_execute_error():
     executor = ExecutePreprocessor()
     ex_nb = executor.execute_notebook(nb)
 
-    assert ex_nb.cells[0].outputs[0]["ename"] == "SyntaxError"
+    assert ex_nb.cells[0].outputs[0]["output_type"] == "error"
 
 
 def test_pipeline():

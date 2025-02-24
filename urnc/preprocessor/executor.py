@@ -1,3 +1,5 @@
+from os import chdir, getcwd
+from os.path import dirname
 from nbformat import NotebookNode
 from papermill.engines import NBClientEngine
 from nbconvert.preprocessors.base import Preprocessor
@@ -24,8 +26,16 @@ class ExecutePreprocessor(Preprocessor):
 
     def preprocess(self, nb, resources):
         filename = resources.get("filename", None)
+        filepath = resources.get("path", "")
+        path = dirname(filepath)
+        if not path:
+            path = "."
         if filename:
             log(f"Executing notebook {filename}")
 
+        cwd = getcwd()
+        chdir(path)
         ex_nb = self.execute_notebook(nb)
+        chdir(cwd)
+
         return ex_nb, resources

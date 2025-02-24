@@ -128,6 +128,10 @@ def convert_target(input: Path, path: str, type: str, config: dict):
         ]
     elif type == TargetType.CLEAR:
         preprocessors = [ClearOutputs]
+    elif type == TargetType.FIX:
+        nb_config.ImageChecker.interactive = True
+        nb_config.ImageChecker.autofix = True
+        preprocessors = [ImageChecker]
 
     if preprocessors is None:
         critical(f"Unknown target type '{type}' in 'convert.targets'. Aborting.")

@@ -112,19 +112,12 @@ def convert(ctx, input, output, solution, force, dry_run, interactive):
 @click.pass_context
 @click.option("-q", "--quiet", is_flag=True)
 @click.option("-c", "--clear", is_flag=True)
-def check(ctx, input, quiet, clear):
+@click.option("-i", "--image", is_flag=True)
+def check(ctx, input, quiet, clear, image):
+    config = ctx.obj
+    input_path = urnc.config.resolve_path(config, input)
     if not quiet:
         urnc.logger.set_verbose()
-    config = ctx.obj
-    config["convert"]["write_mode"] = WriteMode.DRY_RUN
-    targets = [
-        {
-            "type": TargetType.STUDENT,
-            "path": None,
-        }
-    ]
-    input_path = urnc.config.resolve_path(config, input)
-    urnc.convert.convert(config, input_path, targets)
     if clear:
         log("Clearing cell outputs")
         config["convert"]["write_mode"] = WriteMode.OVERWRITE
@@ -135,6 +128,27 @@ def check(ctx, input, quiet, clear):
             }
         ]
         urnc.convert.convert(config, input_path, targets)
+        return
+    if image:
+        log("Fixing image paths")
+        config["convert"]["write_mode"] = WriteMode.OVERWRITE
+        targets = [
+            {
+                "type": TargetType.FIX,
+                "path": "{nb.relpath}",
+            }
+        ]
+        urnc.convert.convert(config, input_path, targets)
+        return
+
+    config["convert"]["write_mode"] = WriteMode.DRY_RUN
+    targets = [
+        {
+            "type": TargetType.STUDENT,
+            "path": None,
+        }
+    ]
+    urnc.convert.convert(config, input_path, targets)
 
 
 @click.command(help="Execute notebooks")
