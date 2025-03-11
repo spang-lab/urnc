@@ -4,6 +4,7 @@ import os
 
 import nbformat
 import click
+import fnmatch
 
 import urnc
 from urnc.logger import dbg, log, warn, critical
@@ -35,6 +36,19 @@ def find_notebooks(input: Path, output_path: Optional[Path]) -> List[Path]:
                 continue
             notebooks.append(path)
     return sorted(notebooks)
+
+
+def filter_notebooks(notebooks: List[Path], ignore_patterns: List[str]) -> List[Path]:
+    filtered = []
+    for nb in notebooks:
+        ignore = False
+        for pattern in ignore_patterns:
+            if fnmatch.fnmatch(nb.name, pattern):
+                ignore = True
+                break
+        if not ignore:
+            filtered.append(nb)
+    return filtered
 
 
 def write_notebook(notebook, path: Optional[Path], config):
@@ -108,6 +122,7 @@ def convert_target(input: Path, path: str, type: str, config: dict):
         if is_directory_path(path):
             output_path = config["base_path"].joinpath(path)
         input_notebooks = find_notebooks(input, output_path)
+        input_notebooks = filter_notebooks(input_notebooks, config["convert"]["ignore"])
         for nb in input_notebooks:
             out_file = format_path(nb, path, input)
             jobs.append((nb, out_file))

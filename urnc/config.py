@@ -51,6 +51,7 @@ def default_config(root) -> dict:
         "base_path": root,
         "convert": {
             "write_mode": WriteMode.SKIP_EXISTING,
+            "ignore": [],
             "targets": [],
             "keywords": {
                 "solution": ["solution"],
