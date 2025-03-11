@@ -44,6 +44,7 @@ def filter_notebooks(notebooks: List[Path], ignore_patterns: List[str]) -> List[
         ignore = False
         for pattern in ignore_patterns:
             if fnmatch.fnmatch(nb.name, pattern):
+                log(f"Ignoring notebook {nb} because it matches pattern '{pattern}'")
                 ignore = True
                 break
         if not ignore:
