@@ -1,0 +1,106 @@
+urnc package
+============
+
+.. automodule:: urnc
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   urnc.preprocessor
+
+Submodules
+----------
+
+urnc.ci module
+--------------
+
+.. automodule:: urnc.ci
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.config module
+------------------
+
+.. automodule:: urnc.config
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.convert module
+-------------------
+
+.. automodule:: urnc.convert
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.format module
+------------------
+
+.. automodule:: urnc.format
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.git module
+---------------
+
+.. automodule:: urnc.git
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.init module
+----------------
+
+.. automodule:: urnc.init
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.logger module
+------------------
+
+.. automodule:: urnc.logger
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.main module
+----------------
+
+.. automodule:: urnc.main
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.pull module
+----------------
+
+.. automodule:: urnc.pull
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.util module
+----------------
+
+.. automodule:: urnc.util
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+urnc.version module
+-------------------
+
+.. automodule:: urnc.version
+   :members:
+   :show-inheritance:
+   :undoc-members:
