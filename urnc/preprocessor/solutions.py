@@ -28,21 +28,29 @@ class SolutionProcessor(Preprocessor):
     skeleton_keywords = List(
         ["skeleton"], help="Keywords to search for in the cell source"
     ).tag(config=True)
+    end_keywords = List(["end"], help="Keywords to search for in the cell source").tag(
+        config=True
+    )
     output = Unicode(
         "skeleton", help="Which lines to keep. Either 'skeleton', 'solution' of 'none'"
     ).tag(config=True)
 
     def tag_line(self, line: str) -> t.Tuple[str, str]:
-        if match := re.match(r"\s*(#{1,6})\s*(.+)", line):
+        if match := re.match(r"\s*(#{1,6})\s*(.+)?", line):
             level = len(match.group(1))
             text = match.group(2)
+            print(level, text)
             if level == 1:
                 return LineTags.NONE, line
             if util.contains(text, self.solution_keywords):
                 return LineTags.SOLUTION_KEY, line
             if util.contains(text, self.skeleton_keywords):
                 return LineTags.SKELETON_KEY, line
-            return LineTags.END_KEY, line
+            if util.contains(text, self.end_keywords):
+                return LineTags.END_KEY, line
+            if not text:
+                return LineTags.END_KEY, line
+            return LineTags.NONE, line
         return LineTags.NONE, line
 
     def scan_lines(self, text: str) -> t.List[t.Tuple[str, str]]:

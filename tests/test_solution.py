@@ -33,7 +33,7 @@ def test_tag_line():
 
     line = "## Random"
     tag, _ = processor.tag_line(line)
-    assert tag == LineTags.END_KEY
+    assert tag == LineTags.NONE
 
     line = "Random"
     tag, _ = processor.tag_line(line)
@@ -186,3 +186,23 @@ def test_multiple_solutions():
     cell = nbformat.v4.new_markdown_cell("Random")
     stripped = processor.strip_cell(cell)
     assert stripped is None
+
+
+def test_non_solution_comments():
+    processor = SolutionProcessor()
+    code = textwrap.dedent(
+        """
+        print("fib(5) = 5")
+        ### some comment
+        def fib(n):
+            a, b = 0, 1
+            for _ in range(n):
+                a, b = b, a+b
+            return a
+        ### some comment
+        fib(5)
+        """
+    ).strip()
+    cell = nbformat.v4.new_code_cell(code)
+    stripped = processor.strip_cell(cell)
+    assert not stripped
