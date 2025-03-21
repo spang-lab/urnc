@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>urnc.preprocessor package &mdash; urnc 2.0.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d65cc7a5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="urnc package" href="urnc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="urnc.html">urnc package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="urnc.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">urnc.preprocessor package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.ci">urnc.ci module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.config">urnc.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.convert">urnc.convert module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.format">urnc.format module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.git">urnc.git module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.init">urnc.init module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.logger">urnc.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.main">urnc.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.pull">urnc.pull module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.util">urnc.util module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="urnc.html#module-urnc.version">urnc.version module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Modules</a></li>
+          <li class="breadcrumb-item"><a href="urnc.html">urnc package</a></li>
+      <li class="breadcrumb-item active">urnc.preprocessor package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/urnc.preprocessor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-urnc.preprocessor">
+<span id="urnc-preprocessor-package"></span><h1>urnc.preprocessor package<a class="headerlink" href="#module-urnc.preprocessor" title="Link to this heading"></a></h1>
+<p>Function used by <a class="reference internal" href="urnc.html#module-urnc.convert" title="urnc.convert"><code class="xref py py-mod docutils literal notranslate"><span class="pre">urnc.convert</span></code></a> for generating student versions of notebooks</p>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-urnc.preprocessor.add_tags">
+<span id="urnc-preprocessor-add-tags-module"></span><h2>urnc.preprocessor.add_tags module<a class="headerlink" href="#module-urnc.preprocessor.add_tags" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AddTags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Preprocessor</span></code></p>
+<p>Public constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>Config</em>) – Configuration file structure</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments passed to parent</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.assignment_keywords">
+<span class="sig-name descname"><span class="pre">assignment_keywords</span></span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.assignment_keywords" title="Link to this definition"></a></dt>
+<dd><p>Keywords to search for in the notebook headers</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.assignment_start_tag">
+<span class="sig-name descname"><span class="pre">assignment_start_tag</span></span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.assignment_start_tag" title="Link to this definition"></a></dt>
+<dd><p>Tag to assign to the first cell of an assignment</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.assignment_tag">
+<span class="sig-name descname"><span class="pre">assignment_tag</span></span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.assignment_tag" title="Link to this definition"></a></dt>
+<dd><p>Tag to assign to assignment cells</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.ignore_tag">
+<span class="sig-name descname"><span class="pre">ignore_tag</span></span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.ignore_tag" title="Link to this definition"></a></dt>
+<dd><p>Tag to assign to cells that should be ignored</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.is_assignment_end">
+<span class="sig-name descname"><span class="pre">is_assignment_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.is_assignment_end" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode</em>)</p></li>
+<li><p><strong>header</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.is_assignment_start">
+<span class="sig-name descname"><span class="pre">is_assignment_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.is_assignment_start" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode</em>)</p></li>
+<li><p><strong>header</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.is_solution">
+<span class="sig-name descname"><span class="pre">is_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.is_solution" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode</em>)</p></li>
+<li><p><strong>header</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Preprocessing to apply on each notebook.</p>
+<p>Must return modified nb, resources.</p>
+<p>If you wish to apply your preprocessing to each cell, you might want
+to override preprocess_cell method instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb</strong> (<em>NotebookNode</em>) – Notebook being converted</p></li>
+<li><p><strong>resources</strong> (<em>dictionary</em>) – Additional resources used in the conversion process.  Allows
+preprocessors to pass variables into the Jinja engine.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.solution_keywords">
+<span class="sig-name descname"><span class="pre">solution_keywords</span></span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.solution_keywords" title="Link to this definition"></a></dt>
+<dd><p>Keywords to search for in the notebook headers</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.AddTags.solution_tag">
+<span class="sig-name descname"><span class="pre">solution_tag</span></span><a class="headerlink" href="#urnc.preprocessor.add_tags.AddTags.solution_tag" title="Link to this definition"></a></dt>
+<dd><p>Tag to assign to solution cells</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.extract_header">
+<span class="sig-name descname"><span class="pre">extract_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.add_tags.extract_header" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.add_tags.header_to_id">
+<span class="sig-name descname"><span class="pre">header_to_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.add_tags.header_to_id" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>header</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-urnc.preprocessor.check_outputs">
+<span id="urnc-preprocessor-check-outputs-module"></span><h2>urnc.preprocessor.check_outputs module<a class="headerlink" href="#module-urnc.preprocessor.check_outputs" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.preprocessor.check_outputs.CheckOutputs">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CheckOutputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.check_outputs.CheckOutputs" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Preprocessor</span></code></p>
+<p>Public constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>Config</em>) – Configuration file structure</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments passed to parent</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.check_outputs.CheckOutputs.check_output">
+<span class="sig-name descname"><span class="pre">check_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.check_outputs.CheckOutputs.check_output" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.check_outputs.CheckOutputs.max_line_count">
+<span class="sig-name descname"><span class="pre">max_line_count</span></span><a class="headerlink" href="#urnc.preprocessor.check_outputs.CheckOutputs.max_line_count" title="Link to this definition"></a></dt>
+<dd><p>Maximum number of lines in a cell output</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.check_outputs.CheckOutputs.preprocess_cell">
+<span class="sig-name descname"><span class="pre">preprocess_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.check_outputs.CheckOutputs.preprocess_cell" title="Link to this definition"></a></dt>
+<dd><p>Override if you want to apply some preprocessing to each cell.
+Must return modified cell and resource dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode cell</em>) – Notebook cell being processed</p></li>
+<li><p><strong>resources</strong> (<em>dictionary</em>) – Additional resources used in the conversion process.  Allows
+preprocessors to pass variables into the Jinja engine.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – Index of the cell being processed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-urnc.preprocessor.clear_outputs">
+<span id="urnc-preprocessor-clear-outputs-module"></span><h2>urnc.preprocessor.clear_outputs module<a class="headerlink" href="#module-urnc.preprocessor.clear_outputs" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.preprocessor.clear_outputs.ClearOutputs">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ClearOutputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.clear_outputs.ClearOutputs" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Preprocessor</span></code></p>
+<p>Removes the output from all code cells in a notebook.</p>
+<p>Public constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>Config</em>) – Configuration file structure</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments passed to parent</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.clear_outputs.ClearOutputs.preprocess_cell">
+<span class="sig-name descname"><span class="pre">preprocess_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.clear_outputs.ClearOutputs.preprocess_cell" title="Link to this definition"></a></dt>
+<dd><p>Override if you want to apply some preprocessing to each cell.
+Must return modified cell and resource dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode cell</em>) – Notebook cell being processed</p></li>
+<li><p><strong>resources</strong> (<em>dictionary</em>) – Additional resources used in the conversion process.  Allows
+preprocessors to pass variables into the Jinja engine.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – Index of the cell being processed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-urnc.preprocessor.clear_tagged">
+<span id="urnc-preprocessor-clear-tagged-module"></span><h2>urnc.preprocessor.clear_tagged module<a class="headerlink" href="#module-urnc.preprocessor.clear_tagged" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.preprocessor.clear_tagged.ClearTaggedCells">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ClearTaggedCells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.clear_tagged.ClearTaggedCells" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Preprocessor</span></code></p>
+<p>Public constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>Config</em>) – Configuration file structure</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments passed to parent</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.clear_tagged.ClearTaggedCells.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.clear_tagged.ClearTaggedCells.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Preprocessing to apply on each notebook.</p>
+<p>Must return modified nb, resources.</p>
+<p>If you wish to apply your preprocessing to each cell, you might want
+to override preprocess_cell method instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb</strong> (<em>NotebookNode</em>) – Notebook being converted</p></li>
+<li><p><strong>resources</strong> (<em>dictionary</em>) – Additional resources used in the conversion process.  Allows
+preprocessors to pass variables into the Jinja engine.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.clear_tagged.ClearTaggedCells.tags">
+<span class="sig-name descname"><span class="pre">tags</span></span><a class="headerlink" href="#urnc.preprocessor.clear_tagged.ClearTaggedCells.tags" title="Link to this definition"></a></dt>
+<dd><p>List of tags to clear from the notebook</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-urnc.preprocessor.executor">
+<span id="urnc-preprocessor-executor-module"></span><h2>urnc.preprocessor.executor module<a class="headerlink" href="#module-urnc.preprocessor.executor" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.preprocessor.executor.ExecutePreprocessor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExecutePreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.executor.ExecutePreprocessor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Preprocessor</span></code></p>
+<p>Public constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>Config</em>) – Configuration file structure</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments passed to parent</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.executor.ExecutePreprocessor.execute_notebook">
+<span class="sig-name descname"><span class="pre">execute_notebook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.executor.ExecutePreprocessor.execute_notebook" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nb</strong> (<em>NotebookNode</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.executor.ExecutePreprocessor.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.executor.ExecutePreprocessor.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Preprocessing to apply on each notebook.</p>
+<p>Must return modified nb, resources.</p>
+<p>If you wish to apply your preprocessing to each cell, you might want
+to override preprocess_cell method instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb</strong> (<em>NotebookNode</em>) – Notebook being converted</p></li>
+<li><p><strong>resources</strong> (<em>dictionary</em>) – Additional resources used in the conversion process.  Allows
+preprocessors to pass variables into the Jinja engine.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.executor.ExecutePreprocessor.supported_kernels">
+<span class="sig-name descname"><span class="pre">supported_kernels</span></span><a class="headerlink" href="#urnc.preprocessor.executor.ExecutePreprocessor.supported_kernels" title="Link to this definition"></a></dt>
+<dd><p>List of supported kernels</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-urnc.preprocessor.image">
+<span id="urnc-preprocessor-image-module"></span><h2>urnc.preprocessor.image module<a class="headerlink" href="#module-urnc.preprocessor.image" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImageChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Preprocessor</span></code></p>
+<p>Public constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>Config</em>) – Configuration file structure</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments passed to parent</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker.autofix">
+<span class="sig-name descname"><span class="pre">autofix</span></span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker.autofix" title="Link to this definition"></a></dt>
+<dd><p>Automatically fix paths with a single valid fix</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker.base_path">
+<span class="sig-name descname"><span class="pre">base_path</span></span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker.base_path" title="Link to this definition"></a></dt>
+<dd><p>The base path of the notebook</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker.check_image">
+<span class="sig-name descname"><span class="pre">check_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker.check_image" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_path</strong> (<em>Path</em>)</p></li>
+<li><p><strong>src</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Tuple</em>[bool, str | None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker.interactive">
+<span class="sig-name descname"><span class="pre">interactive</span></span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker.interactive" title="Link to this definition"></a></dt>
+<dd><p>Interactive mode for fixing paths</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker.invalid_tag">
+<span class="sig-name descname"><span class="pre">invalid_tag</span></span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker.invalid_tag" title="Link to this definition"></a></dt>
+<dd><p>Tag to assign to cells with invalid images</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker.max_image_size">
+<span class="sig-name descname"><span class="pre">max_image_size</span></span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker.max_image_size" title="Link to this definition"></a></dt>
+<dd><p>The maximum size of an image</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Preprocessing to apply on each notebook.</p>
+<p>Must return modified nb, resources.</p>
+<p>If you wish to apply your preprocessing to each cell, you might want
+to override preprocess_cell method instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb</strong> (<em>NotebookNode</em>) – Notebook being converted</p></li>
+<li><p><strong>resources</strong> (<em>dictionary</em>) – Additional resources used in the conversion process.  Allows
+preprocessors to pass variables into the Jinja engine.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.ImageChecker.replace_src">
+<span class="sig-name descname"><span class="pre">replace_src</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.image.ImageChecker.replace_src" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nb_path</strong> (<em>Path</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.image.url_is_valid">
+<span class="sig-name descname"><span class="pre">url_is_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.image.url_is_valid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-urnc.preprocessor.solutions">
+<span id="urnc-preprocessor-solutions-module"></span><h2>urnc.preprocessor.solutions module<a class="headerlink" href="#module-urnc.preprocessor.solutions" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.LineTags">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LineTags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.solutions.LineTags" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">StrEnum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.LineTags.END_KEY">
+<span class="sig-name descname"><span class="pre">END_KEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'end_key'</span></em><a class="headerlink" href="#urnc.preprocessor.solutions.LineTags.END_KEY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.LineTags.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'none'</span></em><a class="headerlink" href="#urnc.preprocessor.solutions.LineTags.NONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.LineTags.SKELETON">
+<span class="sig-name descname"><span class="pre">SKELETON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'skeleton'</span></em><a class="headerlink" href="#urnc.preprocessor.solutions.LineTags.SKELETON" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.LineTags.SKELETON_KEY">
+<span class="sig-name descname"><span class="pre">SKELETON_KEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'skeleton_key'</span></em><a class="headerlink" href="#urnc.preprocessor.solutions.LineTags.SKELETON_KEY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.LineTags.SOLUTION">
+<span class="sig-name descname"><span class="pre">SOLUTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'solution'</span></em><a class="headerlink" href="#urnc.preprocessor.solutions.LineTags.SOLUTION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.LineTags.SOLUTION_KEY">
+<span class="sig-name descname"><span class="pre">SOLUTION_KEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'solution_key'</span></em><a class="headerlink" href="#urnc.preprocessor.solutions.LineTags.SOLUTION_KEY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SolutionProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Preprocessor</span></code></p>
+<p>Public constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>Config</em>) – Configuration file structure</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments passed to parent</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.end_keywords">
+<span class="sig-name descname"><span class="pre">end_keywords</span></span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.end_keywords" title="Link to this definition"></a></dt>
+<dd><p>Keywords to search for in the cell source</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.output">
+<span class="sig-name descname"><span class="pre">output</span></span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.output" title="Link to this definition"></a></dt>
+<dd><p>Which lines to keep. Either ‘skeleton’, ‘solution’ of ‘none’</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Preprocessing to apply on each notebook.</p>
+<p>Must return modified nb, resources.</p>
+<p>If you wish to apply your preprocessing to each cell, you might want
+to override preprocess_cell method instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb</strong> (<em>NotebookNode</em>) – Notebook being converted</p></li>
+<li><p><strong>resources</strong> (<em>dictionary</em>) – Additional resources used in the conversion process.  Allows
+preprocessors to pass variables into the Jinja engine.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Tuple</em>[<em>NotebookNode</em>, <em>Dict</em> | None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.scan_lines">
+<span class="sig-name descname"><span class="pre">scan_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.scan_lines" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List</em>[<em>Tuple</em>[str, str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.skeleton_keywords">
+<span class="sig-name descname"><span class="pre">skeleton_keywords</span></span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.skeleton_keywords" title="Link to this definition"></a></dt>
+<dd><p>Keywords to search for in the cell source</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.solution_keywords">
+<span class="sig-name descname"><span class="pre">solution_keywords</span></span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.solution_keywords" title="Link to this definition"></a></dt>
+<dd><p>Keywords to search for in the notebook headers</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.solution_tag">
+<span class="sig-name descname"><span class="pre">solution_tag</span></span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.solution_tag" title="Link to this definition"></a></dt>
+<dd><p>Tag to assign to solution cells</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.strip_cell">
+<span class="sig-name descname"><span class="pre">strip_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.strip_cell" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cell</strong> (<em>NotebookNode</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>NotebookNode</em> | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="urnc.preprocessor.solutions.SolutionProcessor.tag_line">
+<span class="sig-name descname"><span class="pre">tag_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.solutions.SolutionProcessor.tag_line" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>line</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Tuple</em>[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-urnc.preprocessor.util">
+<span id="urnc-preprocessor-util-module"></span><h2>urnc.preprocessor.util module<a class="headerlink" href="#module-urnc.preprocessor.util" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.util.cell_preview">
+<span class="sig-name descname"><span class="pre">cell_preview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.util.cell_preview" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cell</strong> (<em>NotebookNode</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.util.contains">
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keywords</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.util.contains" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>keywords</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.util.has_tag">
+<span class="sig-name descname"><span class="pre">has_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.util.has_tag" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode</em>)</p></li>
+<li><p><strong>tag</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.util.has_tags">
+<span class="sig-name descname"><span class="pre">has_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.util.has_tags" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode</em>)</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.util.remove_tag">
+<span class="sig-name descname"><span class="pre">remove_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.util.remove_tag" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode</em>)</p></li>
+<li><p><strong>tag</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.util.set_tag">
+<span class="sig-name descname"><span class="pre">set_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.util.set_tag" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>NotebookNode</em>)</p></li>
+<li><p><strong>tag</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.util.string_to_byte">
+<span class="sig-name descname"><span class="pre">string_to_byte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.util.string_to_byte" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urnc.preprocessor.util.to_snake_case">
+<span class="sig-name descname"><span class="pre">to_snake_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urnc.preprocessor.util.to_snake_case" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="urnc.html" class="btn btn-neutral float-left" title="urnc package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
