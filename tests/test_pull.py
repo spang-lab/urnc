@@ -14,7 +14,6 @@ def update_remote(repo: git.Repo):
 
 def test_pull():
     tmp = tempfile.TemporaryDirectory()
-
     path = Path(tmp.name)
 
     # init repo
@@ -84,5 +83,42 @@ def test_pull():
 
     renamed = pull_path.glob("collision_*.txt")
     assert len(list(renamed)) == 1
+
+    tmp.cleanup()
+
+
+def test_pull_delete_restore():
+    tmp = tempfile.TemporaryDirectory()
+    path = Path(tmp.name)
+    # init repo
+    repo_path = path / "repo"
+    config = urnc.config.default_config(path)
+    repo = urnc.init.init(config, "repo")
+
+    # init remote
+    remote_path = path / "remote.git"
+    remote_path.mkdir()
+    git.Repo.init(remote_path, bare=True, initial_branch="main")
+    origin = repo.create_remote("origin", str(remote_path))
+    origin.push(refspec="main:main")
+
+    pull_path = path / "pulled"
+    urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
+
+    # delete a remote file
+    (repo_path / "example.ipynb").unlink()
+    update_remote(repo)
+
+    # pull the deletion
+    urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
+    assert not (pull_path / "example.ipynb").is_file()
+
+    # restore the file
+    (repo_path / "example.ipynb").write_text("restored notebook")
+    update_remote(repo)
+
+    # pull the restored file
+    urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
+    assert (pull_path / "example.ipynb").is_file()
 
     tmp.cleanup()
