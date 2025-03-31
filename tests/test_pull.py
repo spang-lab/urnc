@@ -107,11 +107,17 @@ def test_pull_delete_restore():
 
     # delete a remote file
     (repo_path / "example.ipynb").unlink()
+    (repo_path / "tmp2.txt").write_text("temporary file")
     update_remote(repo)
 
     # pull the deletion
     urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
     assert not (pull_path / "example.ipynb").is_file()
+
+    (repo_path / "tmp.txt").write_text("temporary file")
+    update_remote(repo)
+    (pull_path / "tmp2.txt").write_text("other temporary file")
+    urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
 
     # restore the file
     (repo_path / "example.ipynb").write_text("restored notebook")
