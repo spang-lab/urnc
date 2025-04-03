@@ -115,9 +115,13 @@ def get_repo(git_url, output, branch, depth):
             return None
     try:
         repo = git.Repo(folder_name)
-        if git_url != repo.remote().url:
+        git_url_normed = git_url.replace("\\", "/") # (1)
+        repo_url_normed = repo.remote().url.replace("\\", "/") # (1)
+        # (1) Normalization required or check will fail if git_url is a path to
+        # a bare repo with Windows path seperators.
+        if git_url_normed != repo_url_normed:
             log.error(
-                f"Remote url {repo.remote().url} of folder {folder_name} does not match {git_url}"
+                f"Remote url {repo_url_normed} of folder {folder_name} does not match {git_url_normed}"
             )
             return None
         return repo
