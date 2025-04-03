@@ -50,14 +50,14 @@ class AddTags(Preprocessor):
     def is_assignment_start(self, cell: NotebookNode, header: t.Optional[str]) -> bool:
         if util.has_tag(cell, self.ignore_tag):
             return False
-        return util.contains(header, self.assignment_keywords)
+        return util.starts_with(header, self.assignment_keywords)
 
     def is_solution(self, cell: NotebookNode, header: t.Optional[str]) -> bool:
         if util.has_tag(cell, self.ignore_tag):
             return False
         if util.has_tag(cell, self.solution_tag):
             return True
-        return util.contains(header, self.solution_keywords)
+        return util.starts_with(header, self.solution_keywords)
 
     def is_assignment_end(self, cell: NotebookNode, header: t.Optional[str]) -> bool:
         if util.has_tag(cell, self.ignore_tag):

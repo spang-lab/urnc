@@ -42,11 +42,11 @@ class SolutionProcessor(Preprocessor):
             print(level, text)
             if level == 1:
                 return LineTags.NONE, line
-            if util.contains(text, self.solution_keywords):
+            if util.starts_with(text, self.solution_keywords):
                 return LineTags.SOLUTION_KEY, line
-            if util.contains(text, self.skeleton_keywords):
+            if util.starts_with(text, self.skeleton_keywords):
                 return LineTags.SKELETON_KEY, line
-            if util.contains(text, self.end_keywords):
+            if util.starts_with(text, self.end_keywords):
                 return LineTags.END_KEY, line
             if not text:
                 return LineTags.END_KEY, line

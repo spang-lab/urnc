@@ -54,7 +54,7 @@ def test_styled_headers():
     )
     level, title, id = add_tags.extract_header(cell)
     assert level == 3
-    assert util.contains(title, ["assignment"])
+    assert not util.starts_with(title, ["assignment"])
 
 
 def test_code_cell():
@@ -85,6 +85,16 @@ def test_full_notebook():
     assert add_tags.util.has_tags(tagged.cells[2], ["solution", "assignment"])
     assert add_tags.util.has_tags(tagged.cells[3], ["solution", "assignment"])
     assert add_tags.util.has_tag(tagged.cells[4], "assignment") is False
+
+
+def test_solution_comment():
+    cells = [
+        nbformat.v4.new_code_cell("# Enter solution here"),
+    ]
+    nb = nbformat.v4.new_notebook(cells=cells)
+    preprocessor = add_tags.AddTags()
+    tagged, _ = preprocessor.preprocess(nb, {})
+    assert not add_tags.util.has_tag(tagged.cells[0], "solution")
 
 
 def test_custom_keywords():

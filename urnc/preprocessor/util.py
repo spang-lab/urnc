@@ -1,16 +1,16 @@
 import re
 
-from enum import StrEnum
 from typing import List, Optional
 
 from nbformat.notebooknode import NotebookNode
 
 
-def contains(string: Optional[str], keywords: List[str]) -> bool:
+def starts_with(string: Optional[str], keywords: List[str]) -> bool:
     if string is None:
         return False
     for keyword in keywords:
-        if re.search(keyword, string, re.IGNORECASE):
+        pattern = re.compile(rf"^\s*{keyword}\b", re.IGNORECASE)
+        if re.match(pattern, string):
             return True
     return False
 
