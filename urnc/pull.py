@@ -89,7 +89,10 @@ def merge(repo):
             )
             repo.git.commit("-am", "Resolve CONFLICT (modify/delete)", "--allow-empty")
             return
-        raise
+        log.error("!!!THIS SHOULD NOT HAPPEN!!!")
+        log.error("Failed to merge. Error:")
+        log.error(err)
+        return
 
 
 def get_repo(git_url, output, branch, depth):
