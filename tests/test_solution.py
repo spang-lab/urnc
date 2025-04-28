@@ -150,7 +150,7 @@ def test_strip_skeleton():
 
     cell = nbformat.v4.new_markdown_cell("Random")
     stripped = processor.strip_cell(cell)
-    assert stripped is None
+    assert stripped and stripped.source == "Random"
 
 
 def test_multiple_solutions():
