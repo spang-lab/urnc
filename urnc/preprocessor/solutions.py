@@ -74,6 +74,8 @@ class SolutionProcessor(Preprocessor):
     def strip_cell(self, cell: NotebookNode) -> t.Optional[NotebookNode]:
         tagged_lines = self.scan_lines(cell.source)
         if all(tag == LineTags.NONE for tag, _ in tagged_lines):
+            if self.output == "solution":
+                return cell
             return None
         lines = []
         for tag, line in tagged_lines:
