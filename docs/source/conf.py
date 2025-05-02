@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath('../..'))  # Source code dir relative to this
 
 # Project Info
 project = 'urnc'
-copyright = '2023, Michael Huttner, Tobias Schmidt'
+copyright = '2023-2025, Michael Huttner, Tobias Schmidt'
 author = 'Michael Huttner, Tobias Schmidt'
 pyproject = toml.load("../../pyproject.toml")
 release = pyproject['project']['version']
