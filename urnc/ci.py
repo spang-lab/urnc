@@ -7,7 +7,7 @@ from os.path import basename, exists, isdir, isfile, join
 from pathlib import Path
 from typing import Optional
 
-import dateutil.parser
+import dateutil
 import git
 import click
 import urnc
@@ -98,17 +98,21 @@ def write_gitignore(
     exclude = config["git"]["exclude"]
     if not isinstance(exclude, list):
         critical("config.git.exclude must be a list")
-    now = datetime.now()
+    now = datetime.now(dateutil.tz.tzlocal())
     with open(student_gitignore, "a", newline="\n") as gitignore:
         gitignore.write("\n")
         for value in exclude:
             if isinstance(value, str):
                 gitignore.write(f"{value}\n")
                 continue
-            if "after" in value and now < dateutil.parser.parse(value["after"]):
-                continue
-            if "until" in value and now > dateutil.parser.parse(value["until"]):
-                continue
+            if "after" in value:
+                after_time = dateutil.parser.parse(value["after"])
+                if now < after_time.astimezone(dateutil.tz.tzlocal()):
+                    continue
+            if "until" in value:
+                until_time = dateutil.parser.parse(value["until"])
+                if now > until_time.astimezone(dateutil.tz.tzlocal()):
+                    continue
             gitignore.write(f"{value['pattern']}\n")
 
 
