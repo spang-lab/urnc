@@ -20,13 +20,15 @@ jobs:
     - name: Test installation
       run: python3 -m pip install .
     - name: Setup test dependencies
-      run: python3 -m pip install pytest pytest-cov freezegun PyYAML ipykernel
+      run: python3 -m pip install pytest~=7.0 pytest-cov~=4.0 freezegun~=1.0 PyYAML~=6.0 ipykernel~=6.0
     - name: Run test suite
-      run: pytest --cov=urnc --cov-report=xml
+      run: pytest --cov=urnc --junitxml=junit.xml
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v5
       with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-urnc
-        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
