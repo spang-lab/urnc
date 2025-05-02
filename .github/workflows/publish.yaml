@@ -42,6 +42,21 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  github:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: ${{ github.ref_name }}
+          body: See <a href="https://spang-lab.github.io/urnc/changelog.html">changelog</a> for a list of changes.
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
   pages:
     runs-on: ubuntu-latest
     steps:
