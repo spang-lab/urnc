@@ -12,23 +12,23 @@ jobs:
       matrix:
         python-version: ['3.12']
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Test installation
-      run: python3 -m pip install .
-    - name: Setup test dependencies
-      run: python3 -m pip install pytest~=7.0 pytest-cov~=4.0 freezegun~=1.0 PyYAML~=6.0 ipykernel~=6.0
-    - name: Run test suite
-      run: pytest --cov=urnc --junitxml=junit.xml
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-    - name: Upload test results to Codecov
-      if: ${{ !cancelled() }}
-      uses: codecov/test-results-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Set up Python  ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Test installation
+        run: python3 -m pip install .
+      - name: Setup test dependencies
+        run: python3 -m pip install pytest~=7.0 pytest-cov~=4.0 freezegun~=1.0 PyYAML~=6.0 ipykernel~=6.0
+      - name: Run test suite
+        run: pytest --cov=urnc --junitxml=junit.xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
