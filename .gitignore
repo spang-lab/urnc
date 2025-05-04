@@ -147,3 +147,5 @@ tests/courses/urnc-example-course-public
 tests/courses_bak
 tests/outputs
 .virtual_documents/
+temp/
+tmp/
