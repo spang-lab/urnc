@@ -30,13 +30,19 @@ To avoid having to install the package repeatedly after each change, we recommen
 See below for a selection of useful commands for testing:
 
 ```bash
-git clone https://github.com/spang-lab/urnc.git # Clone urnc
+# Install urnc in editable mode
+git clone https://github.com/spang-lab/urnc.git
 cd urnc
-pip install -e . # Install urnc in editable mode
-pip install pytest pytest-cov freezegun PyYAML # Install testing dependencies
-pytest --tb=short # Run tests and show short traceback
-pytest -k test_version # Run test_version.py only
-pytest -s # Show stdout of commands during tests (useful for debugging)
+pip install -e .
+
+# Install pytest dependencies
+pip install pytest pytest-cov freezegun PyYAML pytest-xdist
+
+# Run tests
+pytest                 # Run all tests
+pytest -k test_version # Run only tests from test_version.py
+pytest -s              # Show STDOUT during tests
+pytest -n 2            # Use 2 cores (requires pytest-xdist)
 ```
 
 # Documentation
