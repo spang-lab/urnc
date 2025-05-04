@@ -3,17 +3,17 @@ from pathlib import Path
 from typing import Optional
 import os
 import click
-from enum import StrEnum
+from enum import Enum
 
 
-class WriteMode(StrEnum):
+class WriteMode(str, Enum):
     DRY_RUN = "dry-run"
     OVERWRITE = "overwrite"
     INTERACTIVE = "interactive"
     SKIP_EXISTING = "skip-existing"
 
 
-class TargetType(StrEnum):
+class TargetType(str, Enum):
     STUDENT = "student"
     SOLUTION = "solution"
     EXECUTE = "execute"
