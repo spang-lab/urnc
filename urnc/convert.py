@@ -85,10 +85,13 @@ def convert(config: dict, input: Path, targets: List[dict]):
     if len(targets) == 0:
         warn("No targets specified in convert.config. Exiting.")
         return
+    converted_notebooks = []
     for target in targets:
         type = target.get("type", None)
         path = target.get("path", None)
-        convert_target(input, path, type, config)
+        converted_notebooks.extend(convert_target(input, path, type, config))
+    for body, output_path in converted_notebooks:
+        write_notebook(body, output_path, config)
 
 
 def create_nb_config(config: dict) -> Config:
@@ -155,6 +158,7 @@ def convert_target(input: Path, path: str, type: str, config: dict):
     nb_config.NotebookExporter.preprocessors = preprocessors
     converter = NotebookExporter(config=nb_config)
 
+    converted_notebooks = []
     for notebook_path, output_path in jobs:
         dbg(f"Converting {notebook_path} to {output_path}")
         filename = notebook_path.name
@@ -166,4 +170,5 @@ def convert_target(input: Path, path: str, type: str, config: dict):
             "filename": filename,
         }
         body, resources = converter.from_notebook_node(nb_node, resources)
-        write_notebook(body, output_path, config)
+        converted_notebooks.append((body, output_path))
+    return converted_notebooks
