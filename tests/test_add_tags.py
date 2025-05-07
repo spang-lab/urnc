@@ -1,9 +1,6 @@
 from traitlets.config import Config
-import urnc
 from urnc.preprocessor import util
 import urnc.preprocessor.add_tags as add_tags
-import pytest
-import click
 
 import nbformat
 
