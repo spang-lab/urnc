@@ -1,25 +1,46 @@
 # Contributing
 
-In case you have **questions**, **feature requests** or find any **bugs** in urnc, please create a corresponding issue at [github.com/spang-lab/urnc/issues](https://github.com/spang-lab/urnc/issues).
+In case you have **questions**, **feature requests** or find any
+**bugs** in urnc, please create a corresponding [issue].
 
-In case you want to **write code** for this package, please also create an [Issue](https://github.com/spang-lab/urnc/issues) first, in which you describe your planned code contribution. After acceptance of your proposal by an active maintainer of the repository you will get permissions to create branches for this repository. After this, please follow the steps outlined in [Making Edits](#making-edits) to create a new version of urnc.
+In case you want to **write code** for this package, please also
+create an issue first, in which you describe your planned code
+contribution. After acceptance of your proposal by an active
+maintainer of the repository you will get permissions to create
+branches for this repository. After this, follow the steps
+outlined below to create a new version of urnc.
 
-## Making Edits
+1. **Clone**
+    - Clone the [urnc repository]
+    - Create a new branch for your changes
+2. **Edit, Test and Document**
+    - Update the files in folder [urnc]
+    - Use [autopep8] to format your code
+    - Use [pyright] for type checking
+    - Test your changes as described in [Testing]
+    - If necessary, add or update the [tests]
+    - Increase the version in [pyproject.toml]
+    - Describe your changes in [docs/source/changelog.md]
+3. **Push and create a Pull Request**
+    - Push your changes
+    - Create a pull request
+    - Wait for the automated tests to finish
+    - If any test fails, fix and repeat
+    - If all tests pass, wait for a maintainer to review your changes
+4. **Wait for acceptance**
+    - If a maintainer requests changes, make the changes and push again
+    - If a maintainer approves your changes, they will merge your pull request into main and create a new version tag
+    - After the tag has been created, a new github release and pypi release will be created automatically.
 
-1. Clone the [urnc repository](https://github.com/spang-lab/urnc).
-2. Create a new branch for your changes.
-3. Make your code changes by updating the files in folder [urnc](https://github.com/spang-lab/urnc/tree/main/urnc).
-4. Test your changes by following the steps outlined in [Testing](#testing).
-5. If necessary, update the tests in folder [tests](https://github.com/spang-lab/urnc/tree/main/tests).
-6. Increase the version in [pyproject.toml](https://github.com/spang-lab/urnc/blob/main/pyproject.toml).
-7. Describe your changes in [docs/source/changelog.md](https://github.com/spang-lab/urnc/tree/main/docs/source).
-8. Push your changes to the repository.
-9. Create a pull request for your changes.
-10. Wait for the automated tests to finish.
-11. In case the automated tests fail, fix the problems and push the changes to the repository again.
-12. In case the automated tests pass, wait for a maintainer to review your changes.
-13. After your changes have been accepted, a maintainer will merge your pull request into main and create a new tag.
-14. After the tag has been created, a new github release and pypi release will be created automatically.
+[issue]: https://github.com/spang-lab/urnc/issues
+[urnc repository]: https://github.com/spang-lab/urnc
+[urnc]: https://github.com/spang-lab/urnc/tree/main/urnc
+[tests]: https://github.com/spang-lab/urnc/tree/main/tests
+[pyproject.toml]: https://github.com/spang-lab/urnc/blob/main/pyproject.toml
+[Testing]: #testing
+[docs/source/changelog.md]: https://github.com/spang-lab/urnc/tree/main/docs/source
+[pyright]: https://microsoft.github.io/pyright/#/
+[autopep8]: https://pypi.org/project/autopep8/
 
 ## Testing
 
@@ -30,13 +51,10 @@ To avoid having to install the package repeatedly after each change, we recommen
 See below for a selection of useful commands for testing:
 
 ```bash
-# Install urnc in editable mode
+# Install urnc in editable mode (incl. dev dependencies)
 git clone https://github.com/spang-lab/urnc.git
 cd urnc
-pip install -e .
-
-# Install pytest dependencies
-pip install pytest pytest-cov freezegun PyYAML pytest-xdist
+pip install -e .[dev]
 
 # Run tests
 pytest                 # Run all tests
@@ -45,13 +63,17 @@ pytest -s              # Show STDOUT during tests
 pytest -n 2            # Use 2 cores (requires pytest-xdist)
 ```
 
+Hint: if you're not using your system's default python version, you may need to use `python -m pytest` instead of `pytest` in the commands above.
+
 # Documentation
 
 Documentation for this package is generated automatically upon pushes to the `main` branch using [Sphinx](https://www.sphinx-doc.org/en/master/index.html) with the extensions [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) and [myst_parser](https://myst-parser.readthedocs.io/en/latest/). The relevant commands to generate the documentation pages locally are listed below:
 
 ```bash
-# Install Sphinx and dependencies
-pip install sphinx sphinx_rtd_theme myst_parser toml
+# Install urnc in editable mode (incl. dev dependencies)
+git clone https://github.com/spang-lab/urnc.git
+cd urnc
+pip install -e .[dev]
 
 # Build documentation
 cd docs
