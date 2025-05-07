@@ -17,18 +17,18 @@ def bump(version: str, action: str):
     """
     v = semver.Version.parse(version)
     print(v)
-    match action:
-        case "show":
-            return None
-        case "patch":
-            return str(v.bump_patch())
-        case "minor":
-            return str(v.bump_minor())
-        case "major":
-            return str(v.bump_major())
-        case "prerelease":
-            return str(v.bump_prerelease())
-    raise click.UsageError("Invalid action")
+    if action == "show":
+        return None
+    elif action == "patch":
+        return str(v.bump_patch())
+    elif action == "minor":
+        return str(v.bump_minor())
+    elif action == "major":
+        return str(v.bump_major())
+    elif action == "prerelease":
+        return str(v.bump_prerelease())
+    else:
+        raise click.UsageError("Invalid action")
 
 
 def read_pyproject_version(path: Path):
