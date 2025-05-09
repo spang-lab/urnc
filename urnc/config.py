@@ -46,12 +46,19 @@ def default_config(root: Path) -> Dict[str, Any]:
 
     Returns:
         config: The configuration dictionary.
-
-
     """
     config = {
+        # Mandatory keys (must be set in {root}/config.yaml)
+        "name": None,
+        "semester": None,
         "version": None,
+        "description": None,
+        "authors": None,
+        "version": None,
+        # Dynamic keys (set at runtime by urnc.config.read())
         "base_path": root,
+        "is_default": True,
+        # Optional keys (here the defaults are important)        
         "convert": {
             "write_mode": WriteMode.SKIP_EXISTING,
             "ignore": [],
@@ -77,8 +84,30 @@ def default_config(root: Path) -> Dict[str, Any]:
         },
         "ci": {
             "commit": False,
+            "push": False,
+            "pull": False,
+            "dry_run": True,
+            "skip_existing": False,
+            "skip_git": False
         },
-        "is_default": True,
+        "jupyter": None
+        #
+        # TODO: why are the following values defined as config options? 
+        # 
+        # - ci.commit
+        # - ci.push
+        # - ci.pull
+        # - ci.dry_run
+        # - ci.skip_existing
+        # - ci.skip_git
+        # - convert.write_mode
+        #
+        # I can't think of any scenario where you would want to configure those
+        # in the config.yaml. So I think if would be more intuitive to set them
+        # as function arguments.
+        # 
+        # Let's dicuss this. For now I omit them in
+        # docs/source/configuration.md.
     }
     return config
 
