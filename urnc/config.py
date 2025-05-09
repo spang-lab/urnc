@@ -37,6 +37,17 @@ def merge_dict(source: Dict[Any, Any],
     return target
 
 
+def update_dict(old: Dict[str, Any],
+                new: Dict[str, Any]) -> Dict[str, Any]:
+    """Update dict {old} recursively with values from {new}."""
+    for k, v in new.items():
+        if isinstance(v, dict):
+            old[k] = update_dict(old.get(k, {}), v)
+        else:
+            old[k] = v
+    return old
+
+
 def default_config(root: Path) -> Dict[str, Any]:
     """
     Create a default configuration object with 'base_path' set to {root}
@@ -130,8 +141,20 @@ def find_file(path: Path, filename: str) -> Optional[Path]:
     return None
 
 
+def find_file_strict(path: Path, filename: str) -> Path:
+    """Finds {filename} in {path} or any of its parent directories."""
+    while path != path.parent:
+        if path.joinpath(filename).exists():
+            return path.joinpath(filename)
+        path = path.parent
+    msg = f"{filename} not found in {path} or its parent directories"
+    raise click.UsageError(msg)
+
+
 def read(root: Path) -> Dict[str, Any]:
     """
+	DEPRECATED. Use `read_config()` instead.
+
     Reads the configuration from a YAML file named 'config.yaml' located at the root of the git repository.
 
     Args:
@@ -162,6 +185,24 @@ def read(root: Path) -> Dict[str, Any]:
             return config
     except Exception as e:
         raise click.FileError(str(config_path), str(e))
+
+
+def read_config(path: Union[str, Path]) -> Dict[str, Any]:
+    """
+    1. Searches for config.yaml in {path} and its parent directories
+    2. Reads config.yaml
+    3. Updates the default config with the values read from config.yaml
+    4. Returns the updated config
+
+    Raises a click.UsageError if 'config.yaml' is not found
+    Raises a click.FileError if reading 'config.yaml' fails
+    """
+    config_path = find_file_strict(Path(path), "config.yaml")
+    course_config = read_yaml(config_path)
+    defaults = default_config(config_path.parent)
+    config = update_dict(defaults, course_config)
+    config["is_default"] = False
+    return config
 
 
 def write_version(root: Path, version: str):
@@ -200,3 +241,14 @@ def resolve_path(config: Dict[str, Any],
         return path
     new_path = Path(config["base_path"]).joinpath(path)
     return new_path.resolve()
+
+
+def read_yaml(path: Path) -> Dict[str, Any]:
+    yaml_reader = YAML(typ="rt")
+    yaml_reader.preserve_quotes = True
+    try:
+        with open(path, "r") as f:
+            return(yaml_reader.load(f))
+    except Exception as e:
+        raise click.FileError(str(path), str(e))
+
