@@ -1,9 +1,10 @@
-from ruamel.yaml import YAML
-from pathlib import Path
-from typing import Optional
-import os
-import click
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, Union, Optional
+
+import click
+import os
+from ruamel.yaml import YAML
 
 
 class WriteMode(str, Enum):
@@ -21,7 +22,9 @@ class TargetType(str, Enum):
     FIX = "fix"
 
 
-def merge_dict(source, target):
+def merge_dict(source: Dict[Any, Any],
+               target: Dict[Any, Any]) -> Dict[str, Any]:
+    """Merge entries from {source} into {target} that are not already in {target}."""
     for key in source:
         if (
             key in target
@@ -34,9 +37,9 @@ def merge_dict(source, target):
     return target
 
 
-def default_config(root) -> dict:
+def default_config(root: Path) -> Dict[str, Any]:
     """
-    Create a default configuration object with the base path set to the root of the course.
+    Create a default configuration object with 'base_path' set to {root}
 
     Args:
         root: The root directory of the course.
@@ -98,7 +101,7 @@ def find_file(path: Path, filename: str) -> Optional[Path]:
     return None
 
 
-def read(root: Path) -> dict:
+def read(root: Path) -> Dict[str, Any]:
     """
     Reads the configuration from a YAML file named 'config.yaml' located at the root of the git repository.
 
@@ -151,7 +154,8 @@ def write_version(root: Path, version: str):
         raise click.FileError(str(config_path), str(e))
 
 
-def resolve_path(config: dict, pathstr: Path) -> Path:
+def resolve_path(config: Dict[str, Any],
+                 pathstr: Union[str, Path]) -> Path:
     """
     Resolves a path relative to the course root.
 
