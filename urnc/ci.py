@@ -129,22 +129,31 @@ def update_index(repo: git.Repo) -> None:
 
 def ci(config: Dict[str, Any]) -> None:
     """
-    Perform a continuous integration run on a student repository.
+    Performs a continuous integration run by:
 
-    This function
+    1. Cloning or pulling STUDENT_REPO as STUDENT_PATH
+    2. Deleting all non-hidden files in STUDENT_PATH
+    3. Copying all non-hidden files from ADMIN_PATH to STUDENT_PATH
+    4. Converting all notebooks in STUDENT_PATH according to CONVERT_SETTINGS
+    5. Updating STUDENT_PATH/.gitignore according to GIT_EXCLUDES
+    6. Commiting and pushing the changes if COMMIT is True
 
-    1. Clones the student repository
-    2. Clears it
-    3. Copies over all files from the course repository
-    4. Converts the notebooks
-    5. Updates the .gitignore file according to the `git.exclude` setting from the `config.yaml`
-    6. Commits and pushes the changes if `commit` is True
+    All configuration values mentioned above are taken from config:
+
+    ADMIN_PATH       = config["base_path"]
+    STUDENT_REPO     = config["git"]["student"]
+    STUDENT_PATH     = config["git"]["output_dir"]
+    GIT_EXCLUDES     = config["git"]["exclude"]
+    CONVERT_SETTINGS = config["convert"]
+
+    For a list of configuration values, see
+    https://spang-lab.github.io/urnc/configuration.html
 
     Parameters:
-        config (dict): The configuration object.
+        config: configuration dictionary as returned by `urnc.config.read()`
 
     Raises:
-        Exception: If the repository is dirty and commit is True, an exception is raised.
+        Exception: If the repository is dirty and commit is True.
     """
     base_path = config["base_path"]
     repo = urnc.git.get_repo(base_path)
