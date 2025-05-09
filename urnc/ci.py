@@ -5,16 +5,18 @@ import shutil
 from datetime import datetime
 from os.path import basename, exists, isdir, isfile, join
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict, Any, List
 
 import dateutil
+import dateutil.tz
+import dateutil.parser
 import git
 import click
 import urnc
 from urnc.logger import critical, log, warn
 
 
-def clone_student_repo(config: dict) -> git.Repo:
+def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
     """
     Clones the student repository if it doesn't exist locally, or returns the existing local repository.
     If the 'student' key is not found in the 'git' section of the config, it initializes a new student repository.
@@ -59,7 +61,7 @@ def clone_student_repo(config: dict) -> git.Repo:
     return stud_repo
 
 
-def clear_repo(repo):
+def clear_repo(repo: git.Repo) -> None:
     path = repo.working_dir
     entries = os.listdir(path)
     for entry in entries:
@@ -72,9 +74,9 @@ def clear_repo(repo):
             shutil.rmtree(entry_path)
 
 
-def write_gitignore(
-    main_gitignore: Optional[Path], student_gitignore: Path, config: dict
-) -> None:
+def write_gitignore(main_gitignore: Optional[Path],
+                    student_gitignore: Path,
+                    config: Dict[str, Any]) -> None:
     """
     Writes a ``.gitignore`` file in the student repository.
 
@@ -116,7 +118,7 @@ def write_gitignore(
             gitignore.write(f"{value['pattern']}\n")
 
 
-def update_index(repo):
+def update_index(repo: git.Repo) -> None:
     cached_files_str = repo.git.ls_files("-ci", "--exclude-standard")
     if cached_files_str != "":
         cached_files = cached_files_str.split("\n")
@@ -125,7 +127,7 @@ def update_index(repo):
         repo.index.write()
 
 
-def ci(config):
+def ci(config: Dict[str, Any]) -> None:
     """
     Perform a continuous integration run on a student repository.
 
@@ -158,7 +160,7 @@ def ci(config):
     student_path = Path(student_repo.working_dir)
     clear_repo(student_repo)
 
-    def ignore_fn(dir, files):
+    def ignore_fn(dir: str, files: List[str]) -> List[str]:
         ignore_list = [".git"] if ".git" in files else []
         if Path(dir) == student_path.parent:
             log(f"Skipping copy of {student_path}")
