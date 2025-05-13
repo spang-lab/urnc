@@ -209,7 +209,7 @@ def pull(
             urnc.pull.pull(git_url, output, branch, depth)
         except Exception as err:
             urnc.logger.error("pull failed with unexpected error.")
-            urnc.logger.error(err)
+            urnc.logger.error(str(err))
 
 
 @click.command(help="Clone/Pull the repo")
@@ -240,7 +240,7 @@ def clone(
             urnc.pull.clone(git_url, output, branch, depth)
         except Exception as err:
             urnc.logger.error("clone failed with unexpected error.")
-            urnc.logger.error(err)
+            urnc.logger.error(str(err))
 
 
 @click.command(help="Init a new course")
