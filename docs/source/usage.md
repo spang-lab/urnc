@@ -1,13 +1,6 @@
----
-title: "Usage"
-output: md_document
----
-
-<!-- USAGE: Rscript make.R -->
-
 # Usage
 
-This guide explains how to use urnc (v2.0.11) to create and manage a course repository for tutors and students. The workflow involves
+This guide explains how to use urnc to create and manage a course repository for tutors and students. The workflow involves
 
 1. Creating an "admin" repository with lectures, assignments and solutions 
 2. Publishing a corresponding "student" repository where the solutions have been removed
@@ -35,15 +28,14 @@ my_example_course
 The `config.yaml` file contains metadata and configuration and looks like this:
 
 ```yaml
-"name": "My Example Course",
-"semester": "semester",
-"description": "description for your course",
-"version": "0.1.0",
-"authors": [{"name": "Your Name"}],
-"email": "YourEmail@host.com",
-"git": {"student": "Link to student repo"},
-"output_dir": "out",
-"exclude": ["config.yaml", "container/"]
+name: "My Example Course"
+semester: "semester"
+description: "description for your course"
+version: "0.1.0"
+authors: [{name: "Your Name", email: "YourEmail@host.com"}]
+git: {student: "Link to student repo"}
+output_dir: "out"
+exclude: ["config.yaml", "container/"]
 ```
 
 The `example.ipynb` file is an example notebook with the following structure:

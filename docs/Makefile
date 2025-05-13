@@ -20,5 +20,4 @@ help:
 # which can become tedious if you have many targets. The % and $@ approach is
 # more flexible and requires less maintenance.
 %: Makefile
-	sphinx-apidoc --module-first -o ./source ../urnc
 	sphinx-build -M $@ source build
