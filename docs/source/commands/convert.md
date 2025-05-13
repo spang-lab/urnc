@@ -1,4 +1,4 @@
-# Convert
+## Convert
 
 Converts INPUT notebooks to the specified TARGET formats and writes them to OUTPUT.
 
