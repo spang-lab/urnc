@@ -83,7 +83,7 @@ urnc convert --output=$out1 --solution=$sol1 C:/temp/mycourse
 urnc convert --output=$out2 --solution=$sol2 C:/temp/mycourse
 ```
 
-Using the [shortcuts](#shortcuts) described in the next section, the above
+Using [plain directory paths](#plain-directory-paths), the above
 commands could be written even shorter, as:
 
 ```bash
@@ -96,41 +96,33 @@ urnc convert --output=$out2 --solution=$sol2 C:/temp/mycourse
 ```
 
 
-## Shortcuts
+## Plain Directory Paths
 
-To make specifying output paths less verbose, the following shortcuts are
-supported by `urnc convert`, `urnc student` and `urnc ci`:
+To make specifying output paths less verbose, urnc also accepts "plain directory
+paths" as output paths. A path is considered a plain directory path if it does
+neither end with `.ipynb` nor contain any placeholders. If a plain directory
+path is provided, the notebooks will be stored inside that directory in the same
+subfolder they had in the original input directory. However, to avoid
+overwriting outputs of previous targets, each target will use a different file
+name for the notebooks in this case. The following rules apply:
 
-1.  If the current conversion target is "student" and the provided output path
-    does neither end with `.ipynb` nor contain any placeholders, the provided
-    path will be interpreted as a directory and the notebooks will be saved in
-    `OUTPUT/{nb.relpath}`, i.e. the following calls are equivalent:
+| Target     | Naming Pattern                                    |
+| ---------- | ------------------------------------------------- |
+| `student`  | `{nb.reldirpath}/{nb.basename}.{nb.ext}`          |
+| `solution` | `{nb.reldirpath}/{nb.basename}-solution.{nb.ext}` |
+| `execute`  | `{nb.reldirpath}/{nb.basename}-executed.{nb.ext}` |
+| `clear`    | `{nb.reldirpath}/{nb.basename}-cleared.{nb.ext}`  |
+| `fix`      | `{nb.reldirpath}/{nb.basename}-fixed.{nb.ext}`    |
 
-    ```bash
-    urnc convert --output='out' mycourse
-    urnc convert --output='out/{nb.relpath}' mycourse
-    ```
-
-2.  If the current conversion target is "solution" and the provided output path
-    does neither end with `.ipynb` nor contain any placeholders, the provided
-    path will be interpreted as a directory and the notebooks will be saved in
-    `{solution}/{nb.reldirpath}/{nb.basename}-solution.{nb.ext}`, i.e. the
-    following calls are equivalent:
-
-    ```bash
-    urnc convert --solution='out' mycourse
-    urnc convert --solution='out/{nb.reldirpath}/{nb.basename}-solution.{nb.ext}' mycourse
-    ```
 
 ## Limitations
 
 The placeholder variables `nb.rootpath`, `nb.relpath` and `nb.reldirpath`
-require the "root" [^1] of the current course to be specified. Usually, this is done
-by searching the file system upwards from the given input path, until a
+require the "root" [^1] of the current course to be specified. Usually, this is
+done by searching the file system upwards from the given input path, until a
 `config.yaml` file is found. If no `config.yaml` file is found, the current
 working directory is considered the course root. This scenario could happen,
-e.g., if `urnc convert` is used on a single notebook outside a specific
-course.
+e.g., if `urnc convert` is used on a single notebook outside a specific course.
 
 [^1]: Sometimes, the "course root" is also referred to as "course base", "course
     base directory" or "course basepath".
