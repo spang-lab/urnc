@@ -24,7 +24,7 @@ class TargetType(str, Enum):
 
 def merge_dict(source: Dict[Any, Any],
                target: Dict[Any, Any]) -> Dict[str, Any]:
-    """Merge entries from {source} into {target} that are not already in {target}."""
+    """Merge entries from {source} into {target}. Like `update_dict(old=target, new=source)`."""
     for key in source:
         if (
             key in target

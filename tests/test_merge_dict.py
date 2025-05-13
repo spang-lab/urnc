@@ -12,7 +12,6 @@ def test_merge_dict():
             "shared_value": 5,
         },
     }
-
     target = {
         "target_only_value": -1,
         "target_only_dict": {
@@ -33,11 +32,11 @@ def test_merge_dict():
         "target_only_dict": {
             "target_only_value": -2
         },
-        "shared_value": -3,
+        "shared_value": 3,
         "shared_dict": {
             "source_only_value": 4,
             "target_only_value": -4,
-            "shared_value": -5,
+            "shared_value": 5,
         },
     }
     result = merge_dict(source, target)
