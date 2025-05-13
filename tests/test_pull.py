@@ -18,8 +18,7 @@ def test_pull():
 
     # init repo
     repo_path = path / "repo"
-    config = urnc.config.default_config(path)
-    repo = urnc.init.init(config, "repo")
+    repo = urnc.init.init("Example Course", repo_path)
 
     # init remote
     remote_path = path / "remote.git"
@@ -92,8 +91,7 @@ def test_pull_delete_restore():
     path = Path(tmp.name)
     # init repo
     repo_path = path / "repo"
-    config = urnc.config.default_config(path)
-    repo = urnc.init.init(config, "repo")
+    repo = urnc.init.init("Example Course", repo_path)
 
     # init remote
     remote_path = path / "remote.git"
