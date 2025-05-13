@@ -48,7 +48,7 @@ def update_dict(old: Dict[str, Any],
     return old
 
 
-def default_config(root: Path) -> Dict[str, Any]:
+def default_config(root: Union[str,Path]) -> Dict[str, Any]:
     """
     Create a default configuration object with 'base_path' set to {root}
 
@@ -67,7 +67,7 @@ def default_config(root: Path) -> Dict[str, Any]:
         "authors": None,
         "version": None,
         # Dynamic keys (set at runtime by urnc.config.read())
-        "base_path": root,
+        "base_path": Path(root).absolute(),
         "is_default": True,
         # Optional keys (here the defaults are important)        
         "convert": {
