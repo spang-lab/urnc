@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Union, Dict, Any, Sequence
 from pathlib import Path
 import os
 
@@ -6,7 +6,6 @@ import nbformat
 import click
 import fnmatch
 
-import urnc
 from urnc.logger import dbg, log, warn, critical
 from urnc.format import format_path, is_directory_path
 from urnc.config import WriteMode, TargetType
@@ -52,7 +51,7 @@ def filter_notebooks(notebooks: List[Path], ignore_patterns: List[str]) -> List[
     return filtered
 
 
-def write_notebook(notebook, path: Optional[Path], config):
+def write_notebook(notebook: str, path: Optional[Path], config: Dict[str, Any]):
     write_mode = config["convert"]["write_mode"]
     if not path:
         return
@@ -81,20 +80,26 @@ def write_notebook(notebook, path: Optional[Path], config):
         log(f"Wrote notebook to {path}")
 
 
-def convert(config: dict, input: Path, targets: List[dict]):
+def convert(config: Dict[str, Any],
+            input: Union[str, Path],
+            targets: Sequence[Dict[str, Any]]) -> None:
+    input = Path(input)
     if len(targets) == 0:
         warn("No targets specified in convert.config. Exiting.")
         return
+
     converted_notebooks = []
-    for target in targets:
+    for i, target in enumerate(targets):
         type = target.get("type", None)
+        if type is None:
+            critical(f"Target type not specified in target {i}. Aborting.")
         path = target.get("path", None)
         converted_notebooks.extend(convert_target(input, path, type, config))
     for body, output_path in converted_notebooks:
         write_notebook(body, output_path, config)
 
 
-def create_nb_config(config: dict) -> Config:
+def create_nb_config(config: Dict[str, Any]) -> Config:
     nb_config = Config()
     convert = config["convert"]
     keywords = convert["keywords"]
@@ -105,6 +110,7 @@ def create_nb_config(config: dict) -> Config:
     nb_config.AddTags.assignment_tag = tags["assignment"]
     nb_config.AddTags.assignment_start_tag = tags["assignment-start"]
     nb_config.AddTags.solution_tag = tags["solution"]
+    nb_config.AddTags.ignore_tag = tags["ignore"]
 
     nb_config.ImageChecker.base_path = str(config["base_path"])
     nb_config.SolutionProcessor.solution_keywords = keywords["solution"]
@@ -115,20 +121,23 @@ def create_nb_config(config: dict) -> Config:
     return nb_config
 
 
-def convert_target(input: Path, path: str, type: str, config: dict):
+def convert_target(input: Union[str, Path],
+                   path: Union[str, Path],
+                   type: str,
+                   config: Dict[str, Any]):
     jobs = []
-
+    input = Path(input)
     if input.is_file():
-        out_file = format_path(input, path, input.parent)
+        out_file = format_path(input, pattern=str(path), root=input.parent)
         jobs.append((input, out_file))
     else:
         output_path = None
-        if is_directory_path(path):
+        if is_directory_path(str(path)):
             output_path = config["base_path"].joinpath(path)
         input_notebooks = find_notebooks(input, output_path)
         input_notebooks = filter_notebooks(input_notebooks, config["convert"]["ignore"])
         for nb in input_notebooks:
-            out_file = format_path(nb, path, input)
+            out_file = format_path(nb, str(path), input)
             jobs.append((nb, out_file))
 
     nb_config = create_nb_config(config)
@@ -139,12 +148,7 @@ def convert_target(input: Path, path: str, type: str, config: dict):
         nb_config.SolutionProcessor.output = "solution"
         preprocessors = [AddTags, SolutionProcessor, ClearOutputs]
     elif type == TargetType.EXECUTE:
-        preprocessors = [
-            ClearTaggedCells,
-            ExecutePreprocessor,
-            CheckOutputs,
-            ClearOutputs,
-        ]
+        preprocessors = [ClearTaggedCells, ExecutePreprocessor, CheckOutputs, ClearOutputs]
     elif type == TargetType.CLEAR:
         preprocessors = [ClearOutputs]
     elif type == TargetType.FIX:
