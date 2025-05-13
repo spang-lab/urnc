@@ -2,10 +2,11 @@ import os
 import re
 import textwrap
 from pathlib import Path
-from typing import Any, List, Mapping, TypedDict, Union
+from typing import Any, Dict, Union
 
 import click
 import git
+from copy import deepcopy
 from nbconvert.exporters.notebook import NotebookExporter
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
@@ -82,7 +83,7 @@ def name_to_dirname(name: str) -> str:
 
 
 def write_config(path: Path,
-                 config: Mapping[str, Any] = example_config) -> None:
+                 config: Dict[str, Any] = example_config) -> None:
     config_path = path.joinpath("config.yaml")
     yaml = YAML(typ="rt")
     try:
@@ -127,17 +128,15 @@ def init(name: str = "Example Course",
 
     Args:
         name: The name of the course.
-        path: The directory path where the course will
-            be created. If not provided, the path is derived from the course
-            name.
-        url: The git URL for the upstream repository.
-            If a local file path ending in `.git` is provided, a bare repository
-            will be created at that location and configured as the origin
-            remote.
+        path: The directory path where the course will be created. If not
+            provided, the path is derived from the course name.
+        url: The git URL for the upstream repository. If a local file path
+            ending in `.git` is provided, a bare repository will be created at
+            that location and configured as the origin remote.
         student_url: The git URL for the student repository.
-            If a local file path ending in `.git` is provided, a bare repository
-            will be created at that location and configured as the student
-            remote url in config.yaml.
+            If a local file path ending in `.git` is provided, a bare
+            repository will be created at that location and configured as the
+            student remote url in config.yaml.
 
     Raises:
         click.UsageError: If the target directory already exists and is not empty.
@@ -157,12 +156,13 @@ def init(name: str = "Example Course",
         path = Path(path)
     if os.path.exists(path) and any(os.scandir(path)):
         raise click.UsageError(f"Directory {path} exists already and is not empty.")
-    config = example_config
+    config = deepcopy(example_config)
     if student_url is not None:
         student_url = str(student_url)
         if not ("@" in student_url or ":" in student_url):
             os.makedirs(student_url, exist_ok=True)
             git.Repo.init(student_url, bare=True, initial_branch="main")
+        assert isinstance(config["git"], dict) # Required to please type checker
         config["git"]["student"] = student_url
     config["name"] = name
     path.mkdir(parents=True, exist_ok=True)
