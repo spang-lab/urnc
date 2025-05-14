@@ -3,19 +3,20 @@
 import os
 import git
 import datetime
+from typing import Union
 
 import urnc.util as util
 
 import urnc.logger as log
 
 
-def get_upstream_changes(repo):
+def get_upstream_changes(repo: git.Repo) -> list[str]:
     branch_name = repo.active_branch
     changes = repo.git.diff(f"..origin/{branch_name}", "--name-status").split("\n")
     return changes
 
 
-def get_upstream_deleted(repo):
+def get_upstream_deleted(repo: git.Repo) -> list[str]:
     changes = get_upstream_changes(repo)
     files = []
     for change in changes:
@@ -28,7 +29,7 @@ def get_upstream_deleted(repo):
     return files
 
 
-def get_upstream_added(repo):
+def get_upstream_added(repo: git.Repo) -> list[str]:
     changes = get_upstream_changes(repo)
     files = []
     for change in changes:
@@ -41,7 +42,7 @@ def get_upstream_added(repo):
     return files
 
 
-def reset_deleted_files(repo):
+def reset_deleted_files(repo: git.Repo) -> None:
     branch = repo.active_branch
     deleted_files = repo.git.ls_files("--deleted").split("\n")
     deleted_upstream = get_upstream_deleted(repo)
@@ -55,7 +56,7 @@ def reset_deleted_files(repo):
             repo.git.checkout(f"origin/{branch}", "--", filename)
 
 
-def rename_file_with_timestamp(path):
+def rename_file_with_timestamp(path: str) -> None:
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     (folder, filename) = os.path.split(path)
     (basename, ext) = os.path.splitext(filename)
@@ -67,7 +68,7 @@ def rename_file_with_timestamp(path):
     os.rename(path, new_path)
 
 
-def rename_local_untracked(repo):
+def rename_local_untracked(repo: git.Repo) -> None:
     added_files = get_upstream_added(repo)
     for filename in added_files:
         if not filename:
@@ -77,7 +78,7 @@ def rename_local_untracked(repo):
             rename_file_with_timestamp(path)
 
 
-def merge(repo):
+def merge(repo: git.Repo) -> None:
     branch = repo.active_branch
     remote_branch = f"origin/{branch}"
     try:
@@ -91,21 +92,19 @@ def merge(repo):
             return
         log.error("!!!THIS SHOULD NOT HAPPEN!!!")
         log.error("Failed to merge. Error:")
-        log.error(err)
+        log.error(str(err))
         return
 
 
-def get_repo(git_url, output, branch, depth):
+def get_repo(git_url: Union[str, None], output: Union[str, None], branch: str, depth: int) -> Union[git.Repo, None]:
     if not git_url:
         try:
             repo = git.Repo(os.getcwd(), search_parent_directories=True)
             return repo
         except Exception:
             log.error("Failed to pull: no git_url given and not in a git repo")
-            return
-    folder_name = output
-    if not output:
-        folder_name = util.git_folder_name(git_url)
+            return None
+    folder_name: str = output if output is not None else util.git_folder_name(git_url)
     if not os.path.exists(folder_name):
         log.log(f"{folder_name} does not exists. Cloning repo {git_url}")
         try:
@@ -114,22 +113,21 @@ def get_repo(git_url, output, branch, depth):
             return None
         except Exception as err:
             log.error("Failed to clone repo. Error:")
-            log.error(err)
+            log.error(str(err))
             return None
     try:
         repo = git.Repo(folder_name)
-        if git_url != repo.remote().url:
-            log.error(
-                f"Remote url {repo.remote().url} of folder {folder_name} does not match {git_url}"
-            )
+        if git_url.replace("\\", "/") != repo.remote().url:
+            log.error(f"Remote url {repo.remote().url} of folder {folder_name} does not match {git_url}")
             return None
         return repo
-    except Exception:
+    except Exception as err:
         log.error(f"Failed to pull: {folder_name} exists but is not a git repo")
+        log.error(str(err))
         return None
 
 
-def pull(git_url, output, branch, depth):
+def pull(git_url: Union[str, None], output: Union[str, None], branch: str, depth: int) -> None:
     """
     Pull (or clone) a remote git repository and try to automatically merge local changes.
     This is essentially a wrapper around git pull and git merge -Xours.
@@ -151,7 +149,6 @@ def pull(git_url, output, branch, depth):
     repo = get_repo(git_url, output, branch, depth)
     if not repo:
         return
-
     log.log("Fetching changes...")
     repo.remote().fetch()
     log.log("Checking for local untracked files")
@@ -165,13 +162,13 @@ def pull(git_url, output, branch, depth):
         log.log("Repo is dirty. Commiting....")
         repo.git.commit("-am", "Automatic commit by urnc", "--allow-empty")
         log.log("Created new commit")
-
     log.log("Merging from remote...")
     merge(repo)
+    repo.git.clear_cache()
     log.log("Done.")
 
 
-def clone(git_url, output, branch, depth):
+def clone(git_url: Union[str, None], output: Union[str, None], branch: str, depth: int) -> None:
     """
     Pull (or clone) a remote git repository, but only do a fast-forward pull.
 

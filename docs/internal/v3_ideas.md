@@ -64,16 +64,16 @@ I.e. `urnc.` holds our public API and all submodules are private (see [1. Hide i
 This whole Notebook-Processor subclassing is incredible ugly and hard to read.
 It would be so much nicer to just have a few converions functions, like
 
-- `clear_outputs(Notebook) -> Notebook`
-- `remove_solutions(Notebook) -> Notebook`
-- `uncomment_skeletons(Notebook) -> Notebook`
-- `remove_skeletons(Notebook) -> Notebook`
-- `fix_image_paths(Notebook) -> Notebook`
-- `execute_solutions(Notebook) -> Notebook`
+- `clear_outputs(Notebook, config) -> Notebook`
+- `remove_solutions(Notebook, config) -> Notebook`
+- `uncomment_skeletons(Notebook, config) -> Notebook`
+- `remove_skeletons(Notebook, config) -> Notebook`
+- `fix_image_paths(Notebook, config) -> Notebook`
+- `execute_solutions(Notebook, config) -> Notebook`
 
 And call them in the right order.
 
-Then we could even think about providing an interface for specifying conversion-steps directly, e.g. as:
+Optional: then we could even think about providing an interface for specifying conversion-steps directly, e.g. as:
 
 ```
 urnc convert --steps='remove_solutions,uncomment_skeletons,clear_outputs'
@@ -84,5 +84,5 @@ And we could even allow the definition of custom targets in the config.yaml, e.g
 ```yaml
 targets:
   student2:
-    steps: 'remove_solutions,uncomment_skeletons' # outputs not removed
+    steps: ['remove_solutions' ,' uncomment_skeletons'] # outputs not removed
 ```

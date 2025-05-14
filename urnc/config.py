@@ -69,7 +69,7 @@ def default_config(root: Union[str,Path]) -> Dict[str, Any]:
         # Dynamic keys (set at runtime by urnc.config.read())
         "base_path": Path(root).absolute(),
         "is_default": True,
-        # Optional keys (here the defaults are important)        
+        # Optional keys (here the defaults are important)
         "convert": {
             "write_mode": WriteMode.SKIP_EXISTING,
             "ignore": [],
@@ -103,8 +103,8 @@ def default_config(root: Union[str,Path]) -> Dict[str, Any]:
         },
         "jupyter": None
         #
-        # TODO: why are the following values defined as config options? 
-        # 
+        # TODO: why are the following values defined as config options?
+        #
         # - ci.commit
         # - ci.push
         # - ci.pull
@@ -116,7 +116,7 @@ def default_config(root: Union[str,Path]) -> Dict[str, Any]:
         # I can't think of any scenario where you would want to configure those
         # in the config.yaml. So I think if would be more intuitive to set them
         # as function arguments.
-        # 
+        #
         # Let's dicuss this. For now I omit them in
         # docs/source/configuration.md.
     }

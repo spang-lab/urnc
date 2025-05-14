@@ -159,7 +159,7 @@ def init(name: str = "Example Course",
     config = deepcopy(example_config)
     if student_url is not None:
         student_url = str(student_url)
-        if not ("@" in student_url or ":" in student_url):
+        if not _is_remote_git_url(student_url):
             os.makedirs(student_url, exist_ok=True)
             git.Repo.init(student_url, bare=True, initial_branch="main")
         assert isinstance(config["git"], dict) # Required to please type checker
@@ -174,9 +174,18 @@ def init(name: str = "Example Course",
     repo.index.commit("Initial commit")
     if url is not None:
         url = str(url)
-        if not ("@" in url or ":" in url):
+        if not _is_remote_git_url(url):
             os.makedirs(url, exist_ok=True)
             git.Repo.init(url, bare=True, initial_branch="main")
         repo.create_remote("origin", url)
     log(f"Course {name} initialized at {path}")
+    repo.git.clear_cache()
     return repo
+
+def _is_remote_git_url(url: str) -> bool:
+    """Check if the given URL is pointing to a remote git repository."""
+    url = url.strip()
+    return (
+        url.startswith(("http://", "https://", "git://", "ssh://")) or
+        bool(re.match(r"^[\w\-]+@[\w\.\-]+:.*", url))
+    )

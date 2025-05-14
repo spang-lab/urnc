@@ -28,6 +28,7 @@ def test_init_with_default_args():
     assert config.get("name", "") == "Test Course"
     assert config.get("git", {}).get("student", "") == "Link to student repo"
 
+
 def test_init_with_remote_urls():
     tmp_path = Path(mkdtemp())
     course_name = "Test Course"
@@ -58,6 +59,7 @@ def test_init_with_local_urls():
     student_url = tmp_path / "test-course.git"
     repo = init(course_name, admin_path, admin_url, student_url)
     config = read_config(admin_path)
+
     # Check created files
     assert admin_path.exists()
     assert admin_url.exists()
@@ -68,7 +70,7 @@ def test_init_with_local_urls():
     assert not repo.bare
     assert len(list(repo.iter_commits())) == 1
     assert [r.name for r in repo.remotes] == ["origin"]
-    assert repo.remotes["origin"].url == str(admin_url)
+    assert repo.remotes["origin"].url == str(admin_url).replace("\\", "/")
     # Check remote admin repo
     assert git.Repo(admin_url).bare
     # Check remote student repo
@@ -76,3 +78,7 @@ def test_init_with_local_urls():
     # Check config
     assert config.get("name", "") == "Test Course"
     assert config.get("git", {}).get("student", "") == str(student_url)
+
+    repo.git.clear_cache() # (1)
+    # (1) Required on Windows because gitPython is buggy and doesn't clean up open file handles.
+    # For details see: https://github.com/gitpython-developers/GitPython/issues?q=label%3Atag.leaks
