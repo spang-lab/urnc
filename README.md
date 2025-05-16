@@ -45,7 +45,7 @@ You can find the full documentation for URNC at [spang-lab.github.io/urnc](https
 
 - [Installation](https://spang-lab.github.io/urnc/installation.html)
 - [Usage](https://spang-lab.github.io/urnc/usage.html)
-- [Modules](https://spang-lab.github.io/urnc/modules.html)
+- [Commands](https://spang-lab.github.io/urnc/commands/index.html)
+- [Configuration](https://spang-lab.github.io/urnc/configuration.html)
 - [Contributing](https://spang-lab.github.io/urnc/contributing.html)
-- [Documentation](https://spang-lab.github.io/urnc/documentation.html)
 - [Changelog](https://spang-lab.github.io/urnc/changelog.html)

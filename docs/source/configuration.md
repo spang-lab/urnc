@@ -7,7 +7,7 @@ The exact behaviour of these commands can be configured by editing the `config.y
 An example `config.yaml` is given in section [Example Config](#example-config). Descriptions for each field are provided in section [Configuration Options](#configuration-options).
 
 
-# Example Config
+## Example Config
 
 ```yaml
 name: "URNC Example Course"
@@ -52,73 +52,73 @@ jupyter:
         - "tschmidt"
 ```
 
-# Configuration Options
+## Configuration Options
 
 
-## name
+### name
 
 Name of the course as free text.
 
 
-## semester
+### semester
 
 Semester of the course as free text.
 
 
-## version
+### version
 
 Semantic version of the course, e.g., '1.0.0'.
 
 
-## description
+### description
 
 Description of the course as free text.
 
 
-## authors
+### authors
 
 List of authors. Each author must be a dictionary with a `name` and 
 `email` field.
 
 
-## git
+### git
 
 Dictionary of the following git-related options: [student](#student), [output_dir](#output_dir), [exclude](#exclude).
 
 
-### student
+#### student
 
 URL to the public repository where course materials are published for students. The URL must include valid credentials, as it is used by `urnc ci` to push the processed course materials (e.g., notebooks without solutions). If your main repository is public, we recommend using CI tools like [GitLab CI/CD Variables](https://docs.gitlab.com/ee/ci/variables/) or [GitHub Actions Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) to securely manage credentials and inject them at runtime during pipeline execution.
 
 
-### output_dir
+#### output_dir
 
 Directory where the processed course materials are stored when calling `urnc student` or `urnc ci`. If a `git.student` is provided, the given repository will be cloned into this directory before starting the conversions. It's highly recommended to add this directory to your `.gitignore`.
 
 
-### exclude
+#### exclude
 
 List of files or directories to exclude from publishing by `urnc ci`. Each entry is interpreted as a glob pattern. Entries can be either a string or a dictionary. If a dictionary is used, it must include a `pattern` field and can optionally include `after` and `until` fields to specify time-based conditions. At runtime, entries meeting the time conditions will be appended to the `.gitignore` file in the `output_dir`, ensuring they are ignored during publishing.
 
 
-## convert
+### convert
 
 Dictionary of the following conversion-related options: [keywords](#keywords), [targets](#targets), [ignore](#ignore), and [tags](#tags).
 
 
-### keywords
+#### keywords
 
-Keywords used to identify different types of lines within each notebook. Currently, the following categories are supported: `assignment`, `skeleton`, and `solution`. Lines matching `### <keyword>\n(.*|\n)\n###` are considered part of the respective category. Depending on the conversion target, these lines are either removed, transformed, or left unchanged in the notebook. Example: if you configure `solution: "SOL"`, the following cell would be tagged as `solution` and lines 2-4 would be removed in the `student` notebook:
+Keywords used to identify different types of lines within each notebook. Currently, the following categories are supported: `assignment`, `skeleton`, and `solution`. Lines matching `#### <keyword>\n(.*|\n)\n###` are considered part of the respective category. Depending on the conversion target, these lines are either removed, transformed, or left unchanged in the notebook. Example: if you configure `solution: "SOL"`, the following cell would be tagged as `solution` and lines 2-4 would be removed in the `student` notebook:
     
 ```python
 # Enter your solution here  # left unchanged
-### SOL                     # gets removed
+#### SOL                     # gets removed
 sum(range(1, 100))          # gets removed
-###                         # gets removed
+####                         # gets removed
 ```
 
 
-### targets
+#### targets
 
 List of conversion targets created by `urnc ci` and `urnc student`.
 Each target must be a dictionary with fields `type` and `path`.
@@ -137,13 +137,13 @@ urnc execute input_notebook.ipynb
 ```
 
 
-### ignore
+#### ignore
 
 List of glob patterns to ignore during conversion.
 This is different from [`git.exclude`](#exclude), because it suppresses the actual conversion of the notebook, whereas `git.exclude` only suppresses the publishing of the notebook.
 
 
-### tags
+#### tags
 
 Dictionary of tags used by `urnc` to categorize cells in the notebook.
 Cell categories used by `urnc` are `solution`, `skeleton`, `assignment`, `assignment-start`, `ignore`, and `no-execute`.
@@ -162,19 +162,19 @@ tags:
 See [urnc convert](commands.md#-t---target-target) for details on how each tag affects the conversion process for each target type.
 
 
-## jupyter
+### jupyter
 
 Dictionary of the following Jupyter/JupyterHub-related options: [version](#version), [links](#links), [users](#users).
 
 This field is not used by `urnc` directly, but by the script for generating a JupyterHub server list at runtime.
 
 
-### version
+#### version
 
 Specifies the version of the image used by JupyterHub.
 
 
-### links
+#### links
 
 List of links displayed below the course name in the JupyterHub server list.
 Each link must be given as a dictionary with a `name` and `url` field, except for the following two special cases:
@@ -184,6 +184,6 @@ Each link must be given as a dictionary with a `name` and `url` field, except fo
 2. If a dictionary contains a `pull_url` field, that URL will be used by `urnc pull` to clone or pull the course repository inside the container before the user is redirected to the JupyterHub server. Other dictionary fields are ignored in this case.
 
 
-### users
+#### users
 
 List of users allowed to access this profile on the JupyterHub server.

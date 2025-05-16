@@ -65,7 +65,7 @@ pytest -n 2            # Use 2 cores (requires pytest-xdist)
 
 Hint: if you're not using your system's default python version, you may need to use `python -m pytest` instead of `pytest` in the commands above.
 
-# Documentation
+## Documentation
 
 Documentation for this package is generated automatically upon pushes to the `main` branch using [Sphinx](https://www.sphinx-doc.org/en/master/index.html) with the extensions [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) and [myst_parser](https://myst-parser.readthedocs.io/en/latest/). The relevant commands to generate the documentation pages locally are listed below:
 
