@@ -1,6 +1,11 @@
 # Changelog
 
-## v2.1.0 (2025-05-14)
+## v2.1.1 (2025-05-16)
+
+- Added descriptions to previously undocumented CLI options.
+- Improved existing descriptions of CLI options.
+
+## v2.1.0 (2025-05-16)
 
 API Related:
 
