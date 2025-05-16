@@ -1,5 +1,7 @@
 # Contributing
 
+## Always start with an Issue
+
 In case you have **questions**, **feature requests** or find any
 **bugs** in urnc, please create a corresponding [issue].
 
@@ -9,6 +11,8 @@ contribution. After acceptance of your proposal by an active
 maintainer of the repository you will get permissions to create
 branches for this repository. After this, follow the steps
 outlined below to create a new version of urnc.
+
+## Making Updates
 
 1. **Clone**
     - Clone the [urnc repository]

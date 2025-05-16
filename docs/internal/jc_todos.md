@@ -2,10 +2,6 @@
 
 This document contains a list of issues, that should be solved before the journal club talk at May 20, 2025.
 
-## Write internal/usage.md
-
-This document should contain everything I want to show live on Tuesday, including a ton of screenshots.
-
 ## Make sure that all CLI commands are documented
 
 Every command should contain a short description of the command and its arguments as well as a link to the online documentation.
@@ -19,6 +15,10 @@ Every command should contain a short description of the command and its argument
 3. Check that `urnc execute INPUT` and `urnc convert -t execute INPUT` are equivalent (mentioned in `execute.md`)
 
 4. Check that `urnc execute -o OUTPUT INPUT` and `urnc convert -t execute:OUTPUT INPUT` are equivalent (mentioned in `execute.md`)
+
+## Write internal/usage.md
+
+This document should contain everything I want to show live on Tuesday, including a ton of screenshots.
 
 ## Write usage.md
 

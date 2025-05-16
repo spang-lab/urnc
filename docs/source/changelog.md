@@ -30,20 +30,20 @@ Internal:
 - Added tests for `convert` and `merge_dict`
 - Added `url` and `student_url` arguments to `urnc.pull.pull`
 - Made lots of refactorings to support python version below 3.12, e.g.:
-  - Replaced `match` with `if/else` (Python 3.10+)
+  - Used `if/else` instead of `match` (Python 3.10+)
   - Used `Enum` instead of `StrEnum` (Python 3.11+)
 - Made even more refactorings to fix type check findings
 - Added temp folders to `.gitignore`
-- Simpilied `test_ci.py`
+- Simplified `test_ci.py`
 
 ## v2.0.12 (2025-05-07)
 
-- Fixed a bug where multiple targets where falsely generated in sequence, i.e. if both 'student' and 'solution' targets were defined, the solution target was created from the 'student' version, where solutions had already been removed.
+- Fixed a bug where multiple targets were falsely generated in sequence. For example, if both 'student' and 'solution' targets were defined, the solution target was created from the 'student' version after solutions had already been removed.
 
 ## v2.0.11 (2025-05-02)
 
 - Fixed `student`/ `ci` command: time zones in timestamps in `config.yaml` are now handled correctly.
-- Fixed `urnc covert --solution INPUT`: manually tagged solutions are no longer removed.
+- Fixed `urnc convert --solution INPUT`: manually tagged solutions are no longer removed.
 
 ## v2.0.10 (2025-04-03)
 
@@ -116,7 +116,7 @@ Internal:
 ## v1.10.0 (2024-01-04)
 
 - Added solution parameter to `urnc.convert.convert`
-- Added config option `ci.solution` to `config.yaml`. When specified, `urnc student` now creates student notebooks incl. solutions in addition to the usual student notebooks. For details see `<https://spang-lab.github.io/urnc/urnc.html#urnc.ci.ci>`_.
+- Added config option `ci.solution` to `config.yaml`. When specified, `urnc student` now creates student notebooks including solutions in addition to the usual student notebooks.
 - Info messages printed by convert now use relative paths instead of absolute paths to make them more readable.
 - Remote images that cannot be verified now cause a warning message instead of an error message.
 
