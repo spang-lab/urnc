@@ -1,10 +1,6 @@
-# Journal Club Todos
+# Open Journal Club Todos
 
 This document contains a list of issues, that should be solved before the journal club talk at May 20, 2025.
-
-## Make sure that all CLI commands are documented
-
-Every command should contain a short description of the command and its arguments as well as a link to the online documentation.
 
 ## Write testcases for the following checks
 
@@ -23,3 +19,9 @@ This document should contain everything I want to show live on Tuesday, includin
 ## Write usage.md
 
 Copy over relevant parts from `internal/usage.md` (see issue `Write internal/usage.md`).
+
+# Done
+
+## Make sure that all CLI commands are documented
+
+Every command should contain a short description of the command and its arguments as well as a link to the online documentation.
