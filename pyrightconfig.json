@@ -1,0 +1,96 @@
+{
+  // https://microsoft.github.io/pyright/#/configuration?id=main-configuration-options
+
+  // Ignore glob patterns
+  "include": [],
+  "exclude": [],
+  "ignore": ["docs/**/*.py"],
+
+  // Optional: define stub paths (for custom .pyi files)
+  "stubPath": "typings",
+
+  // Type checking mode: "off", "basic", or "strict"
+  "typeCheckingMode": "strict",
+
+  // Use library stubs even if source is available
+  "useLibraryCodeForTypes": true,
+
+  // Enable/disable auto-import completions
+  "autoImportCompletions": true,
+
+  // Allow code with no type hints (for gradual typing)
+  "allowUntypedFunctionCalls": false,
+  "allowUntypedDecorators": false,
+  "enableTypeIgnoreComments": true,
+
+  // Reporting rules
+
+  // Import-related issues
+  "reportMissingImports": "error",
+  "reportImportCycles": "warning",
+
+  // Unused code
+  "reportUnusedImport": "warning",
+  "reportUnusedClass": "warning",
+  "reportUnusedFunction": "warning",
+  "reportUnusedVariable": "warning",
+  "reportDuplicateImport": "warning",
+
+  // Import usage
+  "reportPrivateImportUsage": "warning",
+  "reportWildcardImportFromLibrary": "warning",
+  "reportWildcardImport": "warning",
+
+  // Untyped decorators and classes
+  "reportUntypedFunctionDecorator": "error",
+  "reportUntypedClassDecorator": "error",
+  "reportUntypedBaseClass": "error",
+  "reportUntypedNamedTuple": "error",
+  "reportUntypedDataclass": "error",
+
+  // Missing type annotations
+  "reportMissingParameterType": "error",
+  "reportMissingTypeArgument": "error",
+  "reportMissingTypeStubs": "warning",
+  "reportMissingTypeAnnotation": "error",
+
+  // Unknown types
+  "reportUnknownParameterType": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnknownLambdaType": "none",
+  "reportUnknownVariableType": "none",
+  "reportUnknownMemberType": "none",
+
+  // Incompatible overrides
+  "reportIncompatibleMethodOverride": "error",
+  "reportIncompatibleVariableOverride": "error",
+
+  // Invalid type usage
+  "reportInvalidTypeVarUse": "error",
+  "reportInvalidTypeArguments": "error",
+  "reportInvalidStubStatement": "error",
+  "reportInvalidStringEscapeSequence": "warning",
+
+  // General type issues
+  "reportGeneralTypeIssues": "error",
+  "reportOptionalSubscript": "error",
+  "reportOptionalMemberAccess": "error",
+  "reportOptionalCall": "error",
+  "reportOptionalIterable": "error",
+  "reportOptionalContextManager": "error",
+
+  // Property and function issues
+  "reportPropertyTypeMismatch": "error",
+  "reportFunctionMemberAccess": "error",
+  "reportUninitializedInstanceVariable": "error",
+
+  // Miscellaneous warnings
+  "reportUnnecessaryIsInstance": "warning",
+  "reportAssertAlwaysTrue": "warning",
+  "reportSelfClsParameterName": "warning",
+  "reportImplicitStringConcatenation": "warning",
+
+  // Other
+  "reportUnusedCallResult": "none",
+  "reportUnreachable": "warning"
+}

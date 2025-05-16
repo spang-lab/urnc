@@ -1,19 +1,20 @@
-from ruamel.yaml import YAML
+from enum import Enum
 from pathlib import Path
-from typing import Optional
-import os
+from typing import Any, Dict, Union, Optional
+
 import click
-from enum import StrEnum
+import os
+from ruamel.yaml import YAML
 
 
-class WriteMode(StrEnum):
+class WriteMode(str, Enum):
     DRY_RUN = "dry-run"
     OVERWRITE = "overwrite"
     INTERACTIVE = "interactive"
     SKIP_EXISTING = "skip-existing"
 
 
-class TargetType(StrEnum):
+class TargetType(str, Enum):
     STUDENT = "student"
     SOLUTION = "solution"
     EXECUTE = "execute"
@@ -21,7 +22,9 @@ class TargetType(StrEnum):
     FIX = "fix"
 
 
-def merge_dict(source, target):
+def merge_dict(source: Dict[Any, Any],
+               target: Dict[Any, Any]) -> Dict[str, Any]:
+    """Merge entries from {source} into {target}. Like `update_dict(old=target, new=source)`."""
     for key in source:
         if (
             key in target
@@ -34,21 +37,39 @@ def merge_dict(source, target):
     return target
 
 
-def default_config(root) -> dict:
+def update_dict(old: Dict[str, Any],
+                new: Dict[str, Any]) -> Dict[str, Any]:
+    """Update dict {old} recursively with values from {new}."""
+    for k, v in new.items():
+        if isinstance(v, dict):
+            old[k] = update_dict(old.get(k, {}), v)
+        else:
+            old[k] = v
+    return old
+
+
+def default_config(root: Union[str,Path]) -> Dict[str, Any]:
     """
-    Create a default configuration object with the base path set to the root of the course.
+    Create a default configuration object with 'base_path' set to {root}
 
     Args:
         root: The root directory of the course.
 
     Returns:
         config: The configuration dictionary.
-
-
     """
     config = {
+        # Mandatory keys (must be set in {root}/config.yaml)
+        "name": None,
+        "semester": None,
         "version": None,
-        "base_path": root,
+        "description": None,
+        "authors": None,
+        "version": None,
+        # Dynamic keys (set at runtime by urnc.config.read())
+        "base_path": Path(root).absolute(),
+        "is_default": True,
+        # Optional keys (here the defaults are important)
         "convert": {
             "write_mode": WriteMode.SKIP_EXISTING,
             "ignore": [],
@@ -74,8 +95,30 @@ def default_config(root) -> dict:
         },
         "ci": {
             "commit": False,
+            "push": False,
+            "pull": False,
+            "dry_run": True,
+            "skip_existing": False,
+            "skip_git": False
         },
-        "is_default": True,
+        "jupyter": None
+        #
+        # TODO: why are the following values defined as config options?
+        #
+        # - ci.commit
+        # - ci.push
+        # - ci.pull
+        # - ci.dry_run
+        # - ci.skip_existing
+        # - ci.skip_git
+        # - convert.write_mode
+        #
+        # I can't think of any scenario where you would want to configure those
+        # in the config.yaml. So I think if would be more intuitive to set them
+        # as function arguments.
+        #
+        # Let's dicuss this. For now I omit them in
+        # docs/source/configuration.md.
     }
     return config
 
@@ -98,8 +141,20 @@ def find_file(path: Path, filename: str) -> Optional[Path]:
     return None
 
 
-def read(root: Path) -> dict:
+def find_file_strict(path: Path, filename: str) -> Path:
+    """Finds {filename} in {path} or any of its parent directories."""
+    while path != path.parent:
+        if path.joinpath(filename).exists():
+            return path.joinpath(filename)
+        path = path.parent
+    msg = f"{filename} not found in {path} or its parent directories"
+    raise click.UsageError(msg)
+
+
+def read(root: Path) -> Dict[str, Any]:
     """
+	DEPRECATED. Use `read_config()` instead.
+
     Reads the configuration from a YAML file named 'config.yaml' located at the root of the git repository.
 
     Args:
@@ -132,6 +187,24 @@ def read(root: Path) -> dict:
         raise click.FileError(str(config_path), str(e))
 
 
+def read_config(path: Union[str, Path]) -> Dict[str, Any]:
+    """
+    1. Searches for config.yaml in {path} and its parent directories
+    2. Reads config.yaml
+    3. Updates the default config with the values read from config.yaml
+    4. Returns the updated config
+
+    Raises a click.UsageError if 'config.yaml' is not found
+    Raises a click.FileError if reading 'config.yaml' fails
+    """
+    config_path = find_file_strict(Path(path), "config.yaml")
+    course_config = read_yaml(config_path)
+    defaults = default_config(config_path.parent)
+    config = update_dict(defaults, course_config)
+    config["is_default"] = False
+    return config
+
+
 def write_version(root: Path, version: str):
     filename = "config.yaml"
     config_path = find_file(root, filename)
@@ -151,7 +224,8 @@ def write_version(root: Path, version: str):
         raise click.FileError(str(config_path), str(e))
 
 
-def resolve_path(config: dict, pathstr: Path) -> Path:
+def resolve_path(config: Dict[str, Any],
+                 pathstr: Union[str, Path]) -> Path:
     """
     Resolves a path relative to the course root.
 
@@ -167,3 +241,14 @@ def resolve_path(config: dict, pathstr: Path) -> Path:
         return path
     new_path = Path(config["base_path"]).joinpath(path)
     return new_path.resolve()
+
+
+def read_yaml(path: Path) -> Dict[str, Any]:
+    yaml_reader = YAML(typ="rt")
+    yaml_reader.preserve_quotes = True
+    try:
+        with open(path, "r") as f:
+            return(yaml_reader.load(f))
+    except Exception as e:
+        raise click.FileError(str(path), str(e))
+

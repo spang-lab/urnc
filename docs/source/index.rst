@@ -9,10 +9,8 @@ Welcome to the documentation website of URNC, the Uni Regensburg Notebook Conver
    Home <self>
    Installation <installation>
    Usage <usage>
-   Modules <modules>
+   Commands <commands/index>
+   Configuration <configuration>
+   Placeholders <placeholders>
    Contributing <contributing>
-   Testing <testing>
-   Documentation <documentation>
    Changelog <changelog>
-   Index <genindex>
-

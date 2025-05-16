@@ -5,11 +5,11 @@ from traitlets import List, Unicode
 
 import urnc.preprocessor.util as util
 import re
-from enum import StrEnum
+from enum import Enum
 from nbformat.notebooknode import NotebookNode
 
 
-class LineTags(StrEnum):
+class LineTags(str, Enum):
     SOLUTION_KEY = "solution_key"
     SOLUTION = "solution"
     SKELETON_KEY = "skeleton_key"

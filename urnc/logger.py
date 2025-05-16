@@ -14,7 +14,7 @@ RESET = "\x1b[0m"
 
 
 class CustomFormatter(logging.Formatter):
-    def format(self, record):
+    def format(self, record: logging.LogRecord) -> str:
         log_fmt = "%(message)s"
         log_fmt_name = "%(levelname)s: %(message)s"
         formats = {
@@ -70,27 +70,27 @@ def set_verbose():
     logger.setLevel(logging.DEBUG)
 
 
-def dbg(msg):
+def dbg(msg: str):
     logger = logging.getLogger(__name__)
     logger.debug(msg)
 
 
-def log(msg):
+def log(msg: str):
     logger = logging.getLogger(__name__)
     logger.info(msg)
 
 
-def warn(msg):
+def warn(msg: str):
     logger = logging.getLogger(__name__)
     logger.warning(msg)
 
 
-def error(msg):
+def error(msg: str):
     logger = logging.getLogger(__name__)
     logger.error(msg)
 
 
-def critical(msg) -> NoReturn:
+def critical(msg: str) -> NoReturn:
     logger = logging.getLogger(__name__)
     logger.critical(msg)
     raise Exception(msg)

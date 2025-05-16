@@ -4,7 +4,8 @@ import abc
 import os
 import re
 from pathlib import Path
-from typing import Optional
+from types import TracebackType
+from typing import Optional, Union
 
 import click
 import git
@@ -16,14 +17,14 @@ yaml = YAML(typ="rt")
 # Git related functions
 
 
-def git_folder_name(git_url):
+def git_folder_name(git_url: str) -> str:
     name = git_url.split("/")[-1]
     if name.endswith(".git"):
         name = name[:-4]
     return name
 
 
-def branch_exists(repo, branch):
+def branch_exists(repo: git.Repo, branch: str) -> bool:
     origin_branch = f"origin/{branch}"
     for ref in repo.references:
         if ref.name == branch or ref.name == origin_branch:
@@ -31,7 +32,7 @@ def branch_exists(repo, branch):
     return False
 
 
-def tag_exists(repo, tag):
+def tag_exists(repo: git.Repo, tag: str) -> bool:
     ref = f"refs/tags/{tag}"
     try:
         repo.git.rev_parse("--quiet", "--verify", ref)
@@ -40,7 +41,7 @@ def tag_exists(repo, tag):
         return False
 
 
-def update_repo_config(repo):
+def update_repo_config(repo: git.Repo):
     try:
         r = repo.config_reader()
         name = r.get_value("user", "name")
@@ -121,7 +122,7 @@ class chdir(abc.ABC):
         >>>     pass
     """
 
-    def __init__(self, path):
+    def __init__(self, path: Union[str, Path]):
         self.path = path
         self._old_cwd = []
 
@@ -129,5 +130,8 @@ class chdir(abc.ABC):
         self._old_cwd.append(os.getcwd())
         os.chdir(self.path)
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self,
+                 exc_type: Optional[type],
+                 exc_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]):            
         os.chdir(self._old_cwd.pop())

@@ -18,8 +18,7 @@ def test_pull():
 
     # init repo
     repo_path = path / "repo"
-    config = urnc.config.default_config(path)
-    repo = urnc.init.init(config, "repo")
+    repo = urnc.init.init("Example Course", repo_path)
 
     # init remote
     remote_path = path / "remote.git"
@@ -84,7 +83,10 @@ def test_pull():
     renamed = pull_path.glob("collision_*.txt")
     assert len(list(renamed)) == 1
 
+    repo.git.clear_cache() # (1)
     tmp.cleanup()
+    # (1) Required on Windows because gitPython is buggy and doesn't clean up open file handles.
+    # For details see: https://github.com/gitpython-developers/GitPython/issues?q=label%3Atag.leaks
 
 
 def test_pull_delete_restore():
@@ -92,8 +94,7 @@ def test_pull_delete_restore():
     path = Path(tmp.name)
     # init repo
     repo_path = path / "repo"
-    config = urnc.config.default_config(path)
-    repo = urnc.init.init(config, "repo")
+    repo = urnc.init.init("Example Course", repo_path)
 
     # init remote
     remote_path = path / "remote.git"
@@ -103,7 +104,12 @@ def test_pull_delete_restore():
     origin.push(refspec="main:main")
 
     pull_path = path / "pulled"
-    urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
+    urnc.pull.pull(
+        git_url = str(remote_path),
+        output = str(pull_path),
+        branch = "main",
+        depth = 1
+    )
 
     # delete a remote file
     (repo_path / "example.ipynb").unlink()
@@ -127,4 +133,11 @@ def test_pull_delete_restore():
     urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
     assert (pull_path / "example.ipynb").is_file()
 
+    print("asdf")
+
+    repo.git.clear_cache() # (1)
     tmp.cleanup()
+    # (1) Required on Windows because gitPython is buggy and doesn't clean up open file handles.
+    # For details see: https://github.com/gitpython-developers/GitPython/issues?q=label%3Atag.leaks
+
+    print("qqqqqqqqqqq")
