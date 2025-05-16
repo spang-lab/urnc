@@ -10,6 +10,10 @@ API Related:
 - Removed documentation for 'Modules' (The python interface is considered
   internal and therefore only the command line interface will be documented in
   future versions)
+- Added the following new arguments to `urnc init`:
+  - `-p, --path DIRECTORY`: Output directory
+  - `-u, --url TEXT`: Git URL for admin repository
+  - `-s, --student TEXT`: Git URL for student repository
 
 Internal:
 
@@ -18,15 +22,16 @@ Internal:
 - Fixed coverage upload in CI
 - Switched docs to Markdown format
 - Added type hints to almost every function
-- Added dev dependencies to pyproject.toml, i.e., urnc can now be installed with
-  `pip install urnc[dev]` to get all development dependencies as well.
-- Added `pyrightconfig.json` and recommended pyright as type checker in the contribution guidelines.
+- Added dev dependencies to pyproject.toml, i.e.,
+  urnc can now be installed with `pip install urnc[dev]` to get all
+  development dependencies as well.
+- Added `pyrightconfig.json` and recommended pyright as type checker in the
+  contribution guidelines.
 - Added tests for `convert` and `merge_dict`
 - Added `url` and `student_url` arguments to `urnc.pull.pull`
-
 - Made lots of refactorings to support python version below 3.12, e.g.:
-    - Replaced `match` with `if/else` (Python 3.10+)
-    - Used `Enum` instead of `StrEnum` (Python 3.11+)
+  - Replaced `match` with `if/else` (Python 3.10+)
+  - Used `Enum` instead of `StrEnum` (Python 3.11+)
 - Made even more refactorings to fix type check findings
 - Added temp folders to `.gitignore`
 - Simpilied `test_ci.py`
