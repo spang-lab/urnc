@@ -233,7 +233,6 @@ def clone(
 ) -> None:
     if log_file:
         urnc.logger.add_file_handler(log_file)
-
     with urnc.util.chdir(ctx.obj["base_path"]):
         urnc.logger.setup_logger()
         try:
@@ -243,12 +242,22 @@ def clone(
             urnc.logger.error(str(err))
 
 
-@click.command(help="Init a new course")
+dirPath = click.Path(file_okay=False, dir_okay=True,
+                     writable=True, path_type=Path)
+
+
+@click.command(help="Init a new course", epilog="For details see https://spang-lab.github.io/urnc/usage.html")
 @click.argument("name", type=str, required=True)
+@click.option("-p", "--path", type=dirPath, help="Output directory. Default is derived from name.", default=None)
+@click.option("-u", "--url", type=str, help="Git URL for admin repository.", default=None)
+@click.option("-s", "--student", type=str, help="Git URL for student repository.", default=None)
 @click.pass_context
-def init(ctx: click.Context, name: str) -> None:
-    config = ctx.obj
-    urnc.init.init(config, name)
+def init(ctx: click.Context,
+         name: str,
+         path: Path,
+         url: str,
+         student: str) -> None:
+    urnc.init.init(name, path=path, url=url, student_url=student)
 
 
 main.add_command(version)

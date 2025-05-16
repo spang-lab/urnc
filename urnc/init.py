@@ -118,25 +118,25 @@ def init(name: str = "Example Course",
     """
     Initializes a new course repository with the following structure:
 
-    ```
-    <path>
-    ├── .git
-    ├── .gitignore
-    ├── config.yaml
-    └── example.ipynb
-    ```
+        <path>
+        ├── .git
+        ├── .gitignore
+        ├── config.yaml
+        └── example.ipynb
+
+    For details see https://spang-lab.github.io/urnc/usage.html
 
     Args:
         name: The name of the course.
         path: The directory path where the course will be created. If not
             provided, the path is derived from the course name.
         url: The git URL for the upstream repository. If a local file path
-            ending in `.git` is provided, a bare repository will be created at
-            that location and configured as the origin remote.
+            is provided, a bare repository will be created at that location and
+            configured as the origin remote.
         student_url: The git URL for the student repository.
-            If a local file path ending in `.git` is provided, a bare
-            repository will be created at that location and configured as the
-            student remote url in config.yaml.
+            If a local file path is provided, a bare repository will be created
+            at that location and configured as the student remote url in
+            config.yaml.
 
     Raises:
         click.UsageError: If the target directory already exists and is not empty.

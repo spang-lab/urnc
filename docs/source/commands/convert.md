@@ -1,22 +1,13 @@
-## Convert
+# Convert
 
 Converts INPUT notebooks to the specified TARGET formats and writes them to OUTPUT.
 
 
 ## Usage
 
-### From system shells
-
 ```
 urnc convert [-f|-n|-i] [-t TARGET] [-s SOLUTION] [-o OUTPUT] INPUT
 ```
-
-### From python
-
-```py
-urnc.convert.convert()
-```
-
 
 ## Description
 

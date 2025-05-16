@@ -1,5 +1,40 @@
 # Changelog
 
+## v2.1.0 (2025-05-14)
+
+API Related:
+
+- Added documentation for 'Existing commands', 'Configuration options' and
+  'Placeholders'
+- Improved documentation for 'Contributing' and 'Changelog'
+- Removed documentation for 'Modules' (The python interface is considered
+  internal and therefore only the command line interface will be documented in
+  future versions)
+
+Internal:
+
+- Added tests for MacOS and Windows
+- Added tests for python versions 3.9, 3.10, 3.11 and 3.13
+- Fixed coverage upload in CI
+- Switched docs to Markdown format
+- Added type hints to almost every function
+- Added dev dependencies to pyproject.toml, i.e., urnc can now be installed with
+  `pip install urnc[dev]` to get all development dependencies as well.
+- Added `pyrightconfig.json` and recommended pyright as type checker in the contribution guidelines.
+- Added tests for `convert` and `merge_dict`
+- Added `url` and `student_url` arguments to `urnc.pull.pull`
+
+- Made lots of refactorings to support python version below 3.12, e.g.:
+    - Replaced `match` with `if/else` (Python 3.10+)
+    - Used `Enum` instead of `StrEnum` (Python 3.11+)
+- Made even more refactorings to fix type check findings
+- Added temp folders to `.gitignore`
+- Simpilied `test_ci.py`
+
+## v2.0.12 (2025-05-07)
+
+- Fixed a bug where multiple targets where falsely generated in sequence, i.e. if both 'student' and 'solution' targets were defined, the solution target was created from the 'student' version, where solutions had already been removed.
+
 ## v2.0.11 (2025-05-02)
 
 - Fixed `student`/ `ci` command: time zones in timestamps in `config.yaml` are now handled correctly.
