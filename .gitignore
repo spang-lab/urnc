@@ -149,3 +149,4 @@ tests/outputs
 .virtual_documents/
 temp/
 tmp/
+junit.xml
