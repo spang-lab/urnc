@@ -77,7 +77,7 @@ Description of the course as free text.
 
 ### authors
 
-List of authors. Each author must be a dictionary with a `name` and 
+List of authors. Each author must be a dictionary with a `name` and
 `email` field.
 
 
@@ -93,7 +93,7 @@ URL to the public repository where course materials are published for students. 
 
 #### output_dir
 
-Directory where the processed course materials are stored when calling `urnc student` or `urnc ci`. If a `git.student` is provided, the given repository will be cloned into this directory before starting the conversions. It's highly recommended to add this directory to your `.gitignore`.
+Directory where the processed course materials are stored when calling `urnc student` or `urnc ci`. If [`git.student`](#student) is provided, the given repository will be cloned into this directory before starting the conversions. It's highly recommended to add this directory to your `.gitignore`.
 
 
 #### exclude
@@ -108,8 +108,8 @@ Dictionary of the following conversion-related options: [keywords](#keywords), [
 
 #### keywords
 
-Keywords used to identify different types of lines within each notebook. Currently, the following categories are supported: `assignment`, `skeleton`, and `solution`. Lines matching `#### <keyword>\n(.*|\n)\n###` are considered part of the respective category. Depending on the conversion target, these lines are either removed, transformed, or left unchanged in the notebook. Example: if you configure `solution: "SOL"`, the following cell would be tagged as `solution` and lines 2-4 would be removed in the `student` notebook:
-    
+Keywords used to categorize lines within each notebook. Currently, the following categories are supported: `assignment`, `skeleton`, and `solution`. Lines matching `#### <keyword>\n(.*|\n)\n###` are considered part of the respective category. Depending on the conversion target, these lines are either removed, transformed, or left unchanged in the notebook. Example: if you configure `solution: "SOL"`, the following cell would be tagged as `solution` and lines 2-4 would be removed in the `student` notebook:
+
 ```python
 # Enter your solution here  # left unchanged
 #### SOL                     # gets removed
