@@ -1,6 +1,7 @@
 """Utility functions for urnc"""
 
 import abc
+import filecmp
 import os
 import re
 from pathlib import Path
@@ -9,9 +10,32 @@ from typing import Optional, Union
 
 import click
 import git
+import nbformat
 from ruamel.yaml import YAML
 
 yaml = YAML(typ="rt")
+
+
+
+def dirs_equal(dir1: Union[str, Path],
+               dir2: Union[str, Path],
+               dotignore: bool = True) -> bool:
+    """Return True dir1 and dir2 are equal, False otherwise."""
+    dir1 = Path(dir1)
+    dir2 = Path(dir2)
+    cmp = filecmp.dircmp(dir1, dir2, ignore=['.git', '.ipynb_checkpoints', '.DS_Store', '__pycache__'])
+    if cmp.left_only or cmp.right_only or cmp.diff_files or cmp.funny_files:
+        return False
+    subdirs = [n for n in cmp.common_dirs if not n.startswith('.')] if dotignore else cmp.common_dirs
+    for subdir in subdirs:
+        if not dirs_equal(dir1.joinpath(subdir), dir2.joinpath(subdir)):
+            return False
+    return True
+
+
+def read_notebook(path: Union[str, Path]) -> nbformat.NotebookNode:
+    with open(path, encoding="utf-8") as f:
+        return nbformat.read(f, as_version=4)
 
 
 # Git related functions
@@ -133,5 +157,5 @@ class chdir(abc.ABC):
     def __exit__(self,
                  exc_type: Optional[type],
                  exc_value: Optional[BaseException],
-                 traceback: Optional[TracebackType]):            
+                 traceback: Optional[TracebackType]):
         os.chdir(self._old_cwd.pop())
