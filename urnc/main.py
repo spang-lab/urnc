@@ -13,20 +13,15 @@ from urnc.logger import log, warn
 
 @click.group(help="Uni Regensburg Notebook Converter")
 @click.version_option(prog_name="urnc", message="%(version)s")
-@click.option(
-    "-f",
-    "--root",
-    help="Root folder for resolving relative paths. E.g. `urnc -f some/long/path convert xyz.ipynb out` is the same as `urnc convert some/long/path/xyz.ipynb some/long/path/out`.",
-    default=os.getcwd(),
-    type=click.Path(path_type=Path),
-)
-@click.option("-v", "--verbose", is_flag=True, help="Enable verbose output")
+@click.option("-f", "--root", default=os.getcwd(), type=click.Path(path_type=Path),
+              help="Root folder for resolving relative paths.")
+@click.option("-v", "--verbose", is_flag=True,
+              help="Enable verbose output")
 @click.pass_context
 def main(ctx: click.Context, root: Path, verbose: bool) -> None:
     ctx.ensure_object(dict)
-    config = urnc.config.read(root)
     urnc.logger.setup_logger(verbose)
-    ctx.obj = config
+    ctx.obj["root"] = root
 
 
 @click.command(
@@ -35,7 +30,7 @@ def main(ctx: click.Context, root: Path, verbose: bool) -> None:
 )
 @click.pass_context
 def ci(ctx: click.Context) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=True)
     config["convert"]["write_mode"] = WriteMode.OVERWRITE
     config["ci"]["commit"] = True
     urnc.ci.ci(config)
@@ -47,7 +42,7 @@ def ci(ctx: click.Context) -> None:
 )
 @click.pass_context
 def student(ctx: click.Context) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=True)
     config["convert"]["write_mode"] = WriteMode.OVERWRITE
     config["ci"]["commit"] = False
     urnc.ci.ci(config)
@@ -81,7 +76,8 @@ def convert(
     dry_run: bool,
     interactive: bool,
 ) -> None:
-    config = ctx.obj
+
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
     if sum([force, dry_run, interactive]) > 1:
         msg = "Only one of --force, --dry-run, --interactive can be set at a time."
         raise click.UsageError(msg)
@@ -124,16 +120,15 @@ def convert(
         target_dict[TargetType.STUDENT] = None
 
     # Convert to list of dictionaries as expected by convert
-    target_list = [{"type": typ, "path": path} for typ, path in target_dict.items()]
+    target_list = [{"type": typ, "path": path}
+                   for typ, path in target_dict.items()]
 
     input_path = urnc.config.resolve_path(config, input)
     urnc.convert.convert(config, input_path, target_list)
 
 
-@click.command(
-    help="Check notebooks for errors",
-    epilog="See https://spang-lab.github.io/urnc/commands/check.html for details."
-)
+@click.command(help="Check notebooks for errors",
+               epilog="See https://spang-lab.github.io/urnc/commands/check.html for details.")
 @click.argument("input", type=click.Path(exists=True), default=".")
 @click.option("-q", "--quiet", is_flag=True, help="Only show warnings and errors.")
 @click.option("-c", "--clear", is_flag=True, help="Clear cell outputs.")
@@ -146,40 +141,25 @@ def check(
     clear: bool,
     image: bool,
 ) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
     input_path = urnc.config.resolve_path(config, input)
     if not quiet:
         urnc.logger.set_verbose()
     if clear:
         log("Clearing cell outputs")
         config["convert"]["write_mode"] = WriteMode.OVERWRITE
-        targets = [
-            {
-                "type": TargetType.CLEAR,
-                "path": "{nb.relpath}",
-            }
-        ]
+        targets = [{"type": TargetType.CLEAR, "path": "{nb.relpath}"}]
         urnc.convert.convert(config, input_path, targets)
         return
     if image:
         log("Fixing image paths")
         config["convert"]["write_mode"] = WriteMode.OVERWRITE
-        targets = [
-            {
-                "type": TargetType.FIX,
-                "path": "{nb.relpath}",
-            }
-        ]
+        targets = [{"type": TargetType.FIX, "path": "{nb.relpath}"}]
         urnc.convert.convert(config, input_path, targets)
         return
 
     config["convert"]["write_mode"] = WriteMode.DRY_RUN
-    targets = [
-        {
-            "type": TargetType.STUDENT,
-            "path": None,
-        }
-    ]
+    targets = [{"type": TargetType.STUDENT, "path": None}]
     urnc.convert.convert(config, input_path, targets)
 
 
@@ -191,14 +171,9 @@ def check(
 @click.option("-o", "--output", type=str, default=None, help="Output path for executed notebook(s).")
 @click.pass_context
 def execute(ctx: click.Context, input: str, output: Optional[str]) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
     config["convert"]["write_mode"] = WriteMode.SKIP_EXISTING
-    targets = [
-        {
-            "type": TargetType.EXECUTE,
-            "path": output,
-        }
-    ]
+    targets = [{"type": TargetType.EXECUTE, "path": output}]
     input_path = urnc.config.resolve_path(config, input)
     urnc.convert.convert(config, input_path, targets)
 
@@ -216,7 +191,7 @@ def execute(ctx: click.Context, input: str, output: Optional[str]) -> None:
 )
 @click.pass_context
 def version(ctx: click.Context, self: bool, action: str) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=True)
     if self:
         urnc.version.version_self(config, action)
     else:
@@ -245,9 +220,10 @@ def pull(
     depth: int,
     log_file: Optional[Path],
 ) -> None:
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
     if log_file:
         urnc.logger.add_file_handler(log_file)
-    with urnc.util.chdir(ctx.obj["base_path"]):
+    with urnc.util.chdir(config["base_path"]):
         try:
             urnc.pull.pull(git_url, output, branch, depth)
         except Exception as err:
@@ -277,9 +253,10 @@ def clone(
     depth: int,
     log_file: Optional[Path],
 ) -> None:
+    config = urnc.config.read_config(ctx.obj["root"])
     if log_file:
         urnc.logger.add_file_handler(log_file)
-    with urnc.util.chdir(ctx.obj["base_path"]):
+    with urnc.util.chdir(config["base_path"]):
         urnc.logger.setup_logger()
         try:
             urnc.pull.clone(git_url, output, branch, depth)
@@ -301,7 +278,7 @@ dirPath = click.Path(file_okay=False, dir_okay=True,
 @click.option("-u", "--url", type=str, help="Git URL for admin repository.", default=None)
 @click.option("-s", "--student", type=str, help="Git URL for student repository.", default=None)
 @click.option("-t", "--template", type=click.Choice(["minimal", "full"]),
-              help="Template to use. Default is 'minimal'.", default="minimal")
+              help="Template to use. Default is 'minimal' (default).", default="minimal")
 @click.pass_context
 def init(ctx: click.Context,
          name: str,
@@ -309,7 +286,10 @@ def init(ctx: click.Context,
          url: str,
          student: str,
          template: str) -> None:
-    urnc.init.init(name, path=path, url=url, student_url=student, template=template)
+    root = ctx.obj["root"]
+    with urnc.util.chdir(root):
+        urnc.init.init(name, path=path, url=url,
+                       student_url=student, template=template)
 
 
 main.add_command(version)
