@@ -7,8 +7,6 @@ from typing import Any, Dict, Union
 
 import click
 import git
-import matplotlib.patches as mpatches
-import matplotlib.pyplot as plt
 from nbconvert.exporters.notebook import NotebookExporter
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell as pyc
