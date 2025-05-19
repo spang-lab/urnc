@@ -88,16 +88,13 @@ class ImageChecker(Preprocessor):
         matching_files = list(base_path.rglob(filename))
         if len(matching_files) == 1:
             file_path = matching_files[0]
-            new_path = os.path.relpath(file_path, start=nb_path.parent)
-            log.warn(
-                f"Found a similar file in the base path. Did you mean {file_path}?"
-            )
+            new_path = os.path.relpath(file_path, start=nb_path.parent).replace(os.sep, "/")
+            log.warn(f"Found a similar file in the base path. Did you mean {file_path}?")
             if self.autofix:
                 log.warn(f"Automatically fixing path to {matching_files[0]}")
                 return False, str(new_path)
             if self.interactive and click.prompt(
-                f'Do you want to change the path to "{new_path}"?', type=bool
-            ):
+                f'Do you want to change the path to "{new_path}"?', type=bool):
                 return False, str(new_path)
             return False, None
 
