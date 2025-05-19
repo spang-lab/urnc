@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.1 (2025-05-20)
+
+- Fixed a bug in `urnc ci` that caused errors when a path outside the course was specified as output_dir
+
 ## v2.2.0 (2025-05-19)
 
 General:

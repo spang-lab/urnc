@@ -1,3 +1,7 @@
+# 0. Install URNC
+# ==========================
+pip install urnc
+
 # 1. Initialize a New Course
 # ==========================
 urnc init --help
@@ -27,8 +31,23 @@ git push
 ## Set the remote for the private
 ## Run `urnc ci` locally to update the student repo
 
+# 4. Convert Notebooks to other targets
+# =====================================
+cd lectures/week1/
+urnc convert lecture1.ipynb -o stud.ipynb
+urnc convert lecture1.ipynb -o stud.ipynb -s sol.ipynb
+urnc convert lecture1.ipynb -t student:stud.ipynb -t solution:sol.ipynb
+urnc convert --help
 
-# 4. Pull the Student Version
+
+# 5. Check Notebooks
+# =====================================
+urnc check
+urnc check --quiet
+urnc check --quiet --image
+
+
+# 6. Pull the Student Version
 # ===========================
 
 git clone https://github.com/toscm/urnc-showcase-public
@@ -38,21 +57,6 @@ git clone https://github.com/toscm/urnc-showcase-public
 cd urnc-showcase-public
 git pull # error
 urnc pull
-
-# 5. Convert Notebooks to other targets
-# =====================================
-cd lectures/week1/
-urnc convert lecture1.ipynb -o stud.ipynb
-urnc convert lecture1.ipynb -o stud.ipynb -s sol.ipynb
-urnc convert lecture1.ipynb -t student:stud.ipynb -t solution:sol.ipynb
-urnc convert --help
-
-
-# 6. Check Notebooks
-# =====================================
-urnc check
-urnc check --quiet
-urnc check --quiet --image
 
 
 # 7. Create a Github Action to publish the course automatically

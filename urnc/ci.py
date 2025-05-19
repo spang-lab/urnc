@@ -182,12 +182,8 @@ def ci(config: Dict[str, Any]) -> None:
 
     targets = config["convert"]["targets"]
     if not targets:
-        targets = [
-            {
-                "type": "student",
-                "path": "{nb.abspath}",
-            }
-        ]
+        targets = [{"type": "student", "path": "{nb.abspath}"}]
+    config["base_path"] = student_path
     urnc.convert.convert(config, student_path, targets)
 
     log("Notebooks converted")

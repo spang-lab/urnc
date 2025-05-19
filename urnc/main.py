@@ -60,7 +60,7 @@ def student(ctx: click.Context) -> None:
     config = urnc.config.read_config(ctx.obj["root"], strict=True)
     config["convert"]["write_mode"] = WriteMode.OVERWRITE
     config["ci"]["commit"] = False
-    urnc.ci.ci(config)
+    try_call(urnc.ci.ci, config)
 
 
 @click.command(
