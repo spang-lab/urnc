@@ -2,6 +2,7 @@ import typing as t
 import click
 from nbconvert.preprocessors.base import Preprocessor
 from traitlets import List, Unicode
+from urnc.logger import dbg
 
 import urnc.preprocessor.util as util
 import re
@@ -39,7 +40,7 @@ class SolutionProcessor(Preprocessor):
         if match := re.match(r"\s*(#{1,6})\s*(.+)?", line):
             level = len(match.group(1))
             text = match.group(2)
-            print(level, text)
+            dbg(f"Level {level}: {text}")
             if level == 1:
                 return LineTags.NONE, line
             if util.starts_with(text, self.solution_keywords):
