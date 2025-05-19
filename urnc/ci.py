@@ -5,14 +5,16 @@ import shutil
 from datetime import datetime
 from os.path import basename, exists, isdir, isfile, join
 from pathlib import Path
-from typing import Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional
 
-import dateutil
-import dateutil.tz
-import dateutil.parser
-import git
 import click
+import dateutil
+import dateutil.parser
+import dateutil.tz
+import git
+
 import urnc
+from urnc.util import is_remote_git_url
 from urnc.logger import critical, log, warn
 
 
@@ -34,10 +36,11 @@ def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
     """
     base_path = config["base_path"]
     repo_url = config["git"]["student"]
+    if not is_remote_git_url(repo_url) and os.path.exists(repo_url):
+        repo_url = os.path.abspath(repo_url).replace("\\", "/")
     output_dir = config["git"]["output_dir"]
     if not repo_url:
         raise click.UsageError("No student repository git.student specified in config")
-
     stud_path = base_path.joinpath(output_dir)
 
     # Return existing repo if already available at local filesystem
@@ -48,9 +51,7 @@ def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
         except Exception:
             critical(f"Folder '{stud_path}' exists but is not a git repo")
         if stud_repo.remote().url != repo_url:
-            critical(
-                f"Repo remote mismatch. Expected: {repo_url}. Observed: {stud_repo.remote().url}."
-            )
+            critical(f"Repo remote mismatch. Expected: {repo_url}. Observed: {stud_repo.remote().url}.")
         stud_repo.remote().pull()
         return stud_repo
 
@@ -58,6 +59,7 @@ def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
     log(f"Cloning student repo {repo_url} to {stud_path}")
     stud_repo = git.Repo.clone_from(url=repo_url, to_path=stud_path)
     urnc.git.set_commit_names(stud_repo)
+    stud_repo.git.clear_cache()
     return stud_repo
 
 
@@ -210,3 +212,4 @@ def ci(config: Dict[str, Any]) -> None:
     else:
         log("Skipping git commit and push")
         log("Done.")
+    student_repo.git.clear_cache()

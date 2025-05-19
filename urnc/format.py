@@ -1,5 +1,7 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
+from urnc.config import TargetType, target_suffix
+from urnc.logger import critical
 
 
 class NbPath(object):
@@ -31,9 +33,9 @@ class NbPath(object):
             >>> nb.ext        == "ipynb"
         """
         self.path = path
-        self.rootpath = rootpath
+        self.rootpath = rootpath.absolute()
         self.abspath = path.absolute()
-        self.relpath = path.relative_to(rootpath)
+        self.relpath = self.abspath.relative_to(self.rootpath)
         self.absdirpath = path.parent.absolute()
         self.reldirpath = self.absdirpath.relative_to(self.rootpath)
         self.name = path.name
@@ -41,17 +43,31 @@ class NbPath(object):
         self.ext = path.suffix[1:] if path.suffix.startswith(".") else path.suffix
 
 
-def is_directory_path(pattern: Optional[str]) -> bool:
-    if pattern is None:
+def is_directory_path(path: Union[str, Path, None]) -> bool:
+    if path is None:
         return False
-    return "{" not in pattern and not pattern.endswith(".ipynb")
+    path_str = str(path)
+    return "{" not in path_str and not path_str.endswith(".ipynb")
 
 
-def format_path(path: Path, pattern: Optional[str], root: Path) -> Optional[Path]:
-    if pattern is None:
+def format_path(input: Path,
+                output: Union[str, Path, None],
+                root: Path,
+                type: str = TargetType.STUDENT) -> Optional[Path]:
+    """
+    Substitute placeholders in outpath with the correct values derived from srcpath and root
+
+    Args:
+        input: path of the input notebook
+        output: path of the outbook notebook incl. placeholders
+        root: path of the course root directory
+        type: type of conversion (e.g. student, solution, etc.)
+    """
+    if output is None:
         return None
-    nbpath = NbPath(path, root)
-    if is_directory_path(pattern):
-        pattern = f"{pattern}/{{nb.relpath}}"
-
-    return Path(pattern.format(nb=nbpath))
+    output = str(output)
+    if is_directory_path(output):
+        suffix = target_suffix.get(type, lambda: critical(f"Unknown target type '{type}'. Aborting."))
+        output = f"{output}/{{nb.reldirpath}}/{{nb.basename}}{suffix}.{{nb.ext}}"
+    nbpath = NbPath(input, root)
+    return Path(output.format(nb=nbpath))

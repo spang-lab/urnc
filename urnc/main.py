@@ -3,31 +3,40 @@
 #!/usr/bin/env python3
 import os
 import sys
-from typing import Optional
+from typing import Dict, Optional, Any, List
 from pathlib import Path
 import click
 import urnc
-from urnc.convert import WriteMode, TargetType
+from urnc.config import WriteMode, TargetType, target_types
 from urnc.logger import log, warn
 
+from typing import Callable
 
-@click.group(
-    help="Uni Regensburg Notebook Converter",
-    epilog = "See https://spang-lab.github.io/urnc/ for details"
-)
+def try_call(
+    func: Callable[..., Any],
+    *args: Any,
+    **kwargs: Any
+) -> None:
+    errorcode: int = kwargs.pop("errorcode", 1)
+    assert isinstance(errorcode, int), "errorcode must be an integer"
+    try:
+        func(*args, **kwargs)
+    except Exception as err:
+        urnc.logger.error(str(err))
+        sys.exit(errorcode)
+
+
+@click.group(help="Uni Regensburg Notebook Converter")
 @click.version_option(prog_name="urnc", message="%(version)s")
-@click.option("-f", "--root",
-    help="Root folder for resolving relative paths. DEPRECATED.",
-    default=os.getcwd(),
-    type=click.Path(path_type=Path)
-)
-@click.option("-v", "--verbose", is_flag=True, help="Enable verbose output.")
+@click.option("-f", "--root", default=os.getcwd(), type=click.Path(path_type=Path),
+              help="Root folder for resolving relative paths.")
+@click.option("-v", "--verbose", is_flag=True,
+              help="Enable verbose output")
 @click.pass_context
 def main(ctx: click.Context, root: Path, verbose: bool) -> None:
     ctx.ensure_object(dict)
-    config = urnc.config.read(root)
     urnc.logger.setup_logger(verbose)
-    ctx.obj = config
+    ctx.obj["root"] = root
 
 
 @click.command(
@@ -36,10 +45,10 @@ def main(ctx: click.Context, root: Path, verbose: bool) -> None:
 )
 @click.pass_context
 def ci(ctx: click.Context) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=True)
     config["convert"]["write_mode"] = WriteMode.OVERWRITE
     config["ci"]["commit"] = True
-    urnc.ci.ci(config)
+    try_call(urnc.ci.ci, config)
 
 
 @click.command(
@@ -48,7 +57,7 @@ def ci(ctx: click.Context) -> None:
 )
 @click.pass_context
 def student(ctx: click.Context) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=True)
     config["convert"]["write_mode"] = WriteMode.OVERWRITE
     config["ci"]["commit"] = False
     urnc.ci.ci(config)
@@ -60,6 +69,12 @@ def student(ctx: click.Context) -> None:
     epilog="See https://spang-lab.github.io/urnc/commands/convert.html for details."
 )
 @click.argument("input", type=click.Path(exists=True, path_type=Path), default=Path("."))
+@click.option("-t", "--target", "targets", multiple=True,
+              help="Conversion target. " +
+                   "Either 'student', 'solution', 'execute', 'clear' or 'fix'. " +
+                   "Can be used multiple times. " +
+                   "Can contain an additional, colon-separated output path, " +
+                   "e.g. 'student:./out' or 'solution:C:\\temp\\solutions'.")
 @click.option("-o", "--output", type=str, default=None, help="Output path for student version.")
 @click.option("-s", "--solution", type=str, default=None, help="Output path for solution version.")
 @click.option("-f", "--force", is_flag=True, help="Overwrite existing files.")
@@ -69,13 +84,15 @@ def student(ctx: click.Context) -> None:
 def convert(
     ctx: click.Context,
     input: Path,
+    targets: tuple[str, ...],
     output: Optional[str],
     solution: Optional[str],
     force: bool,
     dry_run: bool,
     interactive: bool,
 ) -> None:
-    config = ctx.obj
+
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
     if sum([force, dry_run, interactive]) > 1:
         msg = "Only one of --force, --dry-run, --interactive can be set at a time."
         raise click.UsageError(msg)
@@ -90,23 +107,43 @@ def convert(
         else:
             msg = "Interactive mode is only available when stdout is a tty."
             raise click.UsageError(msg)
-    targets = []
+
+    # Parse -t/--target arguments
+    target_dict: Dict[str, Any] = dict()
+    for t in targets:
+        if ":" in t:
+            typ, path = t.split(":", 1)
+            typ = typ.strip().lower()
+            path = path.strip()
+        else:
+            typ = t.strip().lower()
+            path = "out"
+        target_dict[typ] = path
+        if typ not in target_types:
+            raise click.UsageError(f"Unknown target type: {typ}")
+
+    # Parse --output and --solution targets (potentially overwriting -t/--target)
     if output is not None:
-        targets.append({"type": TargetType.STUDENT, "path": output})
+        target_dict[TargetType.STUDENT] = output
     if solution is not None:
-        targets.append({"type": TargetType.SOLUTION, "path": solution})
-    if len(targets) == 0:
+        target_dict[TargetType.SOLUTION] = solution
+
+    # Set default target if none provided
+    if len(target_dict) == 0:
         warn("No targets specified for convert. Running check only.")
         config["convert"]["write_mode"] = WriteMode.DRY_RUN
-        targets.append({"type": TargetType.STUDENT, "path": None})
-    input_path = urnc.config.resolve_path(config, input)
-    urnc.convert.convert(config, input_path, targets)
+        target_dict[TargetType.STUDENT] = None
+
+    # Convert to list of dictionaries as expected by convert
+    target_list = [{"type": typ, "path": path}
+                   for typ, path in target_dict.items()]
+
+    input_path = urnc.config.resolve_path(config, os.path.abspath(input))
+    urnc.convert.convert(config, input_path, target_list)
 
 
-@click.command(
-    help="Check notebooks for errors",
-    epilog="See https://spang-lab.github.io/urnc/commands/check.html for details."
-)
+@click.command(help="Check notebooks for errors",
+               epilog="See https://spang-lab.github.io/urnc/commands/check.html for details.")
 @click.argument("input", type=click.Path(exists=True), default=".")
 @click.option("-q", "--quiet", is_flag=True, help="Only show warnings and errors.")
 @click.option("-c", "--clear", is_flag=True, help="Clear cell outputs.")
@@ -119,40 +156,25 @@ def check(
     clear: bool,
     image: bool,
 ) -> None:
-    config = ctx.obj
-    input_path = urnc.config.resolve_path(config, input)
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
+    input_path = urnc.config.resolve_path(config, os.path.abspath(input))
     if not quiet:
         urnc.logger.set_verbose()
     if clear:
         log("Clearing cell outputs")
         config["convert"]["write_mode"] = WriteMode.OVERWRITE
-        targets = [
-            {
-                "type": TargetType.CLEAR,
-                "path": "{nb.relpath}",
-            }
-        ]
+        targets = [{"type": TargetType.CLEAR, "path": "{nb.relpath}"}]
         urnc.convert.convert(config, input_path, targets)
         return
     if image:
         log("Fixing image paths")
         config["convert"]["write_mode"] = WriteMode.OVERWRITE
-        targets = [
-            {
-                "type": TargetType.FIX,
-                "path": "{nb.relpath}",
-            }
-        ]
+        targets = [{"type": TargetType.FIX, "path": "{nb.relpath}"}]
         urnc.convert.convert(config, input_path, targets)
         return
 
     config["convert"]["write_mode"] = WriteMode.DRY_RUN
-    targets = [
-        {
-            "type": TargetType.STUDENT,
-            "path": None,
-        }
-    ]
+    targets = [{"type": TargetType.STUDENT, "path": None}]
     urnc.convert.convert(config, input_path, targets)
 
 
@@ -164,15 +186,10 @@ def check(
 @click.option("-o", "--output", type=str, default=None, help="Output path for executed notebook(s).")
 @click.pass_context
 def execute(ctx: click.Context, input: str, output: Optional[str]) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
     config["convert"]["write_mode"] = WriteMode.SKIP_EXISTING
-    targets = [
-        {
-            "type": TargetType.EXECUTE,
-            "path": output,
-        }
-    ]
-    input_path = urnc.config.resolve_path(config, input)
+    targets = [{"type": TargetType.EXECUTE, "path": output}]
+    input_path = urnc.config.resolve_path(config, os.path.abspath(input))
     urnc.convert.convert(config, input_path, targets)
 
 
@@ -189,7 +206,7 @@ def execute(ctx: click.Context, input: str, output: Optional[str]) -> None:
 )
 @click.pass_context
 def version(ctx: click.Context, self: bool, action: str) -> None:
-    config = ctx.obj
+    config = urnc.config.read_config(ctx.obj["root"], strict=True)
     if self:
         urnc.version.version_self(config, action)
     else:
@@ -218,9 +235,10 @@ def pull(
     depth: int,
     log_file: Optional[Path],
 ) -> None:
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
     if log_file:
         urnc.logger.add_file_handler(log_file)
-    with urnc.util.chdir(ctx.obj["base_path"]):
+    with urnc.util.chdir(config["base_path"]):
         try:
             urnc.pull.pull(git_url, output, branch, depth)
         except Exception as err:
@@ -250,9 +268,10 @@ def clone(
     depth: int,
     log_file: Optional[Path],
 ) -> None:
+    config = urnc.config.read_config(ctx.obj["root"])
     if log_file:
         urnc.logger.add_file_handler(log_file)
-    with urnc.util.chdir(ctx.obj["base_path"]):
+    with urnc.util.chdir(config["base_path"]):
         urnc.logger.setup_logger()
         try:
             urnc.pull.clone(git_url, output, branch, depth)
@@ -273,13 +292,19 @@ dirPath = click.Path(file_okay=False, dir_okay=True,
 @click.option("-p", "--path", type=dirPath, help="Output directory. Default is derived from NAME.", default=None)
 @click.option("-u", "--url", type=str, help="Git URL for admin repository.", default=None)
 @click.option("-s", "--student", type=str, help="Git URL for student repository.", default=None)
+@click.option("-t", "--template", type=click.Choice(["minimal", "full"]),
+              help="Template to use. Default is 'minimal' (default).", default="minimal")
 @click.pass_context
 def init(ctx: click.Context,
          name: str,
          path: Path,
          url: str,
-         student: str) -> None:
-    urnc.init.init(name, path=path, url=url, student_url=student)
+         student: str,
+         template: str) -> None:
+    root = ctx.obj["root"]
+    with urnc.util.chdir(root):
+        urnc.init.init(name, path=path, url=url,
+                       student_url=student, template=template)
 
 
 main.add_command(version)

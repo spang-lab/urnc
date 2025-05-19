@@ -91,6 +91,4 @@ def error(msg: str):
 
 
 def critical(msg: str) -> NoReturn:
-    logger = logging.getLogger(__name__)
-    logger.critical(msg)
     raise Exception(msg)

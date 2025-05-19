@@ -6,7 +6,7 @@ import nbformat
 import click
 import fnmatch
 
-from urnc.logger import dbg, log, warn, critical
+from urnc.logger import log, warn, critical
 from urnc.format import format_path, is_directory_path
 from urnc.config import WriteMode, TargetType
 
@@ -22,6 +22,19 @@ from urnc.preprocessor.clear_tagged import ClearTaggedCells
 
 
 def find_notebooks(input: Path, output_path: Optional[Path]) -> List[Path]:
+    """
+    Recursively find all Jupyter notebooks (*.ipynb) in the input directory,
+    excluding hidden directories (those starting with a dot).
+    Notebooks that are located inside the output_path directory (if given)
+    are skipped.
+
+    Args:
+        input (Path): The root directory to search for notebooks.
+        output_path (Optional[Path]): Directory to exclude notebooks from (e.g., output directory).
+
+    Returns:
+        List[Path]: Sorted list of notebook file paths found.
+    """
     notebooks = []
     if not input.is_dir():
         critical(f"Input path '{input}' is not a directory. Aborting.")
@@ -74,10 +87,11 @@ def write_notebook(notebook: str, path: Optional[Path], config: Dict[str, Any]):
             return
         else:
             raise ValueError(f"Unknown write_mode '{write_mode}' in convert.config")
+    else:
+        log(f"Writing notebook to {path}")
 
     with open(path, "w", newline="\n") as f:
         f.write(notebook)
-        log(f"Wrote notebook to {path}")
 
 
 def convert(config: Dict[str, Any],
@@ -87,7 +101,6 @@ def convert(config: Dict[str, Any],
     if len(targets) == 0:
         warn("No targets specified in convert.config. Exiting.")
         return
-
     converted_notebooks = []
     for i, target in enumerate(targets):
         type = target.get("type", None)
@@ -122,24 +135,24 @@ def create_nb_config(config: Dict[str, Any]) -> Config:
 
 
 def convert_target(input: Union[str, Path],
-                   path: Union[str, Path],
+                   output: Union[str, Path, None],
                    type: str,
-                   config: Dict[str, Any]):
+                   config: Dict[str, Any]) -> List[tuple[str, Union[Path, None]]]:
+    """
+    Convert `input` to target `type`.
+    Returns List[Tuple[<notebook-as-string>, <output-path>]]
+    """
     jobs = []
     input = Path(input)
     if input.is_file():
-        out_file = format_path(input, pattern=str(path), root=input.parent)
-        jobs.append((input, out_file))
+        input_notebooks = [input]
     else:
-        output_path = None
-        if is_directory_path(str(path)):
-            output_path = config["base_path"].joinpath(path)
-        input_notebooks = find_notebooks(input, output_path)
+        ignore = config["base_path"].joinpath(output) if is_directory_path(output) else None
+        input_notebooks = find_notebooks(input, ignore)
         input_notebooks = filter_notebooks(input_notebooks, config["convert"]["ignore"])
-        for nb in input_notebooks:
-            out_file = format_path(nb, str(path), input)
-            jobs.append((nb, out_file))
-
+    for nb in input_notebooks:
+        out_file = format_path(nb, output=output, root=config["base_path"], type=type)
+        jobs.append((nb, out_file))
     nb_config = create_nb_config(config)
     preprocessors = None
     if type == TargetType.STUDENT:
@@ -164,15 +177,9 @@ def convert_target(input: Union[str, Path],
 
     converted_notebooks = []
     for notebook_path, output_path in jobs:
-        dbg(f"Converting {notebook_path} to {output_path}")
-        filename = notebook_path.name
-        print(f"\x1b[94m  ---   {filename}    --- \x1b[0m   \n")
-
+        log(f"Converting {notebook_path.name}")
         nb_node = nbformat.read(notebook_path, as_version=4)
-        resources = {
-            "path": notebook_path,
-            "filename": filename,
-        }
+        resources = {"path": notebook_path, "filename": notebook_path.name}
         body, resources = converter.from_notebook_node(nb_node, resources)
         converted_notebooks.append((body, output_path))
     return converted_notebooks

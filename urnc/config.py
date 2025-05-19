@@ -21,6 +21,16 @@ class TargetType(str, Enum):
     CLEAR = "clear"
     FIX = "fix"
 
+target_suffix: Dict[str, str] = {
+    TargetType.STUDENT: "",
+    TargetType.SOLUTION: "-solution",
+    TargetType.EXECUTE: "-executed",
+    TargetType.CLEAR: "-cleared",
+    TargetType.FIX: "-fixed",
+}
+
+target_types = tuple(TargetType) # Can be used for checks like `assert x in target_types`
+
 
 def merge_dict(source: Dict[Any, Any],
                target: Dict[Any, Any]) -> Dict[str, Any]:
@@ -134,21 +144,12 @@ def find_file(path: Path, filename: str) -> Optional[Path]:
     Returns:
         Optional[Path]: The path to the file if found, otherwise None.
     """
-    while path != path.parent:
-        if path.joinpath(filename).exists():
-            return path.joinpath(filename)
-        path = path.parent
+    path = path.resolve()
+    for parent in [path] + list(path.parents):
+        candidate = parent / filename
+        if candidate.exists():
+            return candidate
     return None
-
-
-def find_file_strict(path: Path, filename: str) -> Path:
-    """Finds {filename} in {path} or any of its parent directories."""
-    while path != path.parent:
-        if path.joinpath(filename).exists():
-            return path.joinpath(filename)
-        path = path.parent
-    msg = f"{filename} not found in {path} or its parent directories"
-    raise click.UsageError(msg)
 
 
 def read(root: Path) -> Dict[str, Any]:
@@ -187,21 +188,28 @@ def read(root: Path) -> Dict[str, Any]:
         raise click.FileError(str(config_path), str(e))
 
 
-def read_config(path: Union[str, Path]) -> Dict[str, Any]:
+def read_config(path: Union[str, Path], strict: bool = True) -> Dict[str, Any]:
     """
     1. Searches for config.yaml in {path} and its parent directories
     2. Reads config.yaml
     3. Updates the default config with the values read from config.yaml
     4. Returns the updated config
 
-    Raises a click.UsageError if 'config.yaml' is not found
     Raises a click.FileError if reading 'config.yaml' fails
+    Raises a click.UsageError if 'config.yaml' is not found and {strict} is True
     """
-    config_path = find_file_strict(Path(path), "config.yaml")
-    course_config = read_yaml(config_path)
-    defaults = default_config(config_path.parent)
-    config = update_dict(defaults, course_config)
-    config["is_default"] = False
+    config_path = find_file(Path(path), "config.yaml")
+    if config_path:
+        course_config = read_yaml(config_path)
+        defaults = default_config(config_path.parent)
+        config = update_dict(defaults, course_config)
+        config["is_default"] = False
+    elif strict:
+        msg = f"config.yaml not found in {path} or its parent directories"
+        raise click.UsageError(msg)
+    else:
+        config = default_config(path)
+        config["is_default"] = True
     return config
 
 

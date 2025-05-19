@@ -18,7 +18,8 @@ def test_pull():
 
     # init repo
     repo_path = path / "repo"
-    repo = urnc.init.init("Example Course", repo_path)
+    urnc.init.init("Example Course", repo_path)
+    repo = git.Repo(repo_path)
 
     # init remote
     remote_path = path / "remote.git"
@@ -94,7 +95,8 @@ def test_pull_delete_restore():
     path = Path(tmp.name)
     # init repo
     repo_path = path / "repo"
-    repo = urnc.init.init("Example Course", repo_path)
+    urnc.init.init("Example Course", repo_path)
+    repo = git.Repo(repo_path)
 
     # init remote
     remote_path = path / "remote.git"
