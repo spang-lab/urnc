@@ -1,15 +1,13 @@
+import os
+import subprocess
+import sys
 from pathlib import Path
 from tempfile import mkdtemp
 
-import os
 import git
 
 from urnc.config import read_config
-from click.testing import CliRunner
-from urnc.main import main  # or import your specific command
-
 from urnc.init import init
-from urnc.util import read_notebook
 
 
 def test_init_with_default_args():
@@ -57,8 +55,8 @@ def test_init_with_remote_urls():
 def test_init_with_local_urls():
     course_name = "Test Course"
     admin_path = Path("test-course-admin")
-    admin_url = Path("test-course-admin.git")
-    student_url = Path("test-course.git")
+    admin_url = Path("test-course-admin.git").absolute()
+    student_url = Path("test-course.git").absolute()
     path = init(course_name, admin_path, admin_url, student_url)
     repo = git.Repo(path)
     config = read_config(admin_path)
@@ -89,10 +87,9 @@ def test_init_with_local_urls():
 
 def test_init_full_cli(tmp_path: Path):
     print("tmp_path", tmp_path)
-    runner = CliRunner()
-    args = ["init", "My Course", "-p", "my_course", "-t", "full"]
-    result = runner.invoke(main, args)
-    assert result.exit_code == 0
+    args = [sys.executable, "-m", "urnc", "init", "My Course", "-p", "my_course", "-t", "full"]
+    result = subprocess.run(args, capture_output=True, text=True)
+    assert result.returncode == 0
     assert Path("my_course/images").is_dir()
     assert Path("my_course/lectures/week1").is_dir()
     assert Path("my_course/lectures/week1/lecture1.ipynb").is_file()

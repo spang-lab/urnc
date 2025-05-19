@@ -14,6 +14,7 @@ from nbformat.v4 import new_markdown_cell as mdc
 from nbformat.v4 import new_notebook
 from ruamel.yaml import YAML
 
+from urnc.util import is_remote_git_url
 from urnc.logger import log
 
 example_config = {
@@ -222,12 +223,17 @@ def init(name: str = "Example Course",
     config = deepcopy(example_config)
     if student_url is not None:
         student_url = str(student_url)
-        if not _is_remote_git_url(student_url):
+        assert isinstance(config["git"], dict) # Required to please type checker
+        if not is_remote_git_url(student_url):
             os.makedirs(student_url, exist_ok=True)
-            git.Repo.init(student_url, bare=True, initial_branch="main")
-        # Required to please type checker
-        assert isinstance(config["git"], dict)
-        config["git"]["student"] = student_url
+            bare_repo = git.Repo.init(student_url, bare=True, initial_branch="main")
+            empty_tree = bare_repo.git.hash_object('-t', 'tree', '/dev/null')
+            commit_hash = bare_repo.git.commit_tree(empty_tree, m="Initial empty commit")
+            bare_repo.git.update_ref('refs/heads/main', commit_hash)
+            bare_repo.git.clear_cache()
+            config["git"]["student"] = os.path.abspath(student_url)
+        else:
+            config["git"]["student"] = student_url
     config["name"] = name
     path.mkdir(parents=True, exist_ok=True)
     repo = git.Repo.init(path, initial_branch="main")
@@ -249,7 +255,8 @@ def init(name: str = "Example Course",
     repo.index.commit("Initial commit")
     if url is not None:
         url = str(url)
-        if not _is_remote_git_url(url):
+        if not is_remote_git_url(url):
+            url = os.path.abspath(url)
             os.makedirs(url, exist_ok=True)
             git.Repo.init(url, bare=True, initial_branch="main")
         repo.create_remote("origin", url)
@@ -257,18 +264,6 @@ def init(name: str = "Example Course",
     repo.git.clear_cache()
     return path
 
-
-def _is_remote_git_url(url: str) -> bool:
-    """Check if the given URL is pointing to a remote git repository."""
-    url = url.strip()
-    return (
-        url.startswith(("http://", "https://", "git://", "ssh://")) or
-        bool(re.match(r"^[\w\-]+@[\w\.\-]+:.*", url))
-    )
-
-
-from typing import Union
-from pathlib import Path
 
 def plot_shape(shape: str,
                color: str,

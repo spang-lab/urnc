@@ -40,6 +40,14 @@ def read_notebook(path: Union[str, Path]) -> nbformat.NotebookNode:
 
 # Git related functions
 
+def is_remote_git_url(url: str) -> bool:
+    """Check if the given URL is pointing to a remote git repository."""
+    url = url.strip()
+    return (
+        url.startswith(("http://", "https://", "git://", "ssh://")) or
+        bool(re.match(r"^[\w\-]+@[\w\.\-]+:.*", url))
+    )
+
 
 def git_folder_name(git_url: str) -> str:
     name = git_url.split("/")[-1]
