@@ -6,9 +6,9 @@ import nbformat
 import click
 import fnmatch
 
-from urnc.logger import dbg, log, warn, critical
+from urnc.logger import log, warn, critical
 from urnc.format import format_path, is_directory_path
-from urnc.config import WriteMode, TargetType, target_suffix
+from urnc.config import WriteMode, TargetType
 
 from traitlets.config import Config
 from nbconvert.exporters.notebook import NotebookExporter
@@ -87,10 +87,11 @@ def write_notebook(notebook: str, path: Optional[Path], config: Dict[str, Any]):
             return
         else:
             raise ValueError(f"Unknown write_mode '{write_mode}' in convert.config")
+    else:
+        log(f"Writing notebook to {path}")
 
     with open(path, "w", newline="\n") as f:
         f.write(notebook)
-        log(f"Wrote notebook to {path}")
 
 
 def convert(config: Dict[str, Any],
@@ -178,12 +179,9 @@ def convert_target(input: Union[str, Path],
 
     converted_notebooks = []
     for notebook_path, output_path in jobs:
-        dbg(f"Converting {notebook_path} to {output_path}")
-        filename = notebook_path.name
-        print(f"\x1b[94m  ---   {filename}    --- \x1b[0m   \n")
-
+        log(f"Converting {notebook_path.name}")
         nb_node = nbformat.read(notebook_path, as_version=4)
-        resources = {"path": notebook_path, "filename": filename}
+        resources = {"path": notebook_path, "filename": notebook_path.name}
         body, resources = converter.from_notebook_node(nb_node, resources)
         converted_notebooks.append((body, output_path))
     return converted_notebooks
