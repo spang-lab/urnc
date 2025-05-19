@@ -3,11 +3,11 @@
 #!/usr/bin/env python3
 import os
 import sys
-from typing import Optional
+from typing import Dict, Optional, Any
 from pathlib import Path
 import click
 import urnc
-from urnc.convert import WriteMode, TargetType
+from urnc.config import WriteMode, TargetType, target_types
 from urnc.logger import log, warn
 
 
@@ -59,6 +59,12 @@ def student(ctx: click.Context) -> None:
     epilog="See https://spang-lab.github.io/urnc/commands/convert.html for details."
 )
 @click.argument("input", type=click.Path(exists=True, path_type=Path), default=Path("."))
+@click.option("-t", "--target", "targets", multiple=True,
+              help="Conversion target. " +
+                   "Either 'student', 'solution', 'execute', 'clear' or 'fix'. " +
+                   "Can be used multiple times. " +
+                   "Can contain an additional, colon-separated output path, " +
+                   "e.g. 'student:./out' or 'solution:C:\\temp\\solutions'.")
 @click.option("-o", "--output", type=str, default=None, help="Output path for student version.")
 @click.option("-s", "--solution", type=str, default=None, help="Output path for solution version.")
 @click.option("-f", "--force", is_flag=True, help="Overwrite existing files.")
@@ -68,6 +74,7 @@ def student(ctx: click.Context) -> None:
 def convert(
     ctx: click.Context,
     input: Path,
+    targets: tuple[str, ...],
     output: Optional[str],
     solution: Optional[str],
     force: bool,
@@ -89,17 +96,38 @@ def convert(
         else:
             msg = "Interactive mode is only available when stdout is a tty."
             raise click.UsageError(msg)
-    targets = []
+
+    # Parse -t/--target arguments
+    target_dict: Dict[str, Any] = dict()
+    for t in targets:
+        if ":" in t:
+            typ, path = t.split(":", 1)
+            typ = typ.strip().lower()
+            path = path.strip()
+        else:
+            typ = t.strip().lower()
+            path = None
+        target_dict[typ] = path
+        if typ not in target_types:
+            raise click.UsageError(f"Unknown target type: {typ}")
+
+    # Parse --output and --solution targets (potentially overwriting -t/--target)
     if output is not None:
-        targets.append({"type": TargetType.STUDENT, "path": output})
+        target_dict[TargetType.STUDENT] = output
     if solution is not None:
-        targets.append({"type": TargetType.SOLUTION, "path": solution})
-    if len(targets) == 0:
+        target_dict[TargetType.SOLUTION] = solution
+
+    # Set default target if none provided
+    if len(target_dict) == 0:
         warn("No targets specified for convert. Running check only.")
         config["convert"]["write_mode"] = WriteMode.DRY_RUN
-        targets.append({"type": TargetType.STUDENT, "path": None})
+        target_dict[TargetType.STUDENT] = None
+
+    # Convert to list of dictionaries as expected by convert
+    target_list = [{"type": typ, "path": path} for typ, path in target_dict.items()]
+
     input_path = urnc.config.resolve_path(config, input)
-    urnc.convert.convert(config, input_path, targets)
+    urnc.convert.convert(config, input_path, target_list)
 
 
 @click.command(
