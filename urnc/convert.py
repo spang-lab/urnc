@@ -101,7 +101,6 @@ def convert(config: Dict[str, Any],
     if len(targets) == 0:
         warn("No targets specified in convert.config. Exiting.")
         return
-
     converted_notebooks = []
     for i, target in enumerate(targets):
         type = target.get("type", None)
@@ -151,9 +150,8 @@ def convert_target(input: Union[str, Path],
         ignore = config["base_path"].joinpath(output) if is_directory_path(output) else None
         input_notebooks = find_notebooks(input, ignore)
         input_notebooks = filter_notebooks(input_notebooks, config["convert"]["ignore"])
-
     for nb in input_notebooks:
-        out_file = format_path(nb, output=output, root=input.parent, type=type)
+        out_file = format_path(nb, output=output, root=config["base_path"], type=type)
         jobs.append((nb, out_file))
     nb_config = create_nb_config(config)
     preprocessors = None
