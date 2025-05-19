@@ -68,6 +68,6 @@ def format_path(input: Path,
     output = str(output)
     if is_directory_path(output):
         suffix = target_suffix.get(type, lambda: critical(f"Unknown target type '{type}'. Aborting."))
-        output = f"{output}/{{nb.reldirpath}}/{{nb.basename}}-{suffix}.{{nb.ext}}"
+        output = f"{output}/{{nb.reldirpath}}/{{nb.basename}}{suffix}.{{nb.ext}}"
     nbpath = NbPath(input, root)
     return Path(output.format(nb=nbpath))
