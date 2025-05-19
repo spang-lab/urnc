@@ -63,4 +63,5 @@ The template to use for the course. Can be "minimal" or "full".
 
 ```bash
 urnc init "My Example Course"
+urnc init -t full -p "my_course_2" "My Course 2"
 ```
