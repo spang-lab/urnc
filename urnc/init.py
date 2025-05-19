@@ -264,8 +264,7 @@ def plot_shape(shape: str,
                color: str,
                path: Union[str, Path, None] = None):
     """
-    Draws a single shape (circle, rectangle, triangle) with the given color
-    and saves as a 64x64 SVG using only the Python standard library.
+    Draw a single shape (circle, rectangle, triangle) with the given color.
 
     Args:
         shape: Shape name ('circle', 'rectangle', 'triangle').
