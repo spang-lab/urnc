@@ -87,14 +87,12 @@ example_lecture_2 = new_notebook(cells=[
     mdc("### Assignment\n" +
         "Create a circle, rectangle or triangle with a color of your choice:\n"),
     pyc("### Solution\n" +
-        "import matplotlib.pyplot as plt\n" +
-        "from matplotlib.patches import Circle\n" +
-        "fig, ax = plt.subplots()\n" +
-        "circle = Circle((0.5, 0.5), 0.4, color='green')\n" +
-        "ax.add_patch(circle)\n" +
-        "ax.set_aspect('equal')\n" +
-        "ax.axis('off')\n" +
-        "plt.show()\n" +
+        "from IPython.display import SVG, display\n" +
+        "svg  = '<?xml version=\"1.0\" standalone=\"no\"?>\\n'\n" +
+        "svg += '<svg width=\"64\" height=\"64\" xmlns=\"http://www.w3.org/2000/svg\">\\n'\n" +
+        "svg += '<polygon points=\"32,8 8,56 56,56\" fill=\"green\" />\\n'\n" +
+        "svg += '</svg>\\n'\n" +
+        "display(SVG(svg))\n" +
         "### Skeleton\n" +
         "# Enter your solution here\n" +
         "###"
@@ -259,36 +257,35 @@ def _is_remote_git_url(url: str) -> bool:
     )
 
 
+from typing import Union
+from pathlib import Path
+
 def plot_shape(shape: str,
                color: str,
-               path: Union[str, Path, None] = None,
-               show: bool = False):
+               path: Union[str, Path, None] = None):
     """
-    Draws a single shape (circle, rectangle, triangle) with the given color and saves as 64x64 SVG.
+    Draws a single shape (circle, rectangle, triangle) with the given color
+    and saves as a 64x64 SVG using only the Python standard library.
 
     Args:
         shape: Shape name ('circle', 'rectangle', 'triangle').
         color: Fill color as a string.
         path: File path to save the SVG image.
-        show: If True, display the plot window.
     """
-    fig, ax = plt.subplots(figsize=(2, 2), dpi=92)
-    ax.set_aspect('equal')
-    ax.axis('off')
-    if shape.lower() == 'circle':
-        patch = mpatches.Circle((0.5, 0.5), 0.4, color=color)
-    elif shape.lower() == 'rectangle':
-        patch = mpatches.Rectangle((0.1, 0.1), 0.8, 0.8, color=color)
-    elif shape.lower() == 'triangle':
-        patch = mpatches.Polygon(
-            [[0.5, 0.9], [0.1, 0.1], [0.9, 0.1]], color=color)
+    shape = shape.lower()
+    svg_header = '<?xml version="1.0" standalone="no"?>\n'
+    svg_open = '<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">\n'
+    svg_close = '</svg>'
+    if shape == 'circle':
+        element = f'<circle cx="32" cy="32" r="25" fill="{color}" />\n'
+    elif shape == 'rectangle':
+        element = f'<rect x="8" y="8" width="48" height="48" fill="{color}" />\n'
+    elif shape == 'triangle':
+        points = "32,8 8,56 56,56"
+        element = f'<polygon points="{points}" fill="{color}" />\n'
     else:
         raise ValueError(f"Unknown shape: {shape}")
-    ax.add_patch(patch)
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
+    svg_content = svg_header + svg_open + element + svg_close
     if path:
-        plt.savefig(path, format='svg', bbox_inches='tight', pad_inches=0)
-    if show:
-        plt.show()
-    plt.close(fig)
+        with open(path, 'w') as f:
+            f.write(svg_content)
