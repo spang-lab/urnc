@@ -1,25 +1,26 @@
 # Convert
 
-Converts INPUT notebooks to the specified TARGET formats and writes them to OUTPUT.
+Converts input notebooks to the specified target formats.
 
 
 ## Usage
 
 ```
-urnc convert [-f|-n|-i] [-t TARGET] [-s SOLUTION] [-o OUTPUT] INPUT
+urnc convert [-f|-n|-i] [-t TARGET] [-s SOLPATH] [-o OUTPATH] INPUT
 ```
 
 ## Description
 
 Notebook conversion by `urnc` happens in two stages:
 
-1. All lines of INPUT notebooks are checked for [keywords].
+1. All lines of all input notebooks are checked for [keywords].
    If a keyword is found, the containing cell is [tagged] accordingly.
-2. All tagged cells are processed according to the specified TARGET format.
+2. All tagged cells are processed according to the specified target format.
 
-This two-stage approach allows manual tagging of cells in addition to the
-use of keywords to configure the conversion behaviour. See [TARGET](#-t---target-target) for
-a description of the effect of each tag on the conversion targets.
+This two-stage approach allows manual tagging of cells in addition to the use of
+keywords to configure the conversion behaviour. See [-t, --target
+TARGET](#-t---target-target) for a description of the effect of each tag on the
+conversion targets.
 
 
 ## Options
@@ -33,12 +34,16 @@ If INPUT is a directory, all notebooks in the directory are converted recursivel
 
 ### -t, --target TARGET
 
-Specifies the conversion target(s), i.e., the type of conversion(s) to be
-performed. Can be a comma-separated list of multiple conversion targets. If no
-TARGET is specified, `student` is used by default (i.e., a notebook for
-"students" is produced). Valid targets are: `student`, `solution`, `execute`,
-`clear`, and `fix`. Depending on the target(s), the following actions are
-performed for each INPUT notebook:
+Specifies the conversion target, i.e., the type of conversion to be performed.
+This option can be used multiple times to specify multiple targets.
+Valid targets are: `student`, `solution`, `execute`, `clear`, and `fix`.
+Every target can contain an additional, colon-seperated output path, e.g.
+`student:out` or `solution:C:\tmp`.
+Paths can contain [placeholder variables](../placeholders.md).
+If not output path is provided, a target-specific default location is used, as
+described in [Plain Directory Paths](../placeholders.md#plain-directory-paths).
+Depending on the target, the following actions are performed for each input
+notebook:
 
 1. `student`:
     1. Tag cells matching `# <solution-keyword>` as `solution`.
@@ -74,37 +79,42 @@ A summary of the effect of each tag (rows) on each target (columns) is shown bel
 | assignmentstart | .         | .        | .       | .     | .   |
 
 
-### -o, --output OUTPUT
+### -o, --output OUTPATH
 
-Path for storing the converted notebook(s).
+Path for storing the output of the [`student` target](#-t---target-target).
 Can be a file or directory path.
-If no OUTPUT is specified, `out/` is used by default.
-Supports [placeholder variables].
-If TARGET is given as a comma-separated list of multiple targets, OUTPUT can be specified as a comma-separated list of the same length.
+If `-o OUTPATH` is not specified, `out/` is used by default.
+Supports [placeholder variables](../placeholders.md).
 
+Remark: specifying `-o OUTPUT` is equivalent to specifying `-t student:OUTPATH`.
 
-### -s, --solution SOLUTION
+### -s, --solution SOLPATH
 
-**DEPRECATED**: Use `-t solution -o SOLUTION` instead.
+Path for storing the output of the [`solution` target](#-t---target-target).
+Can be a file or directory path.
+If `-s SOLPATH` is not specified, the solution target is not generated (unless
+specified via `-t solution`).
+Supports [placeholder variables](../placeholders.md).
 
-Path for storing the output of the `solution` target.
-Specifying `-s SOLUTION` is equivalent to specifying `-t solution -o SOLUTION`.
+Remark: specifying `-s SOLPATH` is equivalent to specifying `-t solution:SOLPATH`.
 
 
 ### -n, --dry-run
 
-If specified, the conversions are performed in memory but nothing gets written to
-disk.
+If specified, the conversions are performed in memory but nothing gets written
+to disk.
 
 
 ### -f, --force
 
-By default, if the OUTPUT path already exists, the conversion is skipped. Specifying `-f` forces existing files to be overwritten.
+By default, if an output path exists already, the conversion is skipped.
+Specifying `-f` forces existing files to be overwritten.
 
 
 ### -i, --interactive
 
-If the OUTPUT path already exists, the user is prompted for confirmation before overwriting it.
+If an output path exists already, the user is prompted for confirmation before
+overwriting it.
 
 
 ### -h, --help
