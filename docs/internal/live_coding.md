@@ -2,7 +2,7 @@
 
 This guide explains how to use urnc to create and manage a course repository for tutors and students. The workflow involves
 
-1. Creating an "admin" repository with lectures, assignments and solutions 
+1. Creating an "admin" repository with lectures, assignments and solutions
 2. Publishing a corresponding "student" repository where the solutions have been removed
 3. Cloning the student repository to a local machine
 4. Checking the notebooks for errors
@@ -12,20 +12,28 @@ This guide explains how to use urnc to create and manage a course repository for
 To start a new course, use the `urnc init` command. This initializes a new "admin" repository with a default configuration and an example notebook.
 
 ```sh
-urnc init "My Example Course"
+urnc init --template=full "My Example Course"
 ```
 
 This creates a directory named after the course, initializes a Git repository, and sets up the following file structure:
 
 ```none
-my_example_course
+<path>
 ├── .git
 ├── .gitignore
 ├── config.yaml
-└── example.ipynb
+├── images
+│   ├── blue_rectangle.png
+│   └── red_circle.png
+├── lectures
+│   └── week1
+│       ├── lecture1.ipynb
+│       └── lecture2.ipynb
+└── assignments
+    └── week1.ipynb
 ```
 
-The `config.yaml` file contains metadata and configuration and looks like this:
+The `config.yaml` file contains metadata and configuration and looks roughly like this:
 
 ```yaml
 name: "My Example Course"
@@ -38,28 +46,22 @@ output_dir: "out"
 exclude: ["config.yaml", "container/"]
 ```
 
-The `example.ipynb` file is an example notebook with the following structure:
+The `ipynb` files are short example notebook showcasing various features of
+urnc. `lecture1.ipynb` look e.g. as follows:
 
-```none
-┌─────────────────────────────────────────md─┐
-│ # Example Notebook                         │
-│ urnc checks markdown headers for keywords  │
-├─────────────────────────────────────────py─┤
-│ print('This is a normal code cell.')       │
-├─────────────────────────────────────────md─┤
-│ ### Assignment 1                           │
-│ Describes the assignment.                  │
-├─────────────────────────────────────────py─┤
-│ ### Solution                               │
-│ Removed by `urnc ci`.                      │
-├─────────────────────────────────────────py─┤
-│ ### Solution                               │
-│ print('In code cell')                      │
-├─────────────────────────────────────────md─┤
-│ ## Other headers                           │
-│ End the assignment.                        │
-└────────────────────────────────────────────┘
-```
+    +----------------------------+----------+
+    | # Lecture 1                | markdown |
+    | ---------------------------+----------+
+    | ## Assignment 1            | markdown |
+    | ---------------------------+----------+
+    | Print Hello World          | markdown |
+    | ---------------------------+----------+
+    | ### Solution               |          |
+    | print('Hello World')       |          |
+    | ### Skeleton               | code     |
+    | # Enter your solution here |          |
+    | ###                        |          |
+    +----------------------------+----------+
 
 ## 2. Create and Publish the Student Version
 
