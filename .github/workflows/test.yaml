@@ -27,5 +27,9 @@ jobs:
         with: { python-version: "${{ matrix.config.python-version }}" }
       - name: Install urnc with dev dependencies
         run: python3 -m pip install .[dev]
+      - name: Configure git user for tests
+        run: |
+          git config --global user.email "test@example.com"
+          git config --global user.name "Test User"
       - name: Run test suite
         run: pytest
