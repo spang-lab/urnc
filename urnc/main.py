@@ -3,12 +3,27 @@
 #!/usr/bin/env python3
 import os
 import sys
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, List
 from pathlib import Path
 import click
 import urnc
 from urnc.config import WriteMode, TargetType, target_types
 from urnc.logger import log, warn
+
+from typing import Callable
+
+def try_call(
+    func: Callable[..., Any],
+    *args: Any,
+    **kwargs: Any
+) -> None:
+    errorcode: int = kwargs.pop("errorcode", 1)
+    assert isinstance(errorcode, int), "errorcode must be an integer"
+    try:
+        func(*args, **kwargs)
+    except Exception as err:
+        urnc.logger.error(str(err))
+        sys.exit(errorcode)
 
 
 @click.group(help="Uni Regensburg Notebook Converter")
@@ -33,7 +48,7 @@ def ci(ctx: click.Context) -> None:
     config = urnc.config.read_config(ctx.obj["root"], strict=True)
     config["convert"]["write_mode"] = WriteMode.OVERWRITE
     config["ci"]["commit"] = True
-    urnc.ci.ci(config)
+    try_call(urnc.ci.ci, config)
 
 
 @click.command(
@@ -102,7 +117,7 @@ def convert(
             path = path.strip()
         else:
             typ = t.strip().lower()
-            path = None
+            path = "out"
         target_dict[typ] = path
         if typ not in target_types:
             raise click.UsageError(f"Unknown target type: {typ}")
@@ -123,7 +138,7 @@ def convert(
     target_list = [{"type": typ, "path": path}
                    for typ, path in target_dict.items()]
 
-    input_path = urnc.config.resolve_path(config, input)
+    input_path = urnc.config.resolve_path(config, os.path.abspath(input))
     urnc.convert.convert(config, input_path, target_list)
 
 
@@ -142,7 +157,7 @@ def check(
     image: bool,
 ) -> None:
     config = urnc.config.read_config(ctx.obj["root"], strict=False)
-    input_path = urnc.config.resolve_path(config, input)
+    input_path = urnc.config.resolve_path(config, os.path.abspath(input))
     if not quiet:
         urnc.logger.set_verbose()
     if clear:
@@ -174,7 +189,7 @@ def execute(ctx: click.Context, input: str, output: Optional[str]) -> None:
     config = urnc.config.read_config(ctx.obj["root"], strict=False)
     config["convert"]["write_mode"] = WriteMode.SKIP_EXISTING
     targets = [{"type": TargetType.EXECUTE, "path": output}]
-    input_path = urnc.config.resolve_path(config, input)
+    input_path = urnc.config.resolve_path(config, os.path.abspath(input))
     urnc.convert.convert(config, input_path, targets)
 
 
