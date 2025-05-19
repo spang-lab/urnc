@@ -31,9 +31,9 @@ class NbPath(object):
             >>> nb.ext        == "ipynb"
         """
         self.path = path
-        self.rootpath = rootpath
+        self.rootpath = rootpath.absolute()
         self.abspath = path.absolute()
-        self.relpath = path.relative_to(rootpath)
+        self.relpath = self.abspath.relative_to(self.rootpath)
         self.absdirpath = path.parent.absolute()
         self.reldirpath = self.absdirpath.relative_to(self.rootpath)
         self.name = path.name
