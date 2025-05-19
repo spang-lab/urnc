@@ -8,7 +8,7 @@ import fnmatch
 
 from urnc.logger import dbg, log, warn, critical
 from urnc.format import format_path, is_directory_path
-from urnc.config import WriteMode, TargetType
+from urnc.config import WriteMode, TargetType, target_suffix
 
 from traitlets.config import Config
 from nbconvert.exporters.notebook import NotebookExporter
@@ -22,6 +22,19 @@ from urnc.preprocessor.clear_tagged import ClearTaggedCells
 
 
 def find_notebooks(input: Path, output_path: Optional[Path]) -> List[Path]:
+    """
+    Recursively find all Jupyter notebooks (*.ipynb) in the input directory,
+    excluding hidden directories (those starting with a dot).
+    Notebooks that are located inside the output_path directory (if given)
+    are skipped.
+
+    Args:
+        input (Path): The root directory to search for notebooks.
+        output_path (Optional[Path]): Directory to exclude notebooks from (e.g., output directory).
+
+    Returns:
+        List[Path]: Sorted list of notebook file paths found.
+    """
     notebooks = []
     if not input.is_dir():
         critical(f"Input path '{input}' is not a directory. Aborting.")
@@ -122,24 +135,25 @@ def create_nb_config(config: Dict[str, Any]) -> Config:
 
 
 def convert_target(input: Union[str, Path],
-                   path: Union[str, Path],
+                   output: Union[str, Path, None],
                    type: str,
-                   config: Dict[str, Any]):
+                   config: Dict[str, Any]) -> List[tuple[str, Union[Path, None]]]:
+    """
+    Convert `input` to target `type`.
+    Returns List[Tuple[<notebook-as-string>, <output-path>]]
+    """
     jobs = []
     input = Path(input)
     if input.is_file():
-        out_file = format_path(input, pattern=str(path), root=input.parent)
-        jobs.append((input, out_file))
+        input_notebooks = [input]
     else:
-        output_path = None
-        if is_directory_path(str(path)):
-            output_path = config["base_path"].joinpath(path)
-        input_notebooks = find_notebooks(input, output_path)
+        ignore = config["base_path"].joinpath(output) if is_directory_path(output) else None
+        input_notebooks = find_notebooks(input, ignore)
         input_notebooks = filter_notebooks(input_notebooks, config["convert"]["ignore"])
-        for nb in input_notebooks:
-            out_file = format_path(nb, str(path), input)
-            jobs.append((nb, out_file))
 
+    for nb in input_notebooks:
+        out_file = format_path(nb, output=output, root=input.parent, type=type)
+        jobs.append((nb, out_file))
     nb_config = create_nb_config(config)
     preprocessors = None
     if type == TargetType.STUDENT:
@@ -169,10 +183,7 @@ def convert_target(input: Union[str, Path],
         print(f"\x1b[94m  ---   {filename}    --- \x1b[0m   \n")
 
         nb_node = nbformat.read(notebook_path, as_version=4)
-        resources = {
-            "path": notebook_path,
-            "filename": filename,
-        }
+        resources = {"path": notebook_path, "filename": filename}
         body, resources = converter.from_notebook_node(nb_node, resources)
         converted_notebooks.append((body, output_path))
     return converted_notebooks

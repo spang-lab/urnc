@@ -21,6 +21,16 @@ class TargetType(str, Enum):
     CLEAR = "clear"
     FIX = "fix"
 
+target_suffix: Dict[str, str] = {
+    TargetType.STUDENT: "",
+    TargetType.SOLUTION: "-solution",
+    TargetType.EXECUTE: "-executed",
+    TargetType.CLEAR: "-cleared",
+    TargetType.FIX: "-fixed",
+}
+
+target_types = tuple(TargetType) # Can be used for checks like `assert x in target_types`
+
 
 def merge_dict(source: Dict[Any, Any],
                target: Dict[Any, Any]) -> Dict[str, Any]:
