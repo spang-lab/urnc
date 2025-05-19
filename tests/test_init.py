@@ -13,7 +13,8 @@ from urnc.util import read_notebook
 
 
 def test_init_with_default_args():
-    repo = init(name="Test Course")
+    path = init(name="Test Course")
+    repo = git.Repo(path)
     config = read_config("test_course")
     admin_path = Path(repo.git_dir).parent
     config = read_config(admin_path)
@@ -36,7 +37,8 @@ def test_init_with_remote_urls():
     admin_path = tmp_path / "course"
     admin_url = "git@github.com:example-user/test-course.git"
     student_url = "git@github.com:example-user/test-course-public.git"
-    repo = init(course_name, admin_path, admin_url, student_url)
+    path = init(course_name, admin_path, admin_url, student_url)
+    repo = git.Repo(path)
     config = read_config(admin_path)
     # Check created files
     assert admin_path.exists()
@@ -57,7 +59,8 @@ def test_init_with_local_urls():
     admin_path = Path("test-course-admin")
     admin_url = Path("test-course-admin.git")
     student_url = Path("test-course.git")
-    repo = init(course_name, admin_path, admin_url, student_url)
+    path = init(course_name, admin_path, admin_url, student_url)
+    repo = git.Repo(path)
     config = read_config(admin_path)
 
     # Check created files

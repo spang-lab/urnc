@@ -116,6 +116,18 @@ example_assignments_1 = new_notebook(cells=[
 ])
 
 
+for nb in [example_notebook, example_lecture_1, example_lecture_2, example_assignments_1]:
+    nb.metadata.kernelspec = {
+        "name": "python3",
+        "display_name": "Python 3",
+        "language": "python"
+    }
+    nb.metadata.language_info = {
+        "name": "python",
+        "version": "3.9"
+    }
+
+
 def name_to_dirname(name: str) -> str:
     return re.sub(r"\W+", "_", name.lower())
 
@@ -151,7 +163,7 @@ def init(name: str = "Example Course",
          path: Union[str, None, Path] = None,
          url: Union[str, None, Path] = None,
          student_url: Union[str, None, Path] = None,
-         template: str = "minimal") -> git.Repo:
+         template: str = "minimal") -> Path:
     """
     Initializes a new course repository with the following structure:
 
@@ -193,7 +205,7 @@ def init(name: str = "Example Course",
         click.FileError: If there is an error writing the configuration file.
 
     Returns:
-        git.Repo: The initialized git repository object.
+        The path to the initialized course repository.
 
     Example:
         >>> repo = init(name="My Example Course")
@@ -243,7 +255,7 @@ def init(name: str = "Example Course",
         repo.create_remote("origin", url)
     log(f"Course {name} initialized at {path}")
     repo.git.clear_cache()
-    return repo
+    return path
 
 
 def _is_remote_git_url(url: str) -> bool:
