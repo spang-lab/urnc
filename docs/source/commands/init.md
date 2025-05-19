@@ -57,7 +57,7 @@ The provided value will be configured as [git.student](../configuration.md#stude
 
 ### -t, --template TEMPLATE
 
-The template to use for the course. Can be "minimal" or "full".
+The template to use for the course. Can be "full" or "minimal" (default).
 
 ## Examples
 

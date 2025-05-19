@@ -300,7 +300,8 @@ dirPath = click.Path(file_okay=False, dir_okay=True,
 @click.option("-p", "--path", type=dirPath, help="Output directory. Default is derived from NAME.", default=None)
 @click.option("-u", "--url", type=str, help="Git URL for admin repository.", default=None)
 @click.option("-s", "--student", type=str, help="Git URL for student repository.", default=None)
-@click.option("-t", "--template", type=click.Choice(["minimal", "full"]), help="Course template to use (minimal or full).", default="minimal")
+@click.option("-t", "--template", type=click.Choice(["minimal", "full"]),
+              help="Template to use. Default is 'minimal'.", default="minimal")
 @click.pass_context
 def init(ctx: click.Context,
          name: str,
