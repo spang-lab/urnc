@@ -11,17 +11,16 @@ from urnc.convert import WriteMode, TargetType
 from urnc.logger import log, warn
 
 
-@click.group(
-    help="Uni Regensburg Notebook Converter",
-    epilog = "See https://spang-lab.github.io/urnc/ for details"
-)
+@click.group(help="Uni Regensburg Notebook Converter")
 @click.version_option(prog_name="urnc", message="%(version)s")
-@click.option("-f", "--root",
-    help="Root folder for resolving relative paths. DEPRECATED.",
+@click.option(
+    "-f",
+    "--root",
+    help="Root folder for resolving relative paths. E.g. `urnc -f some/long/path convert xyz.ipynb out` is the same as `urnc convert some/long/path/xyz.ipynb some/long/path/out`.",
     default=os.getcwd(),
-    type=click.Path(path_type=Path)
+    type=click.Path(path_type=Path),
 )
-@click.option("-v", "--verbose", is_flag=True, help="Enable verbose output.")
+@click.option("-v", "--verbose", is_flag=True, help="Enable verbose output")
 @click.pass_context
 def main(ctx: click.Context, root: Path, verbose: bool) -> None:
     ctx.ensure_object(dict)
@@ -273,13 +272,15 @@ dirPath = click.Path(file_okay=False, dir_okay=True,
 @click.option("-p", "--path", type=dirPath, help="Output directory. Default is derived from NAME.", default=None)
 @click.option("-u", "--url", type=str, help="Git URL for admin repository.", default=None)
 @click.option("-s", "--student", type=str, help="Git URL for student repository.", default=None)
+@click.option("-t", "--template", type=click.Choice(["minimal", "full"]), help="Course template to use (minimal or full).", default="minimal")
 @click.pass_context
 def init(ctx: click.Context,
          name: str,
          path: Path,
          url: str,
-         student: str) -> None:
-    urnc.init.init(name, path=path, url=url, student_url=student)
+         student: str,
+         template: str) -> None:
+    urnc.init.init(name, path=path, url=url, student_url=student, template=template)
 
 
 main.add_command(version)
