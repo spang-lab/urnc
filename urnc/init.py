@@ -236,7 +236,7 @@ def init(name: str = "Example Course",
         plot_shape("rectangle", "blue", path/"images/blue_rectangle.svg") # used by lecture 2
         plot_shape("circle", "red", path/"images/red_circle.svg") # used by lecture 2
     else:
-        write_notebook(path/'example_notebook.ipynb', example_notebook)
+        write_notebook(path/'example.ipynb', example_notebook)
     repo.git.add(all=True)
     repo.index.commit("Initial commit")
     if url is not None:
