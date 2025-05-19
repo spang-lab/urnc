@@ -1,5 +1,35 @@
 # Changelog
 
+## v2.2.0 (2025-05-19)
+
+General:
+
+- Improve path handling when inside course
+- Improve error handling in urnc commands
+
+API:
+
+- Fix: `urnc ci` and `urnc student` now raise an error if `config.yaml` is missing
+- Fix: `urnc init` now provides ci actions
+- Fix: `root path` in convert is now detected correctly
+- Add: `urn convert` now provides default values for targets without output
+- Add: `urnc convert` convert now supports a `--target` argument
+
+Internal:
+
+- Disable patch coverage requirement
+- Fix ci actions by adding dummy git credentials
+- Bump version to 2.2.0
+- Improve out of convert
+- Add strict arg to read_config
+- Improve handling of bare repos in ci
+- Make initial commit in student remote in init
+- Do not return repo objs to prevent leaks
+- Pytest now uses temp dirs for every test
+- Add dirs_equa and read_notebookl to util
+- Add template option to urnc init
+- Fix handling relative paths in NbPath
+
 ## v2.1.1 (2025-05-16)
 
 - Added descriptions to previously undocumented CLI options.
