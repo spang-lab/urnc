@@ -34,6 +34,8 @@ example_config = {
         "exclude": [
             "config.yaml",
             "container/",
+            ".gitlab-ci.yml",
+            ".github/",
         ],
     },
 }
@@ -70,7 +72,7 @@ example_lecture_1 = new_notebook(cells=[
     pyc("### Solution\n" +
         "print('Hello World')\n" +
         "### Skeleton\n" +
-        "# Enter your solution here\n" +
+        "# # Enter your solution here\n" +
         "###")
 ])
 
@@ -93,7 +95,7 @@ example_lecture_2 = new_notebook(cells=[
         "svg += '</svg>\\n'\n" +
         "display(SVG(svg))\n" +
         "### Skeleton\n" +
-        "# Enter your solution here\n" +
+        "# # Enter your solution here\n" +
         "###"
         )
 ])
@@ -105,16 +107,83 @@ example_assignments_1 = new_notebook(cells=[
     pyc("### Solution\n" +
         "print('your name')\n" +
         "### Skeleton\n" +
-        "# Enter your solution here\n" +
+        "# # Enter your solution here\n" +
         "###"),
     mdc("## Assignment 2\n" +
         "Print the sum of the numbers from 1 to 100"),
     pyc("### Solution\n" +
         "print(sum(range(1, 101)))\n" +
         "### Skeleton\n" +
-        "# Enter your solution here\n" +
+        "# # Enter your solution here\n" +
         "###")
 ])
+
+example_gitlab_ci = textwrap.dedent(
+    """
+    stages:
+        - test
+        - publish
+
+    urnc_student:
+        stage: test
+        image: python:3
+        script:
+            - pip install urnc
+            - urnc student
+        only:
+            - main
+
+    urnc_ci:
+        stage: publish
+        image: python:3
+        script:
+            - pip install urnc
+            - urnc ci
+        only:
+            - tags
+    """
+).strip()
+
+example_student_action = textwrap.dedent(
+    """
+    name: Run URNC Student
+    on: { push: { branches: [main] } }
+    jobs:
+      urnc-student:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4
+          - name: Set up Python
+            uses: actions/setup-python@v5
+            with: { python-version: '3.x' }
+          - name: Install urnc
+            run: pip install urnc
+          - name: Run urnc student
+            run: urnc student
+    """
+).strip()
+
+example_ci_action = textwrap.dedent(
+    """
+    name: Run URNC CI
+    on: { push: { tags: ['*'], branches: [main] } }
+    jobs:
+      urnc-ci:
+        if: startsWith(github.ref, 'refs/tags/')
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4
+          - name: Set up Python
+            uses: actions/setup-python@v5
+            with: { python-version: '3.x' }
+          - name: Install urnc
+            run: pip install urnc
+          - name: Run urnc ci
+            run: urnc ci
+    """
+).strip()
 
 
 for nb in [example_notebook, example_lecture_1, example_lecture_2, example_assignments_1]:
@@ -254,6 +323,11 @@ def init(name: str = "Example Course",
         (path/"lectures").mkdir(exist_ok=True)
         (path/"lectures/week1").mkdir(exist_ok=True)
         (path/"assignments").mkdir(exist_ok=True)
+        (path/".github").mkdir(exist_ok=True)
+        (path/".github/workflows").mkdir(exist_ok=True)
+        write_textfile(path/".github/workflows/student.yml", example_student_action)
+        write_textfile(path/".github/workflows/ci.yml", example_ci_action)
+        write_textfile(path/".gitlab-ci.yaml", example_gitlab_ci)
         write_notebook(path/"lectures/week1/lecture1.ipynb", example_lecture_1)
         write_notebook(path/"lectures/week1/lecture2.ipynb", example_lecture_2)
         write_notebook(path/"assignments/week1.ipynb", example_assignments_1)
@@ -303,3 +377,9 @@ def plot_shape(shape: str,
     if path:
         with open(path, 'w') as f:
             f.write(svg_content)
+
+
+def write_textfile(path: Path, content: str) -> None:
+    """Write {content} to {path}."""
+    with open(path, "w") as f:
+        f.write(content)
