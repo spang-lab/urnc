@@ -134,12 +134,22 @@ def name_to_dirname(name: str) -> str:
 
 
 def write_config(path: Path,
-                 config: Dict[str, Any] = example_config) -> None:
+                 config: Dict[str, Any] = example_config,
+                 prolog: str = "",
+                 epilog: str = "") -> None:
+    """
+    Write the config dictionary as YAML to config.yaml in the given path,
+    optionally adding text before (prolog) and after (epilog) the YAML content.
+    """
     config_path = path.joinpath("config.yaml")
     yaml = YAML(typ="rt")
     try:
         with open(config_path, "w") as f:
+            if prolog:
+                f.write(prolog.rstrip() + "\n")
             yaml.dump(config, f)
+            if epilog:
+                f.write("\n" + epilog.lstrip())
     except Exception as e:
         raise click.FileError(str(config_path), str(e))
 
@@ -238,7 +248,7 @@ def init(name: str = "Example Course",
     path.mkdir(parents=True, exist_ok=True)
     repo = git.Repo.init(path, initial_branch="main")
     write_gitignore(path)
-    write_config(path, config)
+    write_config(path, config, prolog="# For details see https://spang-lab.github.io/urnc/configuration.html\n")
     if template == "full":
         (path/"images").mkdir(exist_ok=True)
         (path/"lectures").mkdir(exist_ok=True)
