@@ -159,7 +159,7 @@ tags:
     no-execute: "no-execute"
 ```
 
-See [urnc convert](commands.md#-t---target-target) for details on how each tag affects the conversion process for each target type.
+See [urnc convert](commands/convert.md) for details on how each tag affects the conversion process for each target type.
 
 
 ### jupyter
