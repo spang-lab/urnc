@@ -11,6 +11,7 @@ Welcome to the documentation website of URNC, the Uni Regensburg Notebook Conver
    Usage <usage>
    Commands <commands/index>
    Configuration <configuration>
+   Website-Generation <website-generation>
    Placeholders <placeholders>
    Contributing <contributing>
    Changelog <changelog>
