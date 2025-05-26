@@ -108,13 +108,13 @@ Dictionary of the following conversion-related options: [keywords](#keywords), [
 
 #### keywords
 
-Keywords used to categorize lines within each notebook. Currently, the following categories are supported: `assignment`, `skeleton`, and `solution`. Lines matching `#### <keyword>\n(.*|\n)\n###` are considered part of the respective category. Depending on the conversion target, these lines are either removed, transformed, or left unchanged in the notebook. Example: if you configure `solution: "SOL"`, the following cell would be tagged as `solution` and lines 2-4 would be removed in the `student` notebook:
+Keywords used to categorize lines within each notebook. Currently, the following categories are supported: `assignment`, `skeleton`, and `solution`. Lines matching `^\s*(#{1,6})\s*\b{keyword}\b.*$` start the respective category. Lines matching `^\s*(#{1,6})\s*$` end the current category. Depending on the conversion target, lines of a certain type are either removed, transformed, or left unchanged in the notebook. Example: if you configure `solution: "SOL"` (i.e. you set the `solution` keyword to `SOL`) the following cell would be tagged as `solution` and lines 2-4 would be removed in the `student` notebook:
 
 ```python
-# Enter your solution here  # left unchanged
-#### SOL                     # gets removed
-sum(range(1, 100))          # gets removed
-####                         # gets removed
+# Enter your solution here   # left unchanged
+### SOL                      # gets removed
+sum(range(1, 100))           # gets removed
+###                          # gets removed
 ```
 
 
