@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.2.2 (2025-05-26)
+
+- Fixed link in [configuration page](https://spang-lab.github.io/urnc/configuration.html)
+- Added Documentation page about website generation
+- Improved [keywords chapter](https://spang-lab.github.io/urnc/configuration.html#keywords) in configuration page
+
 ## v2.2.1 (2025-05-20)
 
 - Fixed a bug in `urnc ci` that caused errors when a path outside the course was specified as output_dir
