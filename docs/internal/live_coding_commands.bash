@@ -1,6 +1,6 @@
 # 0. Install URNC
 # ==========================
-pip install urnc
+pip install --upgrade urnc
 
 # 1. Initialize a New Course
 # ==========================
