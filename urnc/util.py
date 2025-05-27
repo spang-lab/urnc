@@ -13,8 +13,30 @@ import git
 import nbformat
 from ruamel.yaml import YAML
 
+from itertools import chain
+import shutil
+import stat
+from typing import Callable, Any
+
+
 yaml = YAML(typ="rt")
 
+
+def _make_writeable(func: Callable[[str], Any], path: str, _: Any) -> None:
+    """Helper of [rmtree()]. Makes {path} writeable, then calls 'func({path})'."""
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
+
+
+def rmtree(path: Union[str, Path]) -> None:
+    """Recursively delete a directory tree.
+
+    Like [shutil.rmtree()] but also allows deletion of system files in Windows,
+    like the .git folder created by GitPython during [urnc.init.init()].
+    Implemented as shown in:
+    https://docs.python.org/3/library/shutil.html#rmtree-example
+    """
+    shutil.rmtree(path, onerror=_make_writeable)
 
 
 def dirs_equal(dir1: Union[str, Path],
@@ -39,6 +61,27 @@ def read_notebook(path: Union[str, Path]) -> nbformat.NotebookNode:
 
 
 # Git related functions
+
+
+def release_locks(repo: git.Repo) -> None:
+    """Release system resources locked by GitPython.
+
+    Required because GitPython leaves orphaned daemon processes with open file
+    handles. On Unix-like systems, this is usually not a major issue, since
+    such systems allow deletion of files even if they are still open by other
+    processes. However, on Windows, this behavior prevents deletion of the .git
+    folder (and any of its parent directories).
+
+    For details see:
+    - https://github.com/gitpython-developers/GitPython?tab=readme-ov-file#leakage-of-system-resources
+    - https://github.com/gitpython-developers/GitPython/issues?q=label%3Atag.leaks
+
+    Maybe we should switch to https://www.pygit2.org/index.html at some point
+    in the future.
+    """
+    repo.git.clear_cache()
+    repo.__del__()
+
 
 def is_remote_git_url(url: str) -> bool:
     """Check if the given URL is pointing to a remote git repository."""
@@ -120,7 +163,8 @@ def get_urnc_root():
             pyproject = open(pyproject_toml).read()
             if re.search(r'name\s*=\s*"?urnc"?', pyproject):
                 return path
-            raise Exception(f"Path '{path}' does not belong to the 'urnc' package")
+            errmsg = f"Path '{path}' does not belong to the 'urnc' package"
+            raise Exception(errmsg)
         path = path.parent
     raise Exception("No 'pyproject.toml' found in the directory hierarchy")
 
