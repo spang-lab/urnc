@@ -122,21 +122,22 @@ def tag_exists(repo: git.Repo, tag: str) -> bool:
         return False
 
 
-def update_repo_config(repo: git.Repo):
+def ensure_git_identity(repo: git.Repo, force: bool = False):
+    """Set user and email in .git/config if not set yet or force is True"""
     try:
-        r = repo.config_reader()
-        name = r.get_value("user", "name")
-        email = r.get_value("user", "email")
-        assert name is not None
-        assert email is not None
-        return
+        with repo.config_reader(config_level="repository") as config:
+            name = config.get_value("user", "name")
+            email = config.get_value("user", "email")
     except Exception:
-        pass
+        name = None
+        email = None
+    if name == None or email == None or force:
+        with repo.config_writer(config_level="repository") as config:
+            config.set_value("user", "name", "urnc")
+            config.set_value("user", "email", "urnc@spang-lab.de")
 
-    config_writer = repo.config_writer()
-    config_writer.set_value("user", "name", "urnc")
-    config_writer.set_value("user", "email", "urnc@spang-lab.de")
-    config_writer.release()
+
+update_repo_config = ensure_git_identity  # alias for backwards compatibility
 
 
 def get_course_repo():
