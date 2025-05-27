@@ -254,4 +254,4 @@ def ci(config: Dict[str, Any]) -> None:
     else:
         log("Skipping git commit and push")
         log("Done.")
-    student_repo.git.clear_cache()
+    urnc.util.release_locks(student_repo)
