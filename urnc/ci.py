@@ -69,8 +69,9 @@ for tz_descr in map(str.split, tz_str.split('\n')):
 
 def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
     """
-    Clones the student repository if it doesn't exist locally, or returns the existing local repository.
-    If the 'student' key is not found in the 'git' section of the config, it initializes a new student repository.
+    Clones the student repository if it doesn't exist locally, or returns the
+    existing local repository. If the 'student' key is not found in the 'git'
+    section of the config, it initializes a new student repository.
 
     Args:
         config (dict): The configuration dictionary.
@@ -85,11 +86,11 @@ def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
     """
     base_path = config["base_path"]
     repo_url = config["git"]["student"]
+    if not repo_url:
+        raise click.UsageError("No student repository git.student specified in config")
     if not is_remote_git_url(repo_url) and os.path.exists(repo_url):
         repo_url = os.path.abspath(repo_url).replace("\\", "/")
     output_dir = config["git"]["output_dir"]
-    if not repo_url:
-        raise click.UsageError("No student repository git.student specified in config")
     stud_path = base_path.joinpath(output_dir)
 
     # Return existing repo if already available at local filesystem
@@ -102,13 +103,10 @@ def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
         if stud_repo.remote().url != repo_url:
             critical(f"Repo remote mismatch. Expected: {repo_url}. Observed: {stud_repo.remote().url}.")
         stud_repo.remote().pull()
-        return stud_repo
-
-    # Clone and return repo if not available locally
-    log(f"Cloning student repo {repo_url} to {stud_path}")
-    stud_repo = git.Repo.clone_from(url=repo_url, to_path=stud_path)
-    urnc.git.set_commit_names(stud_repo)
-    stud_repo.git.clear_cache()
+    else:
+        log(f"Cloning student repo {repo_url} to {stud_path}")
+        stud_repo = git.Repo.clone_from(url=repo_url, to_path=stud_path)
+        urnc.git.set_commit_names(stud_repo)
     return stud_repo
 
 
