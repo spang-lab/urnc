@@ -84,10 +84,7 @@ def test_pull():
     renamed = pull_path.glob("collision_*.txt")
     assert len(list(renamed)) == 1
 
-    repo.git.clear_cache() # (1)
-    tmp.cleanup()
-    # (1) Required on Windows because gitPython is buggy and doesn't clean up open file handles.
-    # For details see: https://github.com/gitpython-developers/GitPython/issues?q=label%3Atag.leaks
+    urnc.util.release_locks(repo)
 
 
 def test_pull_delete_restore():
@@ -135,11 +132,4 @@ def test_pull_delete_restore():
     urnc.pull.pull(str(remote_path), str(pull_path), "main", 1)
     assert (pull_path / "example.ipynb").is_file()
 
-    print("asdf")
-
-    repo.git.clear_cache() # (1)
-    tmp.cleanup()
-    # (1) Required on Windows because gitPython is buggy and doesn't clean up open file handles.
-    # For details see: https://github.com/gitpython-developers/GitPython/issues?q=label%3Atag.leaks
-
-    print("qqqqqqqqqqq")
+    urnc.util.release_locks(repo)

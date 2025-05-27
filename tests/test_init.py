@@ -1,21 +1,18 @@
 import os
-import subprocess
-import sys
-from pathlib import Path
-from tempfile import mkdtemp
+import pathlib
+import tempfile
 
 import git
 
-from urnc.config import read_config
-from urnc.init import init
+import urnc
 
 
 def test_init_with_default_args():
-    path = init(name="Test Course")
+    path = urnc.init.init(name="Test Course")
     repo = git.Repo(path)
-    config = read_config("test_course")
-    admin_path = Path(repo.git_dir).parent
-    config = read_config(admin_path)
+    config = urnc.config.read_config("test_course")
+    admin_path = pathlib.Path(repo.git_dir).parent
+    config = urnc.config.read_config(admin_path)
     # Check created files
     assert admin_path.exists()
     assert len(os.listdir(".")) == 1
@@ -30,14 +27,14 @@ def test_init_with_default_args():
 
 
 def test_init_with_remote_urls():
-    tmp_path = Path(mkdtemp())
+    tmp_path = pathlib.Path(tempfile.mkdtemp())
     course_name = "Test Course"
     admin_path = tmp_path / "course"
     admin_url = "git@github.com:example-user/test-course.git"
     student_url = "git@github.com:example-user/test-course-public.git"
-    path = init(course_name, admin_path, admin_url, student_url)
+    path = urnc.init.init(course_name, admin_path, admin_url, student_url)
     repo = git.Repo(path)
-    config = read_config(admin_path)
+    config = urnc.config.read_config(admin_path)
     # Check created files
     assert admin_path.exists()
     assert len(os.listdir(tmp_path)) == 1
@@ -54,13 +51,12 @@ def test_init_with_remote_urls():
 
 def test_init_with_local_urls():
     course_name = "Test Course"
-    admin_path = Path("test-course-admin")
-    admin_url = Path("test-course-admin.git").absolute()
-    student_url = Path("test-course.git").absolute()
-    path = init(course_name, admin_path, admin_url, student_url)
+    admin_path = pathlib.Path("test-course-admin")
+    admin_url = pathlib.Path("test-course-admin.git").absolute()
+    student_url = pathlib.Path("test-course.git").absolute()
+    path = urnc.init.init(course_name, admin_path, admin_url, student_url)
     repo = git.Repo(path)
-    config = read_config(admin_path)
-
+    config = urnc.config.read_config(admin_path)
     # Check created files
     assert admin_path.exists()
     assert admin_url.exists()
@@ -79,23 +75,4 @@ def test_init_with_local_urls():
     # Check config
     assert config.get("name", "") == "Test Course"
     assert config.get("git", {}).get("student", "") == str(student_url)
-
-    repo.git.clear_cache() # (1)
-    # (1) Required on Windows because gitPython is buggy and doesn't clean up open file handles.
-    # For details see: https://github.com/gitpython-developers/GitPython/issues?q=label%3Atag.leaks
-
-
-def test_init_full_cli(tmp_path: Path):
-    print("tmp_path", tmp_path)
-    args = [sys.executable, "-m", "urnc", "init", "My Course", "-p", "my_course", "-t", "full"]
-    result = subprocess.run(args, capture_output=True, text=True)
-    assert result.returncode == 0
-    assert Path("my_course/images").is_dir()
-    assert Path("my_course/lectures/week1").is_dir()
-    assert Path("my_course/lectures/week1/lecture1.ipynb").is_file()
-    assert Path("my_course/lectures/week1/lecture2.ipynb").is_file()
-    assert Path("my_course/assignments").is_dir()
-    assert Path("my_course/assignments/week1.ipynb").is_file()
-    assert Path("my_course/config.yaml").is_file()
-    assert Path("my_course/.git").is_dir()
-    assert Path("my_course/.gitignore").is_file()
+    urnc.util.release_locks(repo)

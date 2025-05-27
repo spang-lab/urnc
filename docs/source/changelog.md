@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.3.0 (2025-05-xx)
+
+Internal:
+
+- Added recommended command for running a full test incl. code coverage
+- Added functions `rmtree` and `release_locks` to `urnc.util`
+- Fixed `urnc.util.dirs_equal`. Previously, if dotignore was True, not all dotfiles in the root of the compared dirs were ignored, but only a hardcoded subset. Now, all files starting with a dot are correctly ignored.
+- Renamed function `update_repo_config` to `ensure_git_identity`
+- Added support for abbreviated timezones like `CEST` or `CET` to `ci.write_gitignore`. I.e., they can now be used in config option [git.exclude](https://spang-lab.github.io/urnc/configuration.html#exclude) as well.
+
 ## v2.2.2 (2025-05-26)
 
 - Fixed link in [configuration page](https://spang-lab.github.io/urnc/configuration.html)

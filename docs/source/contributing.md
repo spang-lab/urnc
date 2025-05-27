@@ -65,6 +65,9 @@ pytest                 # Run all tests
 pytest -k test_version # Run only tests from test_version.py
 pytest -s              # Show STDOUT during tests
 pytest -n 2            # Use 2 cores (requires pytest-xdist)
+
+# Recommended command to run full test incl. coverage report
+pytest -n 8 --cov=urnc --cov-report=term-missing
 ```
 
 Hint: if you're not using your system's default python version, you may need to use `python -m pytest` instead of `pytest` in the commands above.

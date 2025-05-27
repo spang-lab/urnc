@@ -14,7 +14,7 @@ from nbformat.v4 import new_markdown_cell as mdc
 from nbformat.v4 import new_notebook
 from ruamel.yaml import YAML
 
-from urnc.util import is_remote_git_url
+from urnc.util import is_remote_git_url, release_locks
 from urnc.logger import log
 
 example_config = {
@@ -309,7 +309,7 @@ def init(name: str = "Example Course",
             empty_tree = bare_repo.git.hash_object('-t', 'tree', '/dev/null')
             commit_hash = bare_repo.git.commit_tree(empty_tree, m="Initial empty commit")
             bare_repo.git.update_ref('refs/heads/main', commit_hash)
-            bare_repo.git.clear_cache()
+            release_locks(bare_repo)
             config["git"]["student"] = os.path.abspath(student_url)
         else:
             config["git"]["student"] = student_url
@@ -345,7 +345,7 @@ def init(name: str = "Example Course",
             git.Repo.init(url, bare=True, initial_branch="main")
         repo.create_remote("origin", url)
     log(f"Course {name} initialized at {path}")
-    repo.git.clear_cache()
+    release_locks(repo)
     return path
 
 

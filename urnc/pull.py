@@ -5,9 +5,8 @@ import git
 import datetime
 from typing import Union
 
-import urnc.util as util
-
-import urnc.logger as log
+import urnc
+from urnc.logger import dbg, error, warn, log
 
 
 def get_upstream_changes(repo: git.Repo) -> list[str]:
@@ -52,7 +51,7 @@ def reset_deleted_files(repo: git.Repo) -> None:
         if filename in deleted_upstream:
             repo.git.checkout("HEAD", "--", filename)
         else:
-            log.dbg(f"Restoring deleted file {filename}")
+            dbg(f"Restoring deleted file {filename}")
             repo.git.checkout(f"origin/{branch}", "--", filename)
 
 
@@ -62,7 +61,7 @@ def rename_file_with_timestamp(path: str) -> None:
     (basename, ext) = os.path.splitext(filename)
     new_filename = f"{basename}_{timestamp}{ext}"
     new_path = os.path.join(folder, new_filename)
-    log.warn(
+    warn(
         f"Renaming {path} to {new_path}, to avoid merge conflict with local untracked files."
     )
     os.rename(path, new_path)
@@ -85,14 +84,14 @@ def merge(repo: git.Repo) -> None:
         repo.git.merge("-Xours", remote_branch)
     except git.GitCommandError as err:
         if "CONFLICT (modify/delete)" in str(err):
-            log.warn(
+            warn(
                 "Found a CONFLICT (modify/delete). Keeping the local file by commiting."
             )
             repo.git.commit("-am", "Resolve CONFLICT (modify/delete)", "--allow-empty")
             return
-        log.error("!!!THIS SHOULD NOT HAPPEN!!!")
-        log.error("Failed to merge. Error:")
-        log.error(str(err))
+        error("!!!THIS SHOULD NOT HAPPEN!!!")
+        error("Failed to merge. Error:")
+        error(str(err))
         return
 
 
@@ -102,28 +101,28 @@ def get_repo(git_url: Union[str, None], output: Union[str, None], branch: str, d
             repo = git.Repo(os.getcwd(), search_parent_directories=True)
             return repo
         except Exception:
-            log.error("Failed to pull: no git_url given and not in a git repo")
+            error("Failed to pull: no git_url given and not in a git repo")
             return None
-    folder_name: str = output if output is not None else util.git_folder_name(git_url)
+    folder_name: str = output if output is not None else urnc.util.git_folder_name(git_url)
     if not os.path.exists(folder_name):
-        log.log(f"{folder_name} does not exists. Cloning repo {git_url}")
+        log(f"{folder_name} does not exists. Cloning repo {git_url}")
         try:
             git.Repo.clone_from(git_url, folder_name, branch=branch, depth=depth)
-            log.log("Cloned successfully.")
+            log("Cloned successfully.")
             return None
         except Exception as err:
-            log.error("Failed to clone repo. Error:")
-            log.error(str(err))
+            error("Failed to clone repo. Error:")
+            error(str(err))
             return None
     try:
         repo = git.Repo(folder_name)
         if git_url.replace("\\", "/") != repo.remote().url:
-            log.error(f"Remote url {repo.remote().url} of folder {folder_name} does not match {git_url}")
+            error(f"Remote url {repo.remote().url} of folder {folder_name} does not match {git_url}")
             return None
         return repo
     except Exception as err:
-        log.error(f"Failed to pull: {folder_name} exists but is not a git repo")
-        log.error(str(err))
+        error(f"Failed to pull: {folder_name} exists but is not a git repo")
+        error(str(err))
         return None
 
 
@@ -149,23 +148,23 @@ def pull(git_url: Union[str, None], output: Union[str, None], branch: str, depth
     repo = get_repo(git_url, output, branch, depth)
     if not repo:
         return
-    log.log("Fetching changes...")
+    log("Fetching changes...")
     repo.remote().fetch()
-    log.log("Checking for local untracked files")
+    log("Checking for local untracked files")
     rename_local_untracked(repo)
-    log.log("Restoring locally deleted files")
+    log("Restoring locally deleted files")
     reset_deleted_files(repo)
-    log.log("Unstaging all changes")
+    log("Unstaging all changes")
     repo.git.reset("--mixed")
-    util.update_repo_config(repo)
+    urnc.util.ensure_git_identity(repo)
     if repo.is_dirty():
-        log.log("Repo is dirty. Commiting....")
+        log("Repo is dirty. Commiting....")
         repo.git.commit("-am", "Automatic commit by urnc", "--allow-empty")
-        log.log("Created new commit")
-    log.log("Merging from remote...")
+        log("Created new commit")
+    log("Merging from remote...")
     merge(repo)
-    repo.git.clear_cache()
-    log.log("Done.")
+    urnc.util.release_locks(repo)
+    log("Done.")
 
 
 def clone(git_url: Union[str, None], output: Union[str, None], branch: str, depth: int) -> None:
@@ -189,6 +188,6 @@ def clone(git_url: Union[str, None], output: Union[str, None], branch: str, dept
     repo = get_repo(git_url, output, branch, depth)
     if not repo:
         return
-    log.log("Pulling...")
+    log("Pulling...")
     repo.git.pull("--ff-only")
-    log.log("Done")
+    log("Done")
