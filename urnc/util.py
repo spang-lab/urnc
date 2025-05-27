@@ -42,15 +42,21 @@ def rmtree(path: Union[str, Path]) -> None:
 def dirs_equal(dir1: Union[str, Path],
                dir2: Union[str, Path],
                dotignore: bool = True) -> bool:
-    """Return True dir1 and dir2 are equal, False otherwise."""
+    """Return True if dir1 and dir2 are equal, False otherwise."""
     dir1 = Path(dir1)
     dir2 = Path(dir2)
-    cmp = filecmp.dircmp(dir1, dir2, ignore=['.git', '.ipynb_checkpoints', '.DS_Store', '__pycache__'])
+    ignore = []
+    if dotignore:
+        files = chain(dir1.iterdir(), dir2.iterdir())
+        ignore = list({f.name for f in files if f.name.startswith('.')})
+    cmp = filecmp.dircmp(dir1, dir2, ignore=ignore)
     if cmp.left_only or cmp.right_only or cmp.diff_files or cmp.funny_files:
         return False
-    subdirs = [n for n in cmp.common_dirs if not n.startswith('.')] if dotignore else cmp.common_dirs
+    subdirs = cmp.common_dirs
+    if dotignore:
+        subdirs = [n for n in subdirs if not n.startswith('.')]
     for subdir in subdirs:
-        if not dirs_equal(dir1.joinpath(subdir), dir2.joinpath(subdir)):
+        if not dirs_equal(dir1/subdir, dir2/subdir, dotignore=dotignore):
             return False
     return True
 
