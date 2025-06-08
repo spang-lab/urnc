@@ -52,7 +52,10 @@ def update_dict(old: Dict[str, Any],
     """Update dict {old} recursively with values from {new}."""
     for k, v in new.items():
         if isinstance(v, dict):
-            old[k] = update_dict(old.get(k, {}), v)
+            old_val = old.get(k)
+            if not isinstance(old_val, dict):
+                old_val = {}
+            old[k] = update_dict(old_val, v)
         else:
             old[k] = v
     return old
