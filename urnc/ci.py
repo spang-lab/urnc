@@ -16,12 +16,62 @@ import git
 import urnc
 from urnc.util import is_remote_git_url
 from urnc.logger import critical, log, warn
+import textwrap
+
+
+# See: https://stackoverflow.com/questions/1703546/parsing-date-time-string-with-timezone-abbreviated-name-in-python
+tz_str = textwrap.dedent('''
+    -12 Y
+    -11 X NUT SST
+    -10 W CKT HAST HST TAHT TKT
+    -9 V AKST GAMT GIT HADT HNY
+    -8 U AKDT CIST HAY HNP PST PT
+    -7 T HAP HNR MST PDT
+    -6 S CST EAST GALT HAR HNC MDT
+    -5 R CDT COT EASST ECT EST ET HAC HNE PET
+    -4 Q AST BOT CLT COST EDT FKT GYT HAE HNA PYT
+    -3 P ADT ART BRT CLST FKST GFT HAA PMST PYST SRT UYT WGT
+    -2 O BRST FNT PMDT UYST WGST
+    -1 N AZOT CVT EGT
+    0 Z EGST GMT UTC WET WT
+    1 A CET DFT WAT WEDT WEST
+    2 B CAT CEDT CEST EET SAST WAST
+    3 C EAT EEDT EEST IDT MSK
+    4 D AMT AZT GET GST KUYT MSD MUT RET SAMT SCT
+    5 E AMST AQTT AZST HMT MAWT MVT PKT TFT TJT TMT UZT YEKT
+    6 F ALMT BIOT BTT IOT KGT NOVT OMST YEKST
+    7 G CXT DAVT HOVT ICT KRAT NOVST OMSST THA WIB
+    8 H ACT AWST BDT BNT CAST HKT IRKT KRAST MYT PHT SGT ULAT WITA WST
+    9 I AWDT IRKST JST KST PWT TLT WDT WIT YAKT
+    10 K AEST ChST PGT VLAT YAKST YAPT
+    11 L AEDT LHDT MAGT NCT PONT SBT VLAST VUT
+    12 M ANAST ANAT FJT GILT MAGST MHT NZST PETST PETT TVT WFT
+    13 FJST NZDT
+    11.5 NFT
+    10.5 ACDT LHST
+    9.5 ACST
+    6.5 CCT MMT
+    5.75 NPT
+    5.5 SLT
+    4.5 AFT IRDT
+    3.5 IRST
+    -2.5 HAT NDT
+    -3.5 HNT NST NT
+    -4.5 HLV VET
+    -9.5 MART MIT
+''').strip()
+tz_infos = {}
+for tz_descr in map(str.split, tz_str.split('\n')):
+    tz_offset = int(float(tz_descr[0]) * 3600)
+    for tz_code in tz_descr[1:]:
+        tz_infos[tz_code] = tz_offset
 
 
 def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
     """
-    Clones the student repository if it doesn't exist locally, or returns the existing local repository.
-    If the 'student' key is not found in the 'git' section of the config, it initializes a new student repository.
+    Clones the student repository if it doesn't exist locally, or returns the
+    existing local repository. If the 'student' key is not found in the 'git'
+    section of the config, it initializes a new student repository.
 
     Args:
         config (dict): The configuration dictionary.
@@ -36,11 +86,11 @@ def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
     """
     base_path = config["base_path"]
     repo_url = config["git"]["student"]
+    if not repo_url:
+        raise click.UsageError("No student repository git.student specified in config")
     if not is_remote_git_url(repo_url) and os.path.exists(repo_url):
         repo_url = os.path.abspath(repo_url).replace("\\", "/")
     output_dir = config["git"]["output_dir"]
-    if not repo_url:
-        raise click.UsageError("No student repository git.student specified in config")
     stud_path = base_path.joinpath(output_dir)
 
     # Return existing repo if already available at local filesystem
@@ -53,13 +103,10 @@ def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
         if stud_repo.remote().url != repo_url:
             critical(f"Repo remote mismatch. Expected: {repo_url}. Observed: {stud_repo.remote().url}.")
         stud_repo.remote().pull()
-        return stud_repo
-
-    # Clone and return repo if not available locally
-    log(f"Cloning student repo {repo_url} to {stud_path}")
-    stud_repo = git.Repo.clone_from(url=repo_url, to_path=stud_path)
-    urnc.git.set_commit_names(stud_repo)
-    stud_repo.git.clear_cache()
+    else:
+        log(f"Cloning student repo {repo_url} to {stud_path}")
+        stud_repo = git.Repo.clone_from(url=repo_url, to_path=stud_path)
+        urnc.git.set_commit_names(stud_repo)
     return stud_repo
 
 
@@ -98,7 +145,6 @@ def write_gitignore(main_gitignore: Optional[Path],
     """
     if main_gitignore and exists(main_gitignore):
         shutil.copy(main_gitignore, student_gitignore)
-
     exclude = config["git"]["exclude"]
     if not isinstance(exclude, list):
         critical("config.git.exclude must be a list")
@@ -110,11 +156,11 @@ def write_gitignore(main_gitignore: Optional[Path],
                 gitignore.write(f"{value}\n")
                 continue
             if "after" in value:
-                after_time = dateutil.parser.parse(value["after"])
+                after_time = dateutil.parser.parse(value["after"], tzinfos=tz_infos)
                 if now < after_time.astimezone(dateutil.tz.tzlocal()):
                     continue
             if "until" in value:
-                until_time = dateutil.parser.parse(value["until"])
+                until_time = dateutil.parser.parse(value["until"], tzinfos=tz_infos)
                 if now > until_time.astimezone(dateutil.tz.tzlocal()):
                     continue
             gitignore.write(f"{value['pattern']}\n")
@@ -208,4 +254,4 @@ def ci(config: Dict[str, Any]) -> None:
     else:
         log("Skipping git commit and push")
         log("Done.")
-    student_repo.git.clear_cache()
+    urnc.util.release_locks(student_repo)

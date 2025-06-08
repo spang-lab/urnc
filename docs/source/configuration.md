@@ -98,8 +98,18 @@ Directory where the processed course materials are stored when calling `urnc stu
 
 #### exclude
 
-List of files or directories to exclude from publishing by `urnc ci`. Each entry is interpreted as a glob pattern. Entries can be either a string or a dictionary. If a dictionary is used, it must include a `pattern` field and can optionally include `after` and `until` fields to specify time-based conditions. At runtime, entries meeting the time conditions will be appended to the `.gitignore` file in the `output_dir`, ensuring they are ignored during publishing.
+List of files or directories to exclude from publishing with `urnc ci`. Each entry is treated as a glob pattern and can be either a string or a dictionary. If you use a dictionary, it must include a `pattern` field and can optionally include `after` and `until` fields to specify time-based conditions. At runtime, entries that meet these time conditions are appended to the `.gitignore` file in the `output_dir`, ensuring they are ignored during publishing.
 
+In the example below, the file `aaa.md` is always ignored. All files in the `tmp` folder are also ignored, except for `tmp/abc.md` and `tmp/xyz.md`. The file `tmp/abc.md` is not ignored from 2023-10-02 until 2023-10-09, and `tmp/xyz.md` is not ignored after 2023-10-09.
+
+```yaml
+git:
+    exclude:
+        - "aaa.md"
+        - "tmp/*"
+        - {pattern: "!tmp/abc.md", after: "2023-10-02", until: "2023-10-09"}
+        - {pattern: "!tmp/xyz.md", after: "2023-10-09"}
+```
 
 ### convert
 
