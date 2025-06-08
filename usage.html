@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; urnc 2.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c3c8ae58"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Commands" href="commands/index.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#initialize-a-new-course">1. Initialize a New Course</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-and-publish-the-student-version">2. Create and Publish the Student Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pull-the-student-version">3. Pull the Student Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#convert-notebooks">4. Convert Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#check-notebooks">5. Check Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="website-generation.html">Website-Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="placeholders.html">Placeholders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h1>
+<p>This guide explains how to use urnc to create and manage a course repository for tutors and students. The workflow involves</p>
+<ol class="arabic simple">
+<li><p>Creating an “admin” repository with lectures, assignments and solutions</p></li>
+<li><p>Publishing a corresponding “student” repository where the solutions have been removed</p></li>
+<li><p>Cloning the student repository to a local machine</p></li>
+<li><p>Checking the notebooks for errors</p></li>
+</ol>
+<section id="initialize-a-new-course">
+<h2>1. Initialize a New Course<a class="headerlink" href="#initialize-a-new-course" title="Link to this heading"></a></h2>
+<p>To start a new course, use the <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">init</span></code> command. This initializes a new “admin” repository with a default configuration and an example notebook.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>init<span class="w"> </span><span class="s2">&quot;My Example Course&quot;</span>
+</pre></div>
+</div>
+<p>This creates a directory named after the course, initializes a Git repository, and sets up the following file structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>my_example_course
+├── .git
+├── .gitignore
+├── config.yaml
+└── example.ipynb
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file contains metadata and configuration and looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My</span><span class="nv"> </span><span class="s">Example</span><span class="nv"> </span><span class="s">Course&quot;</span>
+<span class="nt">semester</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;semester&quot;</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;description</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">course&quot;</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.1.0&quot;</span>
+<span class="nt">authors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Your</span><span class="nv"> </span><span class="s">Name&quot;</span><span class="p p-Indicator">,</span><span class="nt"> email</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YourEmail@host.com&quot;</span><span class="p p-Indicator">}]</span>
+<span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">student</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Link</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">student</span><span class="nv"> </span><span class="s">repo&quot;</span><span class="p p-Indicator">}</span>
+<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;out&quot;</span>
+<span class="nt">exclude</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;config.yaml&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;container/&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">example.ipynb</span></code> file is an example notebook with the following structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>┌─────────────────────────────────────────md─┐
+│ # Example Notebook                         │
+│ urnc checks markdown headers for keywords  │
+├─────────────────────────────────────────py─┤
+│ print(&#39;This is a normal code cell.&#39;)       │
+├─────────────────────────────────────────md─┤
+│ ### Assignment 1                           │
+│ Describes the assignment.                  │
+├─────────────────────────────────────────py─┤
+│ ### Solution                               │
+│ Removed by `urnc ci`.                      │
+├─────────────────────────────────────────py─┤
+│ ### Solution                               │
+│ print(&#39;In code cell&#39;)                      │
+├─────────────────────────────────────────md─┤
+│ ## Other headers                           │
+│ End the assignment.                        │
+└────────────────────────────────────────────┘
+</pre></div>
+</div>
+</section>
+<section id="create-and-publish-the-student-version">
+<h2>2. Create and Publish the Student Version<a class="headerlink" href="#create-and-publish-the-student-version" title="Link to this heading"></a></h2>
+<p>To create a student version of the course (without solutions), use the <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">student</span></code> command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>student
+</pre></div>
+</div>
+<p>This generates a student version locally. To publish it, use the <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code> command, which pushes the student version to the remote repository:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>ci
+</pre></div>
+</div>
+<p>Before publishing, ensure the course version is updated using:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>version<span class="w"> </span>patch
+</pre></div>
+</div>
+<p>Other versioning options include <code class="docutils literal notranslate"><span class="pre">minor</span></code> and <code class="docutils literal notranslate"><span class="pre">major</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">student</span></code> and <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code> commands use conversion targets defined in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>. These targets specify how notebooks are processed (e.g., removing solutions). For more details, see Chapter 4.</p>
+</section>
+<section id="pull-the-student-version">
+<h2>3. Pull the Student Version<a class="headerlink" href="#pull-the-student-version" title="Link to this heading"></a></h2>
+<p>To clone the student repository, use the <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">clone</span></code> command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>clone<span class="w"> </span>&lt;student-repo-url&gt;
+</pre></div>
+</div>
+<p>To update an existing local copy of the student repository, use:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>pull
+</pre></div>
+</div>
+</section>
+<section id="convert-notebooks">
+<h2>4. Convert Notebooks<a class="headerlink" href="#convert-notebooks" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">convert</span></code> command processes notebooks based on specified targets. For example, to convert all notebooks in the current directory and output them to a <code class="docutils literal notranslate"><span class="pre">student</span></code> folder:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>convert<span class="w"> </span>.<span class="w"> </span>./student
+</pre></div>
+</div>
+<p>Conversion targets can include removing solutions, clearing outputs, or executing notebooks.</p>
+</section>
+<section id="check-notebooks">
+<h2>5. Check Notebooks<a class="headerlink" href="#check-notebooks" title="Link to this heading"></a></h2>
+<p>To check notebooks for formal errors, use the <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">check</span></code> command, e.g.:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>check<span class="w"> </span>.<span class="w">         </span><span class="c1"># checks all notebooks in the current dir</span>
+urnc<span class="w"> </span>check<span class="w"> </span>--clear<span class="w"> </span>.<span class="w"> </span><span class="c1"># additionally clears outputs</span>
+urnc<span class="w"> </span>check<span class="w"> </span>--image<span class="w"> </span>.<span class="w"> </span><span class="c1"># additional checks image paths</span>
+</pre></div>
+</div>
+<p>To check for coding errors, you can execute notebooks and save their outputs using the <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">execute</span></code>, e.g.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>execute<span class="w"> </span>.
+</pre></div>
+</div>
+<p>This ensures that all code cells run without errors and outputs are up-to-date.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="commands/index.html" class="btn btn-neutral float-right" title="Commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2025, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

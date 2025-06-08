@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; urnc 2.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c3c8ae58"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Contributing" href="contributing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="website-generation.html">Website-Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="placeholders.html">Placeholders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v2-3-0-2025-05-xx">v2.3.0 (2025-05-xx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-2-2-2025-05-26">v2.2.2 (2025-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-2-1-2025-05-20">v2.2.1 (2025-05-20)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-2-0-2025-05-19">v2.2.0 (2025-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-1-2025-05-16">v2.1.1 (2025-05-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-0-2025-05-16">v2.1.0 (2025-05-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-12-2025-05-07">v2.0.12 (2025-05-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-11-2025-05-02">v2.0.11 (2025-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-10-2025-04-03">v2.0.10 (2025-04-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-9-2025-03-21">v2.0.9 (2025-03-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-8-2025-03-11">v2.0.8 (2025-03-11)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-7-2025-03-11">v2.0.7 (2025-03-11)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-6-2025-02-24">v2.0.6 (2025-02-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-5-2025-02-04">v2.0.5 (2025-02-04)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-4-2025-02-03">v2.0.4 (2025-02-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-3-2025-02-03">v2.0.3 (2025-02-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-2-2025-02-03">v2.0.2 (2025-02-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-1-2025-02-03">v2.0.1 (2025-02-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-0-2024-10-17">v2.0.0 (2024-10-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-10-6-2024-09-25">v1.10.6 (2024-09-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-10-5-2024-09-25">v1.10.5 (2024-09-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-10-4-2024-09-25">v1.10.4 (2024-09-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-10-3-2024-04-11">v1.10.3 (2024-04-11)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-10-2-2024-01-04">v1.10.2 (2024-01-04)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-10-0-2024-01-04">v1.10.0 (2024-01-04)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-9-3-2024-01-01">v1.9.3 (2024-01-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-9-2-2023-12-19">v1.9.2 (2023-12-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-9-0-2023-12-19">v1.9.0 (2023-12-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-8-0-2023-12-19">v1.8.0 (2023-12-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-7-0-2023-12-18">v1.7.0 (2023-12-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-5-0-2023-10-16">v1.5.0 (2023-10-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-4-0-2023-10-14">v1.4.0 (2023-10-14)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-3-0-2023-10-12">v1.3.0 (2023-10-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-2-0-2023-10-11">v1.2.0 (2023-10-11)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-1-0-2023-10-10">v1.1.0 (2023-10-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-0-0-2023-09-22">v1.0.0 (2023-09-22)</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/changelog.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<section id="v2-3-0-2025-05-xx">
+<h2>v2.3.0 (2025-05-xx)<a class="headerlink" href="#v2-3-0-2025-05-xx" title="Link to this heading"></a></h2>
+<p>Internal:</p>
+<ul class="simple">
+<li><p>Added recommended command for running a full test incl. code coverage</p></li>
+<li><p>Added functions <code class="docutils literal notranslate"><span class="pre">rmtree</span></code> and <code class="docutils literal notranslate"><span class="pre">release_locks</span></code> to <code class="docutils literal notranslate"><span class="pre">urnc.util</span></code></p></li>
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">urnc.util.dirs_equal</span></code>. Previously, if dotignore was True, not all dotfiles in the root of the compared dirs were ignored, but only a hardcoded subset. Now, all files starting with a dot are correctly ignored.</p></li>
+<li><p>Renamed function <code class="docutils literal notranslate"><span class="pre">update_repo_config</span></code> to <code class="docutils literal notranslate"><span class="pre">ensure_git_identity</span></code></p></li>
+<li><p>Added support for abbreviated timezones like <code class="docutils literal notranslate"><span class="pre">CEST</span></code> or <code class="docutils literal notranslate"><span class="pre">CET</span></code> to <code class="docutils literal notranslate"><span class="pre">ci.write_gitignore</span></code>. I.e., they can now be used in config option <a class="reference external" href="https://spang-lab.github.io/urnc/configuration.html#exclude">git.exclude</a> as well.</p></li>
+</ul>
+</section>
+<section id="v2-2-2-2025-05-26">
+<h2>v2.2.2 (2025-05-26)<a class="headerlink" href="#v2-2-2-2025-05-26" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed link in <a class="reference external" href="https://spang-lab.github.io/urnc/configuration.html">configuration page</a></p></li>
+<li><p>Added Documentation page about website generation</p></li>
+<li><p>Improved <a class="reference external" href="https://spang-lab.github.io/urnc/configuration.html#keywords">keywords chapter</a> in configuration page</p></li>
+</ul>
+</section>
+<section id="v2-2-1-2025-05-20">
+<h2>v2.2.1 (2025-05-20)<a class="headerlink" href="#v2-2-1-2025-05-20" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed a bug in <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code> that caused errors when a path outside the course was specified as output_dir</p></li>
+</ul>
+</section>
+<section id="v2-2-0-2025-05-19">
+<h2>v2.2.0 (2025-05-19)<a class="headerlink" href="#v2-2-0-2025-05-19" title="Link to this heading"></a></h2>
+<p>General:</p>
+<ul class="simple">
+<li><p>Improve path handling when inside course</p></li>
+<li><p>Improve error handling in urnc commands</p></li>
+</ul>
+<p>API:</p>
+<ul class="simple">
+<li><p>Fix: <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code> and <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">student</span></code> now raise an error if <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> is missing</p></li>
+<li><p>Fix: <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">init</span></code> now provides ci actions</p></li>
+<li><p>Fix: <code class="docutils literal notranslate"><span class="pre">root</span> <span class="pre">path</span></code> in convert is now detected correctly</p></li>
+<li><p>Add: <code class="docutils literal notranslate"><span class="pre">urn</span> <span class="pre">convert</span></code> now provides default values for targets without output</p></li>
+<li><p>Add: <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">convert</span></code> convert now supports a <code class="docutils literal notranslate"><span class="pre">--target</span></code> argument</p></li>
+</ul>
+<p>Internal:</p>
+<ul class="simple">
+<li><p>Disable patch coverage requirement</p></li>
+<li><p>Fix ci actions by adding dummy git credentials</p></li>
+<li><p>Bump version to 2.2.0</p></li>
+<li><p>Improve out of convert</p></li>
+<li><p>Add strict arg to read_config</p></li>
+<li><p>Improve handling of bare repos in ci</p></li>
+<li><p>Make initial commit in student remote in init</p></li>
+<li><p>Do not return repo objs to prevent leaks</p></li>
+<li><p>Pytest now uses temp dirs for every test</p></li>
+<li><p>Add dirs_equa and read_notebookl to util</p></li>
+<li><p>Add template option to urnc init</p></li>
+<li><p>Fix handling relative paths in NbPath</p></li>
+</ul>
+</section>
+<section id="v2-1-1-2025-05-16">
+<h2>v2.1.1 (2025-05-16)<a class="headerlink" href="#v2-1-1-2025-05-16" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added descriptions to previously undocumented CLI options.</p></li>
+<li><p>Improved existing descriptions of CLI options.</p></li>
+</ul>
+</section>
+<section id="v2-1-0-2025-05-16">
+<h2>v2.1.0 (2025-05-16)<a class="headerlink" href="#v2-1-0-2025-05-16" title="Link to this heading"></a></h2>
+<p>API Related:</p>
+<ul class="simple">
+<li><p>Added documentation for ‘Existing commands’, ‘Configuration options’ and
+‘Placeholders’</p></li>
+<li><p>Improved documentation for ‘Contributing’ and ‘Changelog’</p></li>
+<li><p>Removed documentation for ‘Modules’ (The python interface is considered
+internal and therefore only the command line interface will be documented in
+future versions)</p></li>
+<li><p>Added the following new arguments to <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">init</span></code>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-p,</span> <span class="pre">--path</span> <span class="pre">DIRECTORY</span></code>: Output directory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-u,</span> <span class="pre">--url</span> <span class="pre">TEXT</span></code>: Git URL for admin repository</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-s,</span> <span class="pre">--student</span> <span class="pre">TEXT</span></code>: Git URL for student repository</p></li>
+</ul>
+</li>
+</ul>
+<p>Internal:</p>
+<ul class="simple">
+<li><p>Added tests for MacOS and Windows</p></li>
+<li><p>Added tests for python versions 3.9, 3.10, 3.11 and 3.13</p></li>
+<li><p>Fixed coverage upload in CI</p></li>
+<li><p>Switched docs to Markdown format</p></li>
+<li><p>Added type hints to almost every function</p></li>
+<li><p>Added dev dependencies to pyproject.toml, i.e.,
+urnc can now be installed with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">urnc[dev]</span></code> to get all
+development dependencies as well.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">pyrightconfig.json</span></code> and recommended pyright as type checker in the
+contribution guidelines.</p></li>
+<li><p>Added tests for <code class="docutils literal notranslate"><span class="pre">convert</span></code> and <code class="docutils literal notranslate"><span class="pre">merge_dict</span></code></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">url</span></code> and <code class="docutils literal notranslate"><span class="pre">student_url</span></code> arguments to <code class="docutils literal notranslate"><span class="pre">urnc.pull.pull</span></code></p></li>
+<li><p>Made lots of refactorings to support python version below 3.12, e.g.:</p>
+<ul>
+<li><p>Used <code class="docutils literal notranslate"><span class="pre">if/else</span></code> instead of <code class="docutils literal notranslate"><span class="pre">match</span></code> (Python 3.10+)</p></li>
+<li><p>Used <code class="docutils literal notranslate"><span class="pre">Enum</span></code> instead of <code class="docutils literal notranslate"><span class="pre">StrEnum</span></code> (Python 3.11+)</p></li>
+</ul>
+</li>
+<li><p>Made even more refactorings to fix type check findings</p></li>
+<li><p>Added temp folders to <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code></p></li>
+<li><p>Simplified <code class="docutils literal notranslate"><span class="pre">test_ci.py</span></code></p></li>
+</ul>
+</section>
+<section id="v2-0-12-2025-05-07">
+<h2>v2.0.12 (2025-05-07)<a class="headerlink" href="#v2-0-12-2025-05-07" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed a bug where multiple targets were falsely generated in sequence. For example, if both ‘student’ and ‘solution’ targets were defined, the solution target was created from the ‘student’ version after solutions had already been removed.</p></li>
+</ul>
+</section>
+<section id="v2-0-11-2025-05-02">
+<h2>v2.0.11 (2025-05-02)<a class="headerlink" href="#v2-0-11-2025-05-02" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">student</span></code>/ <code class="docutils literal notranslate"><span class="pre">ci</span></code> command: time zones in timestamps in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> are now handled correctly.</p></li>
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">convert</span> <span class="pre">--solution</span> <span class="pre">INPUT</span></code>: manually tagged solutions are no longer removed.</p></li>
+</ul>
+</section>
+<section id="v2-0-10-2025-04-03">
+<h2>v2.0.10 (2025-04-03)<a class="headerlink" href="#v2-0-10-2025-04-03" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed solution detection behavior.</p></li>
+<li><p>Removed unnecessary <code class="docutils literal notranslate"><span class="pre">raise</span></code> in <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">pull</span></code>.</p></li>
+</ul>
+</section>
+<section id="v2-0-9-2025-03-21">
+<h2>v2.0.9 (2025-03-21)<a class="headerlink" href="#v2-0-9-2025-03-21" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed solution detection issues.</p></li>
+</ul>
+</section>
+<section id="v2-0-8-2025-03-11">
+<h2>v2.0.8 (2025-03-11)<a class="headerlink" href="#v2-0-8-2025-03-11" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added log statements for better debugging.</p></li>
+</ul>
+</section>
+<section id="v2-0-7-2025-03-11">
+<h2>v2.0.7 (2025-03-11)<a class="headerlink" href="#v2-0-7-2025-03-11" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added an ignore function to improve flexibility in processing.</p></li>
+</ul>
+</section>
+<section id="v2-0-6-2025-02-24">
+<h2>v2.0.6 (2025-02-24)<a class="headerlink" href="#v2-0-6-2025-02-24" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed execution-related issues.</p></li>
+</ul>
+</section>
+<section id="v2-0-5-2025-02-04">
+<h2>v2.0.5 (2025-02-04)<a class="headerlink" href="#v2-0-5-2025-02-04" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed issues with the <code class="docutils literal notranslate"><span class="pre">ci</span></code> command.</p></li>
+</ul>
+</section>
+<section id="v2-0-4-2025-02-03">
+<h2>v2.0.4 (2025-02-03)<a class="headerlink" href="#v2-0-4-2025-02-03" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed a root key error in configuration handling.</p></li>
+</ul>
+</section>
+<section id="v2-0-3-2025-02-03">
+<h2>v2.0.3 (2025-02-03)<a class="headerlink" href="#v2-0-3-2025-02-03" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> as a dependency.</p></li>
+</ul>
+</section>
+<section id="v2-0-2-2025-02-03">
+<h2>v2.0.2 (2025-02-03)<a class="headerlink" href="#v2-0-2-2025-02-03" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed issues with <code class="docutils literal notranslate"><span class="pre">strenum</span></code>.</p></li>
+</ul>
+</section>
+<section id="v2-0-1-2025-02-03">
+<h2>v2.0.1 (2025-02-03)<a class="headerlink" href="#v2-0-1-2025-02-03" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed default branch handling.</p></li>
+</ul>
+</section>
+<section id="v2-0-0-2024-10-17">
+<h2>v2.0.0 (2024-10-17)<a class="headerlink" href="#v2-0-0-2024-10-17" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Major changes to <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">pull</span></code> behavior.</p></li>
+<li><p>Disabled removal of scroll state in <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">convert</span></code>.</p></li>
+<li><p>Added support for subdirectory usage in <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code> and <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">student</span></code>.</p></li>
+<li><p>Introduced <code class="docutils literal notranslate"><span class="pre">config.git.output_dir</span></code> for better configuration.</p></li>
+</ul>
+</section>
+<section id="v1-10-6-2024-09-25">
+<h2>v1.10.6 (2024-09-25)<a class="headerlink" href="#v1-10-6-2024-09-25" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed regression tests.</p></li>
+</ul>
+</section>
+<section id="v1-10-5-2024-09-25">
+<h2>v1.10.5 (2024-09-25)<a class="headerlink" href="#v1-10-5-2024-09-25" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Limited tests to fast tests only.</p></li>
+</ul>
+</section>
+<section id="v1-10-4-2024-09-25">
+<h2>v1.10.4 (2024-09-25)<a class="headerlink" href="#v1-10-4-2024-09-25" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added a pre-release version command.</p></li>
+</ul>
+</section>
+<section id="v1-10-3-2024-04-11">
+<h2>v1.10.3 (2024-04-11)<a class="headerlink" href="#v1-10-3-2024-04-11" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed a bug in which student repos could not be pushed by <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code> if the repo already existed on the CI runner machine and was older than the corresponding remote repo (as could occur when using multiple runners which use different drives for caching). Now, whenever the repo already exists a <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code> is executed before starting the conversion.</p></li>
+</ul>
+</section>
+<section id="v1-10-2-2024-01-04">
+<h2>v1.10.2 (2024-01-04)<a class="headerlink" href="#v1-10-2-2024-01-04" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Skeletons are now removed when creating student version with solutions.</p></li>
+</ul>
+</section>
+<section id="v1-10-0-2024-01-04">
+<h2>v1.10.0 (2024-01-04)<a class="headerlink" href="#v1-10-0-2024-01-04" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added solution parameter to <code class="docutils literal notranslate"><span class="pre">urnc.convert.convert</span></code></p></li>
+<li><p>Added config option <code class="docutils literal notranslate"><span class="pre">ci.solution</span></code> to <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>. When specified, <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">student</span></code> now creates student notebooks including solutions in addition to the usual student notebooks.</p></li>
+<li><p>Info messages printed by convert now use relative paths instead of absolute paths to make them more readable.</p></li>
+<li><p>Remote images that cannot be verified now cause a warning message instead of an error message.</p></li>
+</ul>
+</section>
+<section id="v1-9-3-2024-01-01">
+<h2>v1.9.3 (2024-01-01)<a class="headerlink" href="#v1-9-3-2024-01-01" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added code coverage calculation to test action</p></li>
+<li><p>Test action now also runs regression tests in addition to unit tests.</p></li>
+</ul>
+</section>
+<section id="v1-9-2-2023-12-19">
+<h2>v1.9.2 (2023-12-19)<a class="headerlink" href="#v1-9-2-2023-12-19" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Improved unit and regression tests for better reliability.</p></li>
+<li><p>Reverted solution pattern to maintain compatibility with older notebooks. This ensures that existing notebooks using “# Solution” will still work as expected.</p></li>
+</ul>
+</section>
+<section id="v1-9-0-2023-12-19">
+<h2>v1.9.0 (2023-12-19)<a class="headerlink" href="#v1-9-0-2023-12-19" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added automatic testing for pull requests and pushes to the main branch. This helps ensure code quality and stability.</p></li>
+<li><p>Fixed a minor issue in the versioning function’s documentation.</p></li>
+</ul>
+</section>
+<section id="v1-8-0-2023-12-19">
+<h2>v1.8.0 (2023-12-19)<a class="headerlink" href="#v1-8-0-2023-12-19" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Refactored the codebase significantly. All command-line interface (CLI) functions are now organized in a single module, making the code easier to maintain and extend.</p></li>
+</ul>
+</section>
+<section id="v1-7-0-2023-12-18">
+<h2>v1.7.0 (2023-12-18)<a class="headerlink" href="#v1-7-0-2023-12-18" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Introduced a regression test suite to ensure new changes do not break existing functionality. Details are available in the <code class="docutils literal notranslate"><span class="pre">testing</span></code> documentation.</p></li>
+<li><p>Added comprehensive package documentation in the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder.</p></li>
+</ul>
+</section>
+<section id="v1-5-0-2023-10-16">
+<h2>v1.5.0 (2023-10-16)<a class="headerlink" href="#v1-5-0-2023-10-16" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added support for specifying “after” and “until” values in the <code class="docutils literal notranslate"><span class="pre">git.exclude</span></code> configuration. This allows users to exclude files based on specific time ranges, such as <code class="docutils literal notranslate"><span class="pre">{pattern:</span> <span class="pre">assignments/sheet4.ipynb,</span> <span class="pre">after:</span> <span class="pre">2023-12-04}</span></code>.</p></li>
+</ul>
+</section>
+<section id="v1-4-0-2023-10-14">
+<h2>v1.4.0 (2023-10-14)<a class="headerlink" href="#v1-4-0-2023-10-14" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added support for environment variables in the <code class="docutils literal notranslate"><span class="pre">git.student</span></code> configuration. For example, you can now use a value like <code class="docutils literal notranslate"><span class="pre">https://urncbot:{URNC_ACCESS_TOKEN_STUDENT_REPO}&#64;github.com/spang-lab/urnc-example-course-public.git</span></code>.</p></li>
+<li><p>Introduced a version flag for better version management.</p></li>
+<li><p>Replaced print statements with a logging system for improved debugging and output control.</p></li>
+</ul>
+</section>
+<section id="v1-3-0-2023-10-12">
+<h2>v1.3.0 (2023-10-12)<a class="headerlink" href="#v1-3-0-2023-10-12" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Introduced the <code class="docutils literal notranslate"><span class="pre">pull</span></code> command to fetch updates from remote repositories.</p></li>
+</ul>
+</section>
+<section id="v1-2-0-2023-10-11">
+<h2>v1.2.0 (2023-10-11)<a class="headerlink" href="#v1-2-0-2023-10-11" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Updated the <code class="docutils literal notranslate"><span class="pre">ci</span></code> command to use a separate “student” repository for better organization and workflow.</p></li>
+</ul>
+</section>
+<section id="v1-1-0-2023-10-10">
+<h2>v1.1.0 (2023-10-10)<a class="headerlink" href="#v1-1-0-2023-10-10" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added support for skeletons, allowing users to create templates for assignments.</p></li>
+<li><p>Introduced the <code class="docutils literal notranslate"><span class="pre">student</span></code> command to generate student versions of notebooks.</p></li>
+<li><p>Added the <code class="docutils literal notranslate"><span class="pre">check</span></code> command to validate notebooks for errors.</p></li>
+<li><p>Deprecated the use of “Exercise” in favor of “Assignments” for better clarity.</p></li>
+</ul>
+</section>
+<section id="v1-0-0-2023-09-22">
+<h2>v1.0.0 (2023-09-22)<a class="headerlink" href="#v1-0-0-2023-09-22" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Initial stable release of the URNC tool.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="contributing.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2025, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

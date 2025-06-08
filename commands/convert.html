@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convert &mdash; urnc 2.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Execute" href="execute.html" />
+    <link rel="prev" title="Clone" href="clone.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="check.html">check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">ci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clone.html">clone</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">convert</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#input">INPUT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#t-target-target">-t, –target TARGET</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#o-output-outpath">-o, –output OUTPATH</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#s-solution-solpath">-s, –solution SOLPATH</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#n-dry-run">-n, –dry-run</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#f-force">-f, –force</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#i-interactive">-i, –interactive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#h-help">-h, –help</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="execute.html">execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init.html">init</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pull.html">pull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="student.html">student</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html">version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../website-generation.html">Website-Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../placeholders.html">Placeholders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Commands</a></li>
+      <li class="breadcrumb-item active">Convert</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/commands/convert.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="convert">
+<h1>Convert<a class="headerlink" href="#convert" title="Link to this heading"></a></h1>
+<p>Converts input notebooks to the specified target formats.</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">urnc</span> <span class="n">convert</span> <span class="p">[</span><span class="o">-</span><span class="n">f</span><span class="o">|-</span><span class="n">n</span><span class="o">|-</span><span class="n">i</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">TARGET</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span> <span class="n">SOLPATH</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">o</span> <span class="n">OUTPATH</span><span class="p">]</span> <span class="n">INPUT</span>
+</pre></div>
+</div>
+</section>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>Notebook conversion by <code class="docutils literal notranslate"><span class="pre">urnc</span></code> happens in two stages:</p>
+<ol class="arabic simple">
+<li><p>All lines of all input notebooks are checked for [keywords].
+If a keyword is found, the containing cell is [tagged] accordingly.</p></li>
+<li><p>All tagged cells are processed according to the specified target format.</p></li>
+</ol>
+<p>This two-stage approach allows manual tagging of cells in addition to the use of
+keywords to configure the conversion behaviour. See <a class="reference internal" href="#t-target-target">-t, –target
+TARGET</a> for a description of the effect of each tag on the
+conversion targets.</p>
+</section>
+<section id="options">
+<h2>Options<a class="headerlink" href="#options" title="Link to this heading"></a></h2>
+<section id="input">
+<h3>INPUT<a class="headerlink" href="#input" title="Link to this heading"></a></h3>
+<p>Path to a single input notebook or a directory containing notebooks.
+If INPUT is a directory, all notebooks in the directory are converted recursively.</p>
+</section>
+<section id="t-target-target">
+<h3>-t, –target TARGET<a class="headerlink" href="#t-target-target" title="Link to this heading"></a></h3>
+<p>Specifies the conversion target, i.e., the type of conversion to be performed.
+This option can be used multiple times to specify multiple targets.
+Valid targets are: <code class="docutils literal notranslate"><span class="pre">student</span></code>, <code class="docutils literal notranslate"><span class="pre">solution</span></code>, <code class="docutils literal notranslate"><span class="pre">execute</span></code>, <code class="docutils literal notranslate"><span class="pre">clear</span></code>, and <code class="docutils literal notranslate"><span class="pre">fix</span></code>.
+Every target can contain an additional, colon-seperated output path, e.g.
+<code class="docutils literal notranslate"><span class="pre">student:out</span></code> or <code class="docutils literal notranslate"><span class="pre">solution:C:\tmp</span></code>.
+Paths can contain <a class="reference internal" href="../placeholders.html"><span class="std std-doc">placeholder variables</span></a>.
+If not output path is provided, a target-specific default location is used, as
+described in <a class="reference internal" href="../placeholders.html#plain-directory-paths"><span class="std std-ref">Plain Directory Paths</span></a>.
+Depending on the target, the following actions are performed for each input
+notebook:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">student</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Tag cells matching <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">&lt;solution-keyword&gt;</span></code> as <code class="docutils literal notranslate"><span class="pre">solution</span></code>.</p></li>
+<li><p>Tag cells matching <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">&lt;skeleton-keyword&gt;</span></code> as <code class="docutils literal notranslate"><span class="pre">skeleton</span></code>.</p></li>
+<li><p>Find cells tagged as <code class="docutils literal notranslate"><span class="pre">solution</span></code> and/or <code class="docutils literal notranslate"><span class="pre">skeleton</span></code> but not as <code class="docutils literal notranslate"><span class="pre">ignore</span></code>.</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">solution</span></code> lines and uncomment <code class="docutils literal notranslate"><span class="pre">skeleton</span></code> lines from these cells.</p></li>
+</ol>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solution</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Tag cells matching <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">&lt;skeleton-keyword&gt;</span></code> as <code class="docutils literal notranslate"><span class="pre">skeleton</span></code>.</p></li>
+<li><p>Find cells tagged as <code class="docutils literal notranslate"><span class="pre">skeleton</span></code>, but not as <code class="docutils literal notranslate"><span class="pre">ignore</span></code>.</p></li>
+<li><p>Uncomment <code class="docutils literal notranslate"><span class="pre">skeleton</span></code> lines in these cells.</p></li>
+</ol>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">execute</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Tag cells matching <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">&lt;solution-keyword&gt;</span></code> as <code class="docutils literal notranslate"><span class="pre">solution</span></code>.</p></li>
+<li><p>Find cells tagged as <code class="docutils literal notranslate"><span class="pre">solution</span></code> but not as <code class="docutils literal notranslate"><span class="pre">noexecute</span></code>.</p></li>
+<li><p>Execute these cells.</p></li>
+</ol>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clear</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Clear all output cells in the notebook.</p></li>
+</ol>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fix</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Fix all image paths in the notebook.</p></li>
+</ol>
+</li>
+</ol>
+<p>A summary of the effect of each tag (rows) on each target (columns) is shown below:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>student</p></th>
+<th class="head"><p>solution</p></th>
+<th class="head"><p>execute</p></th>
+<th class="head"><p>clear</p></th>
+<th class="head"><p>fix</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ignore</p></td>
+<td><p>skip</p></td>
+<td><p>skip</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>noexecute</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>skip</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+</tr>
+<tr class="row-even"><td><p>solution</p></td>
+<td><p>remove</p></td>
+<td><p>.</p></td>
+<td><p>execute</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>skeleton</p></td>
+<td><p>uncomment</p></td>
+<td><p>remove</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+</tr>
+<tr class="row-even"><td><p>assignment</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>assignmentstart</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+<td><p>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="o-output-outpath">
+<h3>-o, –output OUTPATH<a class="headerlink" href="#o-output-outpath" title="Link to this heading"></a></h3>
+<p>Path for storing the output of the <a class="reference internal" href="#t-target-target"><code class="docutils literal notranslate"><span class="pre">student</span></code> target</a>.
+Can be a file or directory path.
+If <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">OUTPATH</span></code> is not specified, <code class="docutils literal notranslate"><span class="pre">out/</span></code> is used by default.
+Supports <a class="reference internal" href="../placeholders.html"><span class="std std-doc">placeholder variables</span></a>.</p>
+<p>Remark: specifying <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">OUTPUT</span></code> is equivalent to specifying <code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">student:OUTPATH</span></code>.</p>
+</section>
+<section id="s-solution-solpath">
+<h3>-s, –solution SOLPATH<a class="headerlink" href="#s-solution-solpath" title="Link to this heading"></a></h3>
+<p>Path for storing the output of the <a class="reference internal" href="#t-target-target"><code class="docutils literal notranslate"><span class="pre">solution</span></code> target</a>.
+Can be a file or directory path.
+If <code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">SOLPATH</span></code> is not specified, the solution target is not generated (unless
+specified via <code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">solution</span></code>).
+Supports <a class="reference internal" href="../placeholders.html"><span class="std std-doc">placeholder variables</span></a>.</p>
+<p>Remark: specifying <code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">SOLPATH</span></code> is equivalent to specifying <code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">solution:SOLPATH</span></code>.</p>
+</section>
+<section id="n-dry-run">
+<h3>-n, –dry-run<a class="headerlink" href="#n-dry-run" title="Link to this heading"></a></h3>
+<p>If specified, the conversions are performed in memory but nothing gets written
+to disk.</p>
+</section>
+<section id="f-force">
+<h3>-f, –force<a class="headerlink" href="#f-force" title="Link to this heading"></a></h3>
+<p>By default, if an output path exists already, the conversion is skipped.
+Specifying <code class="docutils literal notranslate"><span class="pre">-f</span></code> forces existing files to be overwritten.</p>
+</section>
+<section id="i-interactive">
+<h3>-i, –interactive<a class="headerlink" href="#i-interactive" title="Link to this heading"></a></h3>
+<p>If an output path exists already, the user is prompted for confirmation before
+overwriting it.</p>
+</section>
+<section id="h-help">
+<h3>-h, –help<a class="headerlink" href="#h-help" title="Link to this heading"></a></h3>
+<p>Show this help message and exit.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="clone.html" class="btn btn-neutral float-left" title="Clone" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="execute.html" class="btn btn-neutral float-right" title="Execute" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2025, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

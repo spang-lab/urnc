@@ -1,0 +1,180 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Version &mdash; urnc 2.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Configuration" href="../configuration.html" />
+    <link rel="prev" title="CI" href="student.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="check.html">check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">ci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clone.html">clone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convert.html">convert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="execute.html">execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init.html">init</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pull.html">pull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="student.html">student</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">version</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#action">ACTION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#self">–self</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#help">–help</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../website-generation.html">Website-Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../placeholders.html">Placeholders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Commands</a></li>
+      <li class="breadcrumb-item active">Version</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/commands/version.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="version">
+<h1>Version<a class="headerlink" href="#version" title="Link to this heading"></a></h1>
+<p>Manage the semantic version of your course</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>urnc version [OPTIONS] [ACTION]
+</pre></div>
+</div>
+</section>
+<section id="options">
+<h2>Options<a class="headerlink" href="#options" title="Link to this heading"></a></h2>
+<section id="action">
+<h3>ACTION<a class="headerlink" href="#action" title="Link to this heading"></a></h3>
+<p>Which action to perform.
+Can be show, major, minor, patch or prerelease.
+The result of each action is described in the following listing:</p>
+<ul class="simple">
+<li><p>show: prints the current course version</p></li>
+<li><p>major: increase the major part of the current version</p></li>
+<li><p>minor: increase the minor part of the current version</p></li>
+<li><p>patch: increase the patch part of the current version</p></li>
+<li><p>prerelease: increase the prerelease part of the current version</p></li>
+</ul>
+</section>
+<section id="self">
+<h3>–self<a class="headerlink" href="#self" title="Link to this heading"></a></h3>
+<p>Print urnc’s own version. Same as <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">--version</span></code>.</p>
+</section>
+<section id="help">
+<h3>–help<a class="headerlink" href="#help" title="Link to this heading"></a></h3>
+<p>Show this message and exit.</p>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming the current version defined in config.yaml is 2.1.6</span>
+urnc<span class="w"> </span>version<span class="w"> </span>show<span class="w">  </span><span class="c1"># would print 2.1.6</span>
+urnc<span class="w"> </span>version<span class="w"> </span>major<span class="w"> </span><span class="c1"># would change the version to 3.0.0</span>
+urnc<span class="w"> </span>version<span class="w"> </span>minor<span class="w"> </span><span class="c1"># would change the version to 2.2.0</span>
+urnc<span class="w"> </span>version<span class="w"> </span>patch<span class="w"> </span><span class="c1"># would change the version to 2.1.7</span>
+urnc<span class="w"> </span>version<span class="w"> </span>pre-release<span class="w"> </span><span class="c1"># would change the version to 3.0.0-rc1</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="student.html" class="btn btn-neutral float-left" title="CI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../configuration.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2025, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

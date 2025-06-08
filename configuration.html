@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration &mdash; urnc 2.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c3c8ae58"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Website Generation" href="website-generation.html" />
+    <link rel="prev" title="Version" href="commands/version.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands/index.html">Commands</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-config">Example Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-options">Configuration Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#name">name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#semester">semester</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#version">version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#description">description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authors">authors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#git">git</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#student">student</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#output-dir">output_dir</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#exclude">exclude</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#convert">convert</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#keywords">keywords</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#targets">targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ignore">ignore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tags">tags</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#jupyter">jupyter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#links">links</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#users">users</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="website-generation.html">Website-Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="placeholders.html">Placeholders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/configuration.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h1>
+<p>Most urnc commands operate on a complete course, containing multiple jupyter notebooks (e.g. <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">student</span></code>, <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">version</span></code> or <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code>).</p>
+<p>The exact behaviour of these commands can be configured by editing the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file in the course root directory. This file is created automatically when you run <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">init</span></code> for the first time.</p>
+<p>An example <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> is given in section <a class="reference internal" href="#example-config">Example Config</a>. Descriptions for each field are provided in section <a class="reference internal" href="#configuration-options">Configuration Options</a>.</p>
+<section id="example-config">
+<h2>Example Config<a class="headerlink" href="#example-config" title="Link to this heading"></a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;URNC</span><span class="nv"> </span><span class="s">Example</span><span class="nv"> </span><span class="s">Course&quot;</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.4&quot;</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Example</span><span class="nv"> </span><span class="s">course</span><span class="nv"> </span><span class="s">demonstrating</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">use</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">URNC</span><span class="nv"> </span><span class="s">(https://github.com/spang-lab/urnc)&quot;</span>
+<span class="nt">authors</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Tobias</span><span class="nv"> </span><span class="s">Schmidt&quot;</span><span class="p p-Indicator">,</span><span class="nt"> email</span><span class="p">:</span><span class="w"> </span><span class="nv">tobias.schmidt331@gmail.com</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Michael</span><span class="nv"> </span><span class="s">Huttner&quot;</span><span class="p p-Indicator">,</span><span class="nt"> email</span><span class="p">:</span><span class="w"> </span><span class="nv">michael@mhuttner.com</span><span class="p p-Indicator">}</span>
+<span class="nt">git</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">student</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://USERNAME:PASSWORD@github.com/spang-lab/urnc-example-course-public.git&quot;</span>
+<span class="w">    </span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;out&quot;</span>
+<span class="w">    </span><span class="nt">exclude</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;config.yaml&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;README.md&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;assignments/*&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!assignments/01*.ipynb&quot;</span><span class="p p-Indicator">,</span><span class="nt"> after</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2023-10-02&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!assignments/02*.ipynb&quot;</span><span class="p p-Indicator">,</span><span class="nt"> after</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2023-10-09&quot;</span><span class="p p-Indicator">}</span>
+<span class="nt">convert</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">keywords</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">assignment</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Lab&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Assignment&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">skeleton</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Skeleton&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Solution&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;student&quot;</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{nb.abspath}&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;solution&quot;</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{nb.absdirpath}_solutions/{nb.name}&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">ignore</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;solution&quot;</span>
+<span class="w">        </span><span class="nt">skeleton</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skeleton&quot;</span>
+<span class="w">        </span><span class="nt">assignment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;assignment&quot;</span>
+<span class="w">        </span><span class="nt">assignment-start</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;assignment-start&quot;</span>
+<span class="w">        </span><span class="nt">ignore</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ignore&quot;</span>
+<span class="w">        </span><span class="nt">no-execute</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;no-execute&quot;</span>
+<span class="nt">jupyter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.13.0</span>
+<span class="w">    </span><span class="nt">links</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">Webpage</span><span class="p p-Indicator">,</span><span class="nt"> url</span><span class="p">:</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//spang-lab.github.io/urnc-example-course</span><span class="p p-Indicator">}</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">logo</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://placehold.co/64&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">pull_url</span><span class="p">:</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//github.com/spang-lab/urnc-example-course-public.git</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">users</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;mhuttner&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;tschmidt&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-options">
+<h2>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading"></a></h2>
+<section id="name">
+<h3>name<a class="headerlink" href="#name" title="Link to this heading"></a></h3>
+<p>Name of the course as free text.</p>
+</section>
+<section id="semester">
+<h3>semester<a class="headerlink" href="#semester" title="Link to this heading"></a></h3>
+<p>Semester of the course as free text.</p>
+</section>
+<section id="version">
+<h3>version<a class="headerlink" href="#version" title="Link to this heading"></a></h3>
+<p>Semantic version of the course, e.g., ‘1.0.0’.</p>
+</section>
+<section id="description">
+<h3>description<a class="headerlink" href="#description" title="Link to this heading"></a></h3>
+<p>Description of the course as free text.</p>
+</section>
+<section id="authors">
+<h3>authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
+<p>List of authors. Each author must be a dictionary with a <code class="docutils literal notranslate"><span class="pre">name</span></code> and
+<code class="docutils literal notranslate"><span class="pre">email</span></code> field.</p>
+</section>
+<section id="git">
+<h3>git<a class="headerlink" href="#git" title="Link to this heading"></a></h3>
+<p>Dictionary of the following git-related options: <a class="reference internal" href="#student">student</a>, <a class="reference internal" href="#output-dir">output_dir</a>, <a class="reference internal" href="#exclude">exclude</a>.</p>
+<section id="student">
+<h4>student<a class="headerlink" href="#student" title="Link to this heading"></a></h4>
+<p>URL to the public repository where course materials are published for students. The URL must include valid credentials, as it is used by <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code> to push the processed course materials (e.g., notebooks without solutions). If your main repository is public, we recommend using CI tools like <a class="reference external" href="https://docs.gitlab.com/ee/ci/variables/">GitLab CI/CD Variables</a> or <a class="reference external" href="https://docs.github.com/en/actions/security-guides/encrypted-secrets">GitHub Actions Secrets</a> to securely manage credentials and inject them at runtime during pipeline execution.</p>
+</section>
+<section id="output-dir">
+<h4>output_dir<a class="headerlink" href="#output-dir" title="Link to this heading"></a></h4>
+<p>Directory where the processed course materials are stored when calling <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">student</span></code> or <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code>. If <a class="reference internal" href="#student"><code class="docutils literal notranslate"><span class="pre">git.student</span></code></a> is provided, the given repository will be cloned into this directory before starting the conversions. It’s highly recommended to add this directory to your <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>.</p>
+</section>
+<section id="exclude">
+<h4>exclude<a class="headerlink" href="#exclude" title="Link to this heading"></a></h4>
+<p>List of files or directories to exclude from publishing with <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code>. Each entry is treated as a glob pattern and can be either a string or a dictionary. If you use a dictionary, it must include a <code class="docutils literal notranslate"><span class="pre">pattern</span></code> field and can optionally include <code class="docutils literal notranslate"><span class="pre">after</span></code> and <code class="docutils literal notranslate"><span class="pre">until</span></code> fields to specify time-based conditions. At runtime, entries that meet these time conditions are appended to the <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> file in the <code class="docutils literal notranslate"><span class="pre">output_dir</span></code>, ensuring they are ignored during publishing.</p>
+<p>In the example below, the file <code class="docutils literal notranslate"><span class="pre">aaa.md</span></code> is always ignored. All files in the <code class="docutils literal notranslate"><span class="pre">tmp</span></code> folder are also ignored, except for <code class="docutils literal notranslate"><span class="pre">tmp/abc.md</span></code> and <code class="docutils literal notranslate"><span class="pre">tmp/xyz.md</span></code>. The file <code class="docutils literal notranslate"><span class="pre">tmp/abc.md</span></code> is not ignored from 2023-10-02 until 2023-10-09, and <code class="docutils literal notranslate"><span class="pre">tmp/xyz.md</span></code> is not ignored after 2023-10-09.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">git</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">exclude</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;aaa.md&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;tmp/*&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!tmp/abc.md&quot;</span><span class="p p-Indicator">,</span><span class="nt"> after</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2023-10-02&quot;</span><span class="p p-Indicator">,</span><span class="nt"> until</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2023-10-09&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!tmp/xyz.md&quot;</span><span class="p p-Indicator">,</span><span class="nt"> after</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2023-10-09&quot;</span><span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="convert">
+<h3>convert<a class="headerlink" href="#convert" title="Link to this heading"></a></h3>
+<p>Dictionary of the following conversion-related options: <a class="reference internal" href="#keywords">keywords</a>, <a class="reference internal" href="#targets">targets</a>, <a class="reference internal" href="#ignore">ignore</a>, and <a class="reference internal" href="#tags">tags</a>.</p>
+<section id="keywords">
+<h4>keywords<a class="headerlink" href="#keywords" title="Link to this heading"></a></h4>
+<p>Keywords used to categorize lines within each notebook. Currently, the following categories are supported: <code class="docutils literal notranslate"><span class="pre">assignment</span></code>, <code class="docutils literal notranslate"><span class="pre">skeleton</span></code>, and <code class="docutils literal notranslate"><span class="pre">solution</span></code>. Lines matching <code class="docutils literal notranslate"><span class="pre">^\s*(#{1,6})\s*\b{keyword}\b.*$</span></code> start the respective category. Lines matching <code class="docutils literal notranslate"><span class="pre">^\s*(#{1,6})\s*$</span></code> end the current category. Depending on the conversion target, lines of a certain type are either removed, transformed, or left unchanged in the notebook. Example: if you configure <code class="docutils literal notranslate"><span class="pre">solution:</span> <span class="pre">&quot;SOL&quot;</span></code> (i.e. you set the <code class="docutils literal notranslate"><span class="pre">solution</span></code> keyword to <code class="docutils literal notranslate"><span class="pre">SOL</span></code>) the following cell would be tagged as <code class="docutils literal notranslate"><span class="pre">solution</span></code> and lines 2-4 would be removed in the <code class="docutils literal notranslate"><span class="pre">student</span></code> notebook:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enter your solution here   # left unchanged</span>
+<span class="c1">### SOL                      # gets removed</span>
+<span class="nb">sum</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>           <span class="c1"># gets removed</span>
+<span class="c1">###                          # gets removed</span>
+</pre></div>
+</div>
+</section>
+<section id="targets">
+<h4>targets<a class="headerlink" href="#targets" title="Link to this heading"></a></h4>
+<p>List of conversion targets created by <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">ci</span></code> and <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">student</span></code>.
+Each target must be a dictionary with fields <code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">path</span></code>.
+Field <code class="docutils literal notranslate"><span class="pre">type</span></code> defines what kind of conversion is performed.
+Supported types are: <code class="docutils literal notranslate"><span class="pre">student</span></code>, <code class="docutils literal notranslate"><span class="pre">solution</span></code>, <code class="docutils literal notranslate"><span class="pre">execute</span></code>, <code class="docutils literal notranslate"><span class="pre">clear</span></code>, <code class="docutils literal notranslate"><span class="pre">fix</span></code>.
+Field <code class="docutils literal notranslate"><span class="pre">path</span></code> defines where the converted notebooks get saved and can contain <a class="reference internal" href="placeholders.html#placeholder-variables"><span class="std std-ref">placeholder variables</span></a>.</p>
+<p>Conversions of individual notebooks can be tested using the commands shown in the example below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>urnc<span class="w"> </span>convert<span class="w"> </span>--output<span class="w"> </span>student_version.ipynb<span class="w"> </span>input_notebook.ipynb
+urnc<span class="w"> </span>convert<span class="w"> </span>--solution<span class="w"> </span>solution_version.ipynb<span class="w"> </span>input_notebook.ipynb
+urnc<span class="w"> </span>check<span class="w"> </span>--clear<span class="w"> </span>input_notebook.ipynb<span class="w"> </span><span class="c1"># clears output cells inplace</span>
+urnc<span class="w"> </span>check<span class="w"> </span>--image<span class="w"> </span>input_notebook.ipynb<span class="w"> </span><span class="c1"># fixes image paths inplace</span>
+urnc<span class="w"> </span>execute<span class="w"> </span>input_notebook.ipynb
+</pre></div>
+</div>
+</section>
+<section id="ignore">
+<h4>ignore<a class="headerlink" href="#ignore" title="Link to this heading"></a></h4>
+<p>List of glob patterns to ignore during conversion.
+This is different from <a class="reference internal" href="#exclude"><code class="docutils literal notranslate"><span class="pre">git.exclude</span></code></a>, because it suppresses the actual conversion of the notebook, whereas <code class="docutils literal notranslate"><span class="pre">git.exclude</span></code> only suppresses the publishing of the notebook.</p>
+</section>
+<section id="tags">
+<h4>tags<a class="headerlink" href="#tags" title="Link to this heading"></a></h4>
+<p>Dictionary of tags used by <code class="docutils literal notranslate"><span class="pre">urnc</span></code> to categorize cells in the notebook.
+Cell categories used by <code class="docutils literal notranslate"><span class="pre">urnc</span></code> are <code class="docutils literal notranslate"><span class="pre">solution</span></code>, <code class="docutils literal notranslate"><span class="pre">skeleton</span></code>, <code class="docutils literal notranslate"><span class="pre">assignment</span></code>, <code class="docutils literal notranslate"><span class="pre">assignment-start</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, and <code class="docutils literal notranslate"><span class="pre">no-execute</span></code>.
+The default values for tagging such cells are:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tags</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;solution&quot;</span>
+<span class="w">    </span><span class="nt">skeleton</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skeleton&quot;</span>
+<span class="w">    </span><span class="nt">assignment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;assignment&quot;</span>
+<span class="w">    </span><span class="nt">assignment-start</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;assignment-start&quot;</span>
+<span class="w">    </span><span class="nt">ignore</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ignore&quot;</span>
+<span class="w">    </span><span class="nt">no-execute</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;no-execute&quot;</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="commands/convert.html"><span class="std std-doc">urnc convert</span></a> for details on how each tag affects the conversion process for each target type.</p>
+</section>
+</section>
+<section id="jupyter">
+<h3>jupyter<a class="headerlink" href="#jupyter" title="Link to this heading"></a></h3>
+<p>Dictionary of the following Jupyter/JupyterHub-related options: <a class="reference internal" href="#version">version</a>, <a class="reference internal" href="#links">links</a>, <a class="reference internal" href="#users">users</a>.</p>
+<p>This field is not used by <code class="docutils literal notranslate"><span class="pre">urnc</span></code> directly, but by the script for generating a JupyterHub server list at runtime.</p>
+<section id="id1">
+<h4>version<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<p>Specifies the version of the image used by JupyterHub.</p>
+</section>
+<section id="links">
+<h4>links<a class="headerlink" href="#links" title="Link to this heading"></a></h4>
+<p>List of links displayed below the course name in the JupyterHub server list.
+Each link must be given as a dictionary with a <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">url</span></code> field, except for the following two special cases:</p>
+<ol class="arabic simple">
+<li><p>If a dictionary contains a <code class="docutils literal notranslate"><span class="pre">logo</span></code> field, that logo will be displayed next to the course name in the JupyterHub server list. Other dictionary fields are ignored in this case.</p></li>
+<li><p>If a dictionary contains a <code class="docutils literal notranslate"><span class="pre">pull_url</span></code> field, that URL will be used by <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">pull</span></code> to clone or pull the course repository inside the container before the user is redirected to the JupyterHub server. Other dictionary fields are ignored in this case.</p></li>
+</ol>
+</section>
+<section id="users">
+<h4>users<a class="headerlink" href="#users" title="Link to this heading"></a></h4>
+<p>List of users allowed to access this profile on the JupyterHub server.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="commands/version.html" class="btn btn-neutral float-left" title="Version" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="website-generation.html" class="btn btn-neutral float-right" title="Website Generation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2025, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

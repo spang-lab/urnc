@@ -1,0 +1,207 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing &mdash; urnc 2.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c3c8ae58"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Placeholders" href="placeholders.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="website-generation.html">Website-Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="placeholders.html">Placeholders</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#always-start-with-an-issue">Always start with an Issue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-updates">Making Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/contributing.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h1>
+<section id="always-start-with-an-issue">
+<h2>Always start with an Issue<a class="headerlink" href="#always-start-with-an-issue" title="Link to this heading"></a></h2>
+<p>In case you have <strong>questions</strong>, <strong>feature requests</strong> or find any
+<strong>bugs</strong> in urnc, please create a corresponding <a class="reference external" href="https://github.com/spang-lab/urnc/issues">issue</a>.</p>
+<p>In case you want to <strong>write code</strong> for this package, please also
+create an issue first, in which you describe your planned code
+contribution. After acceptance of your proposal by an active
+maintainer of the repository you will get permissions to create
+branches for this repository. After this, follow the steps
+outlined below to create a new version of urnc.</p>
+</section>
+<section id="making-updates">
+<h2>Making Updates<a class="headerlink" href="#making-updates" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Clone</strong></p>
+<ul class="simple">
+<li><p>Clone the <a class="reference external" href="https://github.com/spang-lab/urnc">urnc repository</a></p></li>
+<li><p>Create a new branch for your changes</p></li>
+</ul>
+</li>
+<li><p><strong>Edit, Test and Document</strong></p>
+<ul class="simple">
+<li><p>Update the files in folder <a class="reference external" href="https://github.com/spang-lab/urnc/tree/main/urnc">urnc</a></p></li>
+<li><p>Use <a class="reference external" href="https://pypi.org/project/autopep8/">autopep8</a> to format your code</p></li>
+<li><p>Use <a class="reference external" href="https://microsoft.github.io/pyright/#/">pyright</a> for type checking</p></li>
+<li><p>Test your changes as described in <a class="reference internal" href="#testing">Testing</a></p></li>
+<li><p>If necessary, add or update the <a class="reference external" href="https://github.com/spang-lab/urnc/tree/main/tests">tests</a></p></li>
+<li><p>Increase the version in <a class="reference external" href="https://github.com/spang-lab/urnc/blob/main/pyproject.toml">pyproject.toml</a></p></li>
+<li><p>Describe your changes in <a class="reference external" href="https://github.com/spang-lab/urnc/tree/main/docs/source">docs/source/changelog.md</a></p></li>
+</ul>
+</li>
+<li><p><strong>Push and create a Pull Request</strong></p>
+<ul class="simple">
+<li><p>Push your changes</p></li>
+<li><p>Create a pull request</p></li>
+<li><p>Wait for the automated tests to finish</p></li>
+<li><p>If any test fails, fix and repeat</p></li>
+<li><p>If all tests pass, wait for a maintainer to review your changes</p></li>
+</ul>
+</li>
+<li><p><strong>Wait for acceptance</strong></p>
+<ul class="simple">
+<li><p>If a maintainer requests changes, make the changes and push again</p></li>
+<li><p>If a maintainer approves your changes, they will merge your pull request into main and create a new version tag</p></li>
+<li><p>After the tag has been created, a new github release and pypi release will be created automatically.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
+<p>We use <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> together with <a class="reference external" href="https://github.com/spulec/freezegun">freezegun</a> and <a class="reference external" href="https://pypi.org/project/pytest-cov/">pytest-cov</a> for testing. To run the full test suite, install the mentioned packages and <code class="docutils literal notranslate"><span class="pre">urnc</span></code>, then call <code class="docutils literal notranslate"><span class="pre">pytest</span></code> from the root of the repository. The tests are located in the <a class="reference external" href="https://github.com/spang-lab/urnc/tree/main/tests">tests</a> folder. To run a specific test, use the <code class="docutils literal notranslate"><span class="pre">-k</span></code> flag, e.g., <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">-k</span> <span class="pre">test_version</span></code>.</p>
+<p>To avoid having to install the package repeatedly after each change, we recommend performing an <a class="reference external" href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html">editable install</a> using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code>. This allows you to modify the source code and run the tests for the modified version without needing to reinstall the package. Note, however, that it is still required to reinstall the package whenever you modify the <a class="reference external" href="https://github.com/spang-lab/urnc/tree/main/pyproject.toml"><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a> file.</p>
+<p>See below for a selection of useful commands for testing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install urnc in editable mode (incl. dev dependencies)</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/spang-lab/urnc.git
+<span class="nb">cd</span><span class="w"> </span>urnc
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev<span class="o">]</span>
+
+<span class="c1"># Run tests</span>
+pytest<span class="w">                 </span><span class="c1"># Run all tests</span>
+pytest<span class="w"> </span>-k<span class="w"> </span>test_version<span class="w"> </span><span class="c1"># Run only tests from test_version.py</span>
+pytest<span class="w"> </span>-s<span class="w">              </span><span class="c1"># Show STDOUT during tests</span>
+pytest<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w">            </span><span class="c1"># Use 2 cores (requires pytest-xdist)</span>
+
+<span class="c1"># Recommended command to run full test incl. coverage report</span>
+pytest<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>--cov<span class="o">=</span>urnc<span class="w"> </span>--cov-report<span class="o">=</span>term-missing
+</pre></div>
+</div>
+<p>Hint: if you’re not using your system’s default python version, you may need to use <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pytest</span></code> instead of <code class="docutils literal notranslate"><span class="pre">pytest</span></code> in the commands above.</p>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h2>
+<p>Documentation for this package is generated automatically upon pushes to the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch using <a class="reference external" href="https://www.sphinx-doc.org/en/master/index.html">Sphinx</a> with the extensions <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html">autodoc</a> and <a class="reference external" href="https://myst-parser.readthedocs.io/en/latest/">myst_parser</a>. The relevant commands to generate the documentation pages locally are listed below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install urnc in editable mode (incl. dev dependencies)</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/spang-lab/urnc.git
+<span class="nb">cd</span><span class="w"> </span>urnc
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev<span class="o">]</span>
+
+<span class="c1"># Build documentation</span>
+<span class="nb">cd</span><span class="w"> </span>docs
+make<span class="w"> </span>html<span class="w"> </span><span class="c1"># Other formats are: epub, latex, latexpdf</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="placeholders.html" class="btn btn-neutral float-left" title="Placeholders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2025, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

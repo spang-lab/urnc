@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Placeholders &mdash; urnc 2.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c3c8ae58"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="Website Generation" href="website-generation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            urnc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="website-generation.html">Website-Generation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Placeholders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#placeholder-variables">Placeholder Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#motivation">Motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plain-directory-paths">Plain Directory Paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">urnc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Placeholders</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/placeholders.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="placeholders">
+<h1>Placeholders<a class="headerlink" href="#placeholders" title="Link to this heading"></a></h1>
+<p>Since most <code class="docutils literal notranslate"><span class="pre">urnc</span></code> commands accept directories as input, it is crucial to have a
+flexible mechanism for specifying output paths. Urnc provides this functionality
+through a set of placeholder variables, which can be used to define output paths
+in commands or configuration files. The supported placeholders are listed
+in section <a class="reference internal" href="#placeholder-variables">Placeholder Variables</a>.</p>
+<section id="placeholder-variables">
+<h2>Placeholder Variables<a class="headerlink" href="#placeholder-variables" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nb.abspath</span></code> Absolute path to the input notebook.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nb.absdirpath</span></code> Absolute path to the directory containing the notebook.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nb.rootpath</span></code> Absolute path to the root directory of the notebook.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nb.relpath</span></code> Relative path to the notebook from the root directory.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nb.reldirpath</span></code> Relative path to the directory containing the notebook from the root directory.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nb.name</span></code> Name of the notebook including extension.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nb.basename</span></code> Name of the notebook without extension.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nb.ext</span></code> Extension of the notebook without the dot.</p></li>
+</ul>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<p>For a input notebook located at
+<code class="docutils literal notranslate"><span class="pre">C:/temp/mycourse/lectures/lecture1.ipynb</span></code>, the following placeholders
+would be available for constructing the output path:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nb</span><span class="o">.</span><span class="n">abspath</span>    <span class="o">=</span> <span class="s2">&quot;C:/temp/mycourse/lectures/lecture1.ipynb&quot;</span>
+<span class="n">nb</span><span class="o">.</span><span class="n">absdirpath</span> <span class="o">=</span> <span class="s2">&quot;C:/temp/mycourse/lectures&quot;</span>
+<span class="n">nb</span><span class="o">.</span><span class="n">rootpath</span>   <span class="o">=</span> <span class="s2">&quot;C:/temp/mycourse&quot;</span>
+<span class="n">nb</span><span class="o">.</span><span class="n">relpath</span>    <span class="o">=</span> <span class="s2">&quot;lectures/lecture1.ipynb&quot;</span>
+<span class="n">nb</span><span class="o">.</span><span class="n">reldirpath</span> <span class="o">=</span> <span class="s2">&quot;lectures&quot;</span>
+<span class="n">nb</span><span class="o">.</span><span class="n">name</span>       <span class="o">=</span> <span class="s2">&quot;lecture1.ipynb&quot;</span>
+<span class="n">nb</span><span class="o">.</span><span class="n">basename</span>   <span class="o">=</span> <span class="s2">&quot;lecture1&quot;</span>
+<span class="n">nb</span><span class="o">.</span><span class="n">ext</span>        <span class="o">=</span> <span class="s2">&quot;ipynb&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading"></a></h2>
+<p>Consider the following course structure::</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:/temp/mycourse-admin
+├── config.yaml
+├── lectures
+│   └── week1
+│       ├── lecture1.ipynb
+│       └── lecture2.ipynb
+└── assignments
+    └── week1.ipynb
+</pre></div>
+</div>
+<p>Now assume we want to create a public version of our course, containing two
+versions of each notebook. One version without solutions (for presentation
+during the lecture) and one version with solutions (to be released one week
+later). Two possible output structures are shown below:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:/temp/variant1                       C:/temp/variant2
+├── lectures                           ├── lectures
+│   └── week1                          │   ├── week1
+│       ├── lecture1.ipynb             │   │   ├── lecture1.ipynb
+│       ├── lecture1-solution.ipynb    │   │   └── lecture2.ipynb
+│       ├── lecture2.ipynb             │   └── week1-solutions
+│       └── lecture2-solution.ipynb    │       ├── lecture1.ipynb
+└── assignments                        │       └── lecture2.ipynb
+    └── week1.ipynb                    ├── assignments
+    └── week1-solution.ipynb           │   └── week1.ipynb
+                                       └── assignments-solutions
+                                           └── week1.ipynb
+</pre></div>
+</div>
+<p>Both of the above structures can be easily generated using the <a class="reference internal" href="#placeholder-variables">placeholder
+variables</a> described above. For example, the following
+commands would create the above structures:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bash Syntax</span>
+<span class="nv">out1</span><span class="o">=</span><span class="s1">&#39;C:/temp/variant1/{nb.relpath}&#39;</span>
+<span class="nv">sol1</span><span class="o">=</span><span class="s1">&#39;C:/temp/variant1/{nb.reldirpath}/{nb.basename}-solution.{nb.ext}&#39;</span>
+<span class="nv">out2</span><span class="o">=</span><span class="s1">&#39;C:/temp/variant2/{nb.relpath}&#39;</span>
+<span class="nv">sol2</span><span class="o">=</span><span class="s1">&#39;C:/temp/variant2/{nb.reldirpath}-solutions/{nb.basename}-solution.{n.ext}&#39;</span>
+urnc<span class="w"> </span>convert<span class="w"> </span>--output<span class="o">=</span><span class="nv">$out1</span><span class="w"> </span>--solution<span class="o">=</span><span class="nv">$sol1</span><span class="w"> </span>C:/temp/mycourse
+urnc<span class="w"> </span>convert<span class="w"> </span>--output<span class="o">=</span><span class="nv">$out2</span><span class="w"> </span>--solution<span class="o">=</span><span class="nv">$sol2</span><span class="w"> </span>C:/temp/mycourse
+</pre></div>
+</div>
+<p>Using <a class="reference internal" href="#plain-directory-paths">plain directory paths</a>, the above
+commands could be written even shorter, as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">out1</span><span class="o">=</span><span class="s1">&#39;C:/temp/variant1&#39;</span>
+<span class="nv">sol1</span><span class="o">=</span><span class="s1">&#39;C:/temp/variant1&#39;</span>
+<span class="nv">out2</span><span class="o">=</span><span class="s1">&#39;C:/temp/variant2&#39;</span>
+<span class="nv">sol2</span><span class="o">=</span><span class="s1">&#39;C:/temp/variant2/{nb.reldirpath}-solutions/{nb.basename}-solution.{n.ext}&#39;</span>
+urnc<span class="w"> </span>convert<span class="w"> </span>--output<span class="o">=</span><span class="nv">$out1</span><span class="w"> </span>--solution<span class="o">=</span><span class="nv">$sol1</span><span class="w"> </span>C:/temp/mycourse
+urnc<span class="w"> </span>convert<span class="w"> </span>--output<span class="o">=</span><span class="nv">$out2</span><span class="w"> </span>--solution<span class="o">=</span><span class="nv">$sol2</span><span class="w"> </span>C:/temp/mycourse
+</pre></div>
+</div>
+</section>
+<section id="plain-directory-paths">
+<h2>Plain Directory Paths<a class="headerlink" href="#plain-directory-paths" title="Link to this heading"></a></h2>
+<p>To make specifying output paths less verbose, urnc also accepts “plain directory
+paths” as output paths. A path is considered a plain directory path if it does
+neither end with <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> nor contain any placeholders. If a plain directory
+path is provided, the notebooks will be stored inside that directory in the same
+subfolder they had in the original input directory. However, to avoid
+overwriting outputs of previous targets, each target will use a different file
+name for the notebooks in this case. The following rules apply:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Target</p></th>
+<th class="head"><p>Naming Pattern</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">student</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{nb.reldirpath}/{nb.basename}.{nb.ext}</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">solution</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{nb.reldirpath}/{nb.basename}-solution.{nb.ext}</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">execute</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{nb.reldirpath}/{nb.basename}-executed.{nb.ext}</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">clear</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{nb.reldirpath}/{nb.basename}-cleared.{nb.ext}</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{nb.reldirpath}/{nb.basename}-fixed.{nb.ext}</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading"></a></h2>
+<p>The placeholder variables <code class="docutils literal notranslate"><span class="pre">nb.rootpath</span></code>, <code class="docutils literal notranslate"><span class="pre">nb.relpath</span></code> and <code class="docutils literal notranslate"><span class="pre">nb.reldirpath</span></code>
+require the “root” <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> of the current course to be specified. Usually, this is
+done by searching the file system upwards from the given input path, until a
+<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file is found. If no <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file is found, the current
+working directory is considered the course root. This scenario could happen,
+e.g., if <code class="docutils literal notranslate"><span class="pre">urnc</span> <span class="pre">convert</span></code> is used on a single notebook outside a specific course.</p>
+</section>
+</section>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Sometimes, the “course root” is also referred to as “course base”, “course
+base directory” or “course basepath”.</p>
+</aside>
+</aside>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="website-generation.html" class="btn btn-neutral float-left" title="Website Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2025, Michael Huttner, Tobias Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
