@@ -1,6 +1,10 @@
 # Changelog
 
-## v2.3.0 (2025-05-xx)
+## v2.3.1 (2025-06-xx)
+
+- Changed `urnc ci` to only create a commit if there are changed files
+
+## v2.3.0 (2025-06-08)
 
 Internal:
 

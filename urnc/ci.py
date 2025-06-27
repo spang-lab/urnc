@@ -247,9 +247,12 @@ def ci(config: Dict[str, Any]) -> None:
     if config["ci"]["commit"]:
         log("Adding files and commiting")
         student_repo.git.add(all=True)
-        student_repo.index.commit("urnc convert")
-        log("Pushing student repo")
-        student_repo.git.push()
+        if student_repo.index.diff("HEAD"):
+            student_repo.index.commit("urnc convert")
+            log("Pushing student repo")
+            student_repo.git.push()
+        else:
+            log("No files changed, skipping git push")
         log("Done.")
     else:
         log("Skipping git commit and push")
