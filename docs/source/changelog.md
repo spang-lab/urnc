@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3.2 (2025-07-07)
+
+Public:
+
+- Improved Documentation for testing: recommend install command is now `pip install -e '.[dev]'` instead of `pip install -e .[dev]`. Adding the quotation marks makes the command work more stable across different shells.
+
 ## v2.3.1 (2025-07-07)
 
 Public:
