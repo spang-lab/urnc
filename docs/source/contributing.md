@@ -58,7 +58,7 @@ See below for a selection of useful commands for testing:
 # Install urnc in editable mode (incl. dev dependencies)
 git clone https://github.com/spang-lab/urnc.git
 cd urnc
-pip install -e .[dev]
+pip install -e '.[dev]'
 
 # Run tests
 pytest                 # Run all tests
@@ -80,7 +80,7 @@ Documentation for this package is generated automatically upon pushes to the `ma
 # Install urnc in editable mode (incl. dev dependencies)
 git clone https://github.com/spang-lab/urnc.git
 cd urnc
-pip install -e .[dev]
+pip install -e '.[dev]'
 
 # Build documentation
 cd docs
