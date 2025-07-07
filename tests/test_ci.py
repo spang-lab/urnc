@@ -7,30 +7,60 @@ import pytest
 import nbformat
 import urnc
 import urnc.preprocessor.util
+import urnc.logger
 
+RED = "\033[31m"
+GREEN = "\033[32m"
+RESET = "\033[0m"
+YELLOW = "\033[33m"
 
-def test_ci(tmp_path: pathlib.Path):
+def heading(text: str):
+    """Prints a heading with a specific format."""
+    print(f"{RED}{text}{RESET}")
+
+def test_ci_ci(tmp_path: pathlib.Path):
+
+    heading("\n1. SETUP LOCAL ADMIN REPO, REMOTE ADMIN REPO AND REMOTE STUDENT REPO")
     course_name = "Example Course"
-    admin_path = tmp_path / "example-course-admin"
-    admin_url = tmp_path / "example-course-admin.git"
-    student_path = tmp_path / "example-course"
-    student_url = tmp_path / "example-course.git"
+    admin_path = tmp_path / "example-course-admin" # contains .git/, .gitignore, config.yaml, example.ipynb
+    admin_url = tmp_path / "example-course-admin.git" # bare repo used as remote for admin repo
+    student_path = tmp_path / "example-course" # will be created by urnc.pull.pull
+    student_url = tmp_path / "example-course.git" # bare repo used as remote for student repo
     urnc.init.init(course_name, admin_path, admin_url, student_url)
 
+    heading("2. DO FIRST CI RUN")
     config = urnc.config.read(admin_path)
     config["convert"]["write_mode"] = "overwrite"
     config["ci"]["commit"] = True
+    config_bak = copy.deepcopy(config) # store for later check
     urnc.ci.ci(config)
-    urnc.pull.pull(str(student_url), str(student_path), "main", 1)
 
+    heading("3. PULL AND CHECK LOCAL STUDENT REPO")
+    urnc.pull.pull(str(student_url), str(student_path), "main", 1)
     nb = nbformat.read(student_path / "example.ipynb", as_version=4)
     cells = nb["cells"]
-    print(cells)
     assert urnc.preprocessor.util.has_tag(cells[2], "assignment")
     assert urnc.preprocessor.util.has_tag(cells[2], "assignment-start")
     assert urnc.preprocessor.util.has_tag(cells[3], "assignment")
     assert not (student_path / "config.yaml").exists()
 
+    heading("4. DO SECOND CI RUN (no push expected because we did not change anything)")
+    old_stud_hist = git.Repo(student_path).git.log("--oneline")
+    urnc.ci.ci(config)
+    urnc.pull.pull(str(student_url), str(student_path), "main", 1)
+    new_stud_hist = git.Repo(student_path).git.log("--oneline")
+    assert old_stud_hist == new_stud_hist, "Calling CI should not create a commit if nothing changed"
+    assert config == config_bak, "Calling CI should not change the config (fixed with 2.3.1)"
+
+    heading("5. DO THIRD CI RUN (we add one file, so we expect a push)")
+    (admin_path / "new_file.txt").write_text("This is a new file.")
+    old_stud_hist = git.Repo(student_path).git.log("--oneline")
+    n_commits_old = len(old_stud_hist.split('\n'))
+    urnc.ci.ci(config)
+    urnc.pull.pull(str(student_url), str(student_path), "main", 1)
+    new_stud_hist = git.Repo(student_path).git.log("--oneline")
+    n_commits_new = len(new_stud_hist.split('\n'))
+    assert n_commits_new == n_commits_old + 1, "Calling CI should create a new commit after adding a file"
 
 def test_clone_student_repo(tmp_path: pathlib.Path):
 

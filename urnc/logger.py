@@ -32,7 +32,9 @@ class CustomFormatter(logging.Formatter):
 def setup_test_logger():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
-
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setFormatter(CustomFormatter())
+    logger.addHandler(stdout_handler)
 
 def setup_logger(verbose: bool = False) -> None:
     """
@@ -64,6 +66,12 @@ def add_file_handler(log_file: Path):
     except Exception as e:
         logger.error(f"Failed to add file logger: {e}")
 
+
+def set_silent():
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.CRITICAL)
+    for handler in logger.handlers:
+        handler.setLevel(logging.CRITICAL)
 
 def set_verbose():
     logger = logging.getLogger(__name__)

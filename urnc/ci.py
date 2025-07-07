@@ -229,7 +229,8 @@ def ci(config: Dict[str, Any]) -> None:
     targets = config["convert"]["targets"]
     if not targets:
         targets = [{"type": "student", "path": "{nb.abspath}"}]
-    config["base_path"] = student_path
+    # Copy config dict and adjust the base path so we can use it as config for the student repo
+    config = {**config, "base_path": student_path}
     urnc.convert.convert(config, student_path, targets)
 
     log("Notebooks converted")
@@ -238,20 +239,22 @@ def ci(config: Dict[str, Any]) -> None:
     write_gitignore(
         main_gitignore=base_path.joinpath(".gitignore"),
         student_gitignore=student_path.joinpath(".gitignore"),
-        config=config,
+        config=config
     )
     log("Dropping cached files...")
     update_index(student_repo)
 
     # Commit and push
     if config["ci"]["commit"]:
-        log("Adding files and commiting")
-        student_repo.git.add(all=True)
-        student_repo.index.commit("urnc convert")
-        log("Pushing student repo")
-        student_repo.git.push()
-        log("Done.")
+        if student_repo.is_dirty(untracked_files=True):
+            log("Adding, commiting and pushing changes to student repo")
+            student_repo.git.add(all=True)
+            student_repo.index.commit("urnc convert")
+            student_repo.git.push()
+            log("Done.")
+        else:
+            log("Skipping git add, commit and push because there are no changes")
     else:
-        log("Skipping git commit and push")
+        log("Skipping git add, commit and push")
         log("Done.")
     urnc.util.release_locks(student_repo)

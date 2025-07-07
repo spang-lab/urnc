@@ -1,6 +1,18 @@
 # Changelog
 
-## v2.3.0 (2025-05-xx)
+## v2.3.1 (2025-07-07)
+
+Public:
+
+- Changed `urnc ci` to only create a commit if there are changed files
+- Fixed a bug in `urnc.ci.ci` where the function modified the input `config` object in-place. This modification could cause issues when calling the function multiple times in the same Python session with the same config object.
+
+Internal:
+
+- Added more tests for `urnc.ci.ci`
+- Improved logging output during tests. If `pytest` is called with flag `-s` (don't capture STDOUT), logging output is now printed in the same format as during normal execution, whereas previously pytests internal logging format was used.
+
+## v2.3.0 (2025-06-08)
 
 Internal:
 
