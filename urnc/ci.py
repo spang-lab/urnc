@@ -20,7 +20,8 @@ import textwrap
 
 
 # See: https://stackoverflow.com/questions/1703546/parsing-date-time-string-with-timezone-abbreviated-name-in-python
-tz_str = textwrap.dedent('''
+tz_str = textwrap.dedent(
+    """
     -12 Y
     -11 X NUT SST
     -10 W CKT HAST HST TAHT TKT
@@ -59,9 +60,10 @@ tz_str = textwrap.dedent('''
     -3.5 HNT NST NT
     -4.5 HLV VET
     -9.5 MART MIT
-''').strip()
+"""
+).strip()
 tz_infos = {}
-for tz_descr in map(str.split, tz_str.split('\n')):
+for tz_descr in map(str.split, tz_str.split("\n")):
     tz_offset = int(float(tz_descr[0]) * 3600)
     for tz_code in tz_descr[1:]:
         tz_infos[tz_code] = tz_offset
@@ -101,7 +103,9 @@ def clone_student_repo(config: Dict[str, Any]) -> git.Repo:
         except Exception:
             critical(f"Folder '{stud_path}' exists but is not a git repo")
         if stud_repo.remote().url != repo_url:
-            critical(f"Repo remote mismatch. Expected: {repo_url}. Observed: {stud_repo.remote().url}.")
+            critical(
+                f"Repo remote mismatch. Expected: {repo_url}. Observed: {stud_repo.remote().url}."
+            )
         stud_repo.remote().pull()
     else:
         log(f"Cloning student repo {repo_url} to {stud_path}")
@@ -123,9 +127,9 @@ def clear_repo(repo: git.Repo) -> None:
             shutil.rmtree(entry_path)
 
 
-def write_gitignore(main_gitignore: Optional[Path],
-                    student_gitignore: Path,
-                    config: Dict[str, Any]) -> None:
+def write_gitignore(
+    main_gitignore: Optional[Path], student_gitignore: Path, config: Dict[str, Any]
+) -> None:
     """
     Writes a ``.gitignore`` file in the student repository.
 
@@ -173,6 +177,37 @@ def update_index(repo: git.Repo) -> None:
         log(f"Removing excluded files {cached_files}")
         repo.index.remove(cached_files, working_tree=False)
         repo.index.write()
+
+
+def push(repo: git.Repo) -> None:
+    untracked = repo.untracked_files
+    # Add untracked files in batches to avoid maximum pack size errors
+    ninty_MiB = 90 * 1024 * 1024
+    batches = []
+    batch = []
+    batch_size = 0
+    for file in untracked:
+        file_size = os.path.getsize(os.path.join(repo.working_dir, file))
+        if batch_size + file_size > ninty_MiB and batch:
+            batches.append(batch)
+            batch = []
+            batch_size = 0
+        batch.append(file)
+        batch_size += file_size
+    if batch:
+        batches.append(batch)
+    for i, batch in enumerate(batches):
+        log(f"Adding untracked files batch {i+1}/{len(batches)}: {batch}")
+        repo.index.add(batch)
+        repo.index.commit("urnc add untracked files")
+        repo.git.push()
+
+    if repo.is_dirty(untracked_files=True):
+        log("Adding, commiting and pushing changes to student repo")
+        repo.git.add(all=True)
+        repo.index.commit("urnc convert")
+        repo.git.push()
+        log("Done.")
 
 
 def ci(config: Dict[str, Any]) -> None:
@@ -239,7 +274,7 @@ def ci(config: Dict[str, Any]) -> None:
     write_gitignore(
         main_gitignore=base_path.joinpath(".gitignore"),
         student_gitignore=student_path.joinpath(".gitignore"),
-        config=config
+        config=config,
     )
     log("Dropping cached files...")
     update_index(student_repo)
@@ -247,11 +282,7 @@ def ci(config: Dict[str, Any]) -> None:
     # Commit and push
     if config["ci"]["commit"]:
         if student_repo.is_dirty(untracked_files=True):
-            log("Adding, commiting and pushing changes to student repo")
-            student_repo.git.add(all=True)
-            student_repo.index.commit("urnc convert")
-            student_repo.git.push()
-            log("Done.")
+            push(student_repo)
         else:
             log("Skipping git add, commit and push because there are no changes")
     else:

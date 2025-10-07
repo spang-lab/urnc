@@ -50,10 +50,12 @@ def is_directory_path(path: Union[str, Path, None]) -> bool:
     return "{" not in path_str and not path_str.endswith(".ipynb")
 
 
-def format_path(input: Path,
-                output: Union[str, Path, None],
-                root: Path,
-                type: str = TargetType.STUDENT) -> Optional[Path]:
+def format_path(
+    input: Path,
+    output: Union[str, Path, None],
+    root: Path,
+    type: str = TargetType.STUDENT,
+) -> Optional[Path]:
     """
     Substitute placeholders in outpath with the correct values derived from srcpath and root
 
@@ -67,7 +69,9 @@ def format_path(input: Path,
         return None
     output = str(output)
     if is_directory_path(output):
-        suffix = target_suffix.get(type, lambda: critical(f"Unknown target type '{type}'. Aborting."))
+        suffix = target_suffix.get(
+            type, lambda: critical(f"Unknown target type '{type}'. Aborting.")
+        )
         output = f"{output}/{{nb.reldirpath}}/{{nb.basename}}{suffix}.{{nb.ext}}"
     nbpath = NbPath(input, root)
     return Path(output.format(nb=nbpath))
