@@ -12,11 +12,8 @@ from urnc.logger import log, warn
 
 from typing import Callable
 
-def try_call(
-    func: Callable[..., Any],
-    *args: Any,
-    **kwargs: Any
-) -> None:
+
+def try_call(func: Callable[..., Any], *args: Any, **kwargs: Any) -> None:
     errorcode: int = kwargs.pop("errorcode", 1)
     assert isinstance(errorcode, int), "errorcode must be an integer"
     try:
@@ -28,10 +25,14 @@ def try_call(
 
 @click.group(help="Uni Regensburg Notebook Converter")
 @click.version_option(prog_name="urnc", message="%(version)s")
-@click.option("-f", "--root", default=os.getcwd(), type=click.Path(path_type=Path),
-              help="Root folder for resolving relative paths.")
-@click.option("-v", "--verbose", is_flag=True,
-              help="Enable verbose output")
+@click.option(
+    "-f",
+    "--root",
+    default=os.getcwd(),
+    type=click.Path(path_type=Path),
+    help="Root folder for resolving relative paths.",
+)
+@click.option("-v", "--verbose", is_flag=True, help="Enable verbose output")
 @click.pass_context
 def main(ctx: click.Context, root: Path, verbose: bool) -> None:
     ctx.ensure_object(dict)
@@ -41,7 +42,7 @@ def main(ctx: click.Context, root: Path, verbose: bool) -> None:
 
 @click.command(
     help="Create and push the student version",
-    epilog="See https://spang-lab.github.io/urnc/commands/ci.html for details."
+    epilog="See https://spang-lab.github.io/urnc/commands/ci.html for details.",
 )
 @click.pass_context
 def ci(ctx: click.Context) -> None:
@@ -53,7 +54,7 @@ def ci(ctx: click.Context) -> None:
 
 @click.command(
     help="Create the student version of your course",
-    epilog="See https://spang-lab.github.io/urnc/commands/student.html for details."
+    epilog="See https://spang-lab.github.io/urnc/commands/student.html for details.",
 )
 @click.pass_context
 def student(ctx: click.Context) -> None:
@@ -66,19 +67,32 @@ def student(ctx: click.Context) -> None:
 @click.command(
     name="convert",
     help="Convert notebooks",
-    epilog="See https://spang-lab.github.io/urnc/commands/convert.html for details."
+    epilog="See https://spang-lab.github.io/urnc/commands/convert.html for details.",
 )
-@click.argument("input", type=click.Path(exists=True, path_type=Path), default=Path("."))
-@click.option("-t", "--target", "targets", multiple=True,
-              help="Conversion target. " +
-                   "Either 'student', 'solution', 'execute', 'clear' or 'fix'. " +
-                   "Can be used multiple times. " +
-                   "Can contain an additional, colon-separated output path, " +
-                   "e.g. 'student:./out' or 'solution:C:\\temp\\solutions'.")
-@click.option("-o", "--output", type=str, default=None, help="Output path for student version.")
-@click.option("-s", "--solution", type=str, default=None, help="Output path for solution version.")
+@click.argument(
+    "input", type=click.Path(exists=True, path_type=Path), default=Path(".")
+)
+@click.option(
+    "-t",
+    "--target",
+    "targets",
+    multiple=True,
+    help="Conversion target. "
+    + "Either 'student', 'solution', 'execute', 'clear' or 'fix'. "
+    + "Can be used multiple times. "
+    + "Can contain an additional, colon-separated output path, "
+    + "e.g. 'student:./out' or 'solution:C:\\temp\\solutions'.",
+)
+@click.option(
+    "-o", "--output", type=str, default=None, help="Output path for student version."
+)
+@click.option(
+    "-s", "--solution", type=str, default=None, help="Output path for solution version."
+)
 @click.option("-f", "--force", is_flag=True, help="Overwrite existing files.")
-@click.option("-n", "--dry-run", is_flag=True, help="Try conversion, but don't write to disk.")
+@click.option(
+    "-n", "--dry-run", is_flag=True, help="Try conversion, but don't write to disk."
+)
 @click.option("-i", "--interactive", is_flag=True, help="Ask before overwriting files.")
 @click.pass_context
 def convert(
@@ -135,15 +149,16 @@ def convert(
         target_dict[TargetType.STUDENT] = None
 
     # Convert to list of dictionaries as expected by convert
-    target_list = [{"type": typ, "path": path}
-                   for typ, path in target_dict.items()]
+    target_list = [{"type": typ, "path": path} for typ, path in target_dict.items()]
 
     input_path = urnc.config.resolve_path(config, os.path.abspath(input))
     urnc.convert.convert(config, input_path, target_list)
 
 
-@click.command(help="Check notebooks for errors",
-               epilog="See https://spang-lab.github.io/urnc/commands/check.html for details.")
+@click.command(
+    help="Check notebooks for errors",
+    epilog="See https://spang-lab.github.io/urnc/commands/check.html for details.",
+)
 @click.argument("input", type=click.Path(exists=True), default=".")
 @click.option("-q", "--quiet", is_flag=True, help="Only show warnings and errors.")
 @click.option("-c", "--clear", is_flag=True, help="Clear cell outputs.")
@@ -180,10 +195,16 @@ def check(
 
 @click.command(
     help="Execute notebooks",
-    epilog="See https://spang-lab.github.io/urnc/commands/execute.html for details."
+    epilog="See https://spang-lab.github.io/urnc/commands/execute.html for details.",
 )
 @click.argument("input", type=click.Path(exists=True), default=".")
-@click.option("-o", "--output", type=str, default=None, help="Output path for executed notebook(s).")
+@click.option(
+    "-o",
+    "--output",
+    type=str,
+    default=None,
+    help="Output path for executed notebook(s).",
+)
 @click.pass_context
 def execute(ctx: click.Context, input: str, output: Optional[str]) -> None:
     config = urnc.config.read_config(ctx.obj["root"], strict=False)
@@ -195,7 +216,7 @@ def execute(ctx: click.Context, input: str, output: Optional[str]) -> None:
 
 @click.command(
     help="Manage the semantic version of your course",
-    epilog="See https://spang-lab.github.io/urnc/commands/version.html for details."
+    epilog="See https://spang-lab.github.io/urnc/commands/version.html for details.",
 )
 @click.option("--self", is_flag=True, help="Echo the version of urnc.")
 @click.argument(
@@ -206,7 +227,7 @@ def execute(ctx: click.Context, input: str, output: Optional[str]) -> None:
 )
 @click.pass_context
 def version(ctx: click.Context, self: bool, action: str) -> None:
-    config = urnc.config.read_config(ctx.obj["root"], strict=True)
+    config = urnc.config.read_config(ctx.obj["root"], strict=False)
     if self:
         urnc.version.version_self(config, action)
     else:
@@ -215,16 +236,22 @@ def version(ctx: click.Context, self: bool, action: str) -> None:
 
 @click.command(
     help="Pull and automatically merge local changes",
-    epilog="See https://spang-lab.github.io/urnc/commands/pull.html for details."
+    epilog="See https://spang-lab.github.io/urnc/commands/pull.html for details.",
 )
 @click.argument("git_url", type=str, default=None, required=False)
 @click.option(
     "-o", "--output", type=str, help="Path of the output folder.", default=None
 )
-@click.option("-b", "--branch", help="The branch to pull. Default: main.", default="main")
+@click.option(
+    "-b", "--branch", help="The branch to pull. Default: main.", default="main"
+)
 @click.option("-d", "--depth", help="The depth for git fetch. Default: 1.", default=1)
 @click.option(
-    "-l", "--log-file", type=click.Path(path_type=Path), help="The path to the log file.", default=None
+    "-l",
+    "--log-file",
+    type=click.Path(path_type=Path),
+    help="The path to the log file.",
+    default=None,
 )
 @click.pass_context
 def pull(
@@ -248,7 +275,7 @@ def pull(
 
 @click.command(
     help="Clone or pull if output exists already",
-    epilog="See https://spang-lab.github.io/urnc/commands/clone.html for details."
+    epilog="See https://spang-lab.github.io/urnc/commands/clone.html for details.",
 )
 @click.argument("git_url", type=str, default=None, required=False)
 @click.option(
@@ -257,7 +284,11 @@ def pull(
 @click.option("-b", "--branch", help="The branch to pull.", default="main")
 @click.option("-d", "--depth", help="The depth for git fetch.", default=1)
 @click.option(
-    "-l", "--log-file", type=click.Path(path_type=Path), help="The path to the log file.", default=None
+    "-l",
+    "--log-file",
+    type=click.Path(path_type=Path),
+    help="The path to the log file.",
+    default=None,
 )
 @click.pass_context
 def clone(
@@ -280,31 +311,41 @@ def clone(
             urnc.logger.error(str(err))
 
 
-dirPath = click.Path(file_okay=False, dir_okay=True,
-                     writable=True, path_type=Path)
+dirPath = click.Path(file_okay=False, dir_okay=True, writable=True, path_type=Path)
 
 
 @click.command(
     help="Init a new course",
-    epilog="See https://spang-lab.github.io/urnc/commands/init.html for details."
+    epilog="See https://spang-lab.github.io/urnc/commands/init.html for details.",
 )
 @click.argument("name", type=str, required=True)
-@click.option("-p", "--path", type=dirPath, help="Output directory. Default is derived from NAME.", default=None)
-@click.option("-u", "--url", type=str, help="Git URL for admin repository.", default=None)
-@click.option("-s", "--student", type=str, help="Git URL for student repository.", default=None)
-@click.option("-t", "--template", type=click.Choice(["minimal", "full"]),
-              help="Template to use. Default is 'minimal' (default).", default="minimal")
+@click.option(
+    "-p",
+    "--path",
+    type=dirPath,
+    help="Output directory. Default is derived from NAME.",
+    default=None,
+)
+@click.option(
+    "-u", "--url", type=str, help="Git URL for admin repository.", default=None
+)
+@click.option(
+    "-s", "--student", type=str, help="Git URL for student repository.", default=None
+)
+@click.option(
+    "-t",
+    "--template",
+    type=click.Choice(["minimal", "full"]),
+    help="Template to use. Default is 'minimal' (default).",
+    default="minimal",
+)
 @click.pass_context
-def init(ctx: click.Context,
-         name: str,
-         path: Path,
-         url: str,
-         student: str,
-         template: str) -> None:
+def init(
+    ctx: click.Context, name: str, path: Path, url: str, student: str, template: str
+) -> None:
     root = ctx.obj["root"]
     with urnc.util.chdir(root):
-        urnc.init.init(name, path=path, url=url,
-                       student_url=student, template=template)
+        urnc.init.init(name, path=path, url=url, student_url=student, template=template)
 
 
 main.add_command(version)
