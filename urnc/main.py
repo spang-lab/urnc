@@ -299,7 +299,7 @@ def clone(
     depth: int,
     log_file: Optional[Path],
 ) -> None:
-    config = urnc.config.read_config(ctx.obj["root"])
+    config = urnc.config.read_config(ctx.obj["root"], False)
     if log_file:
         urnc.logger.add_file_handler(log_file)
     with urnc.util.chdir(config["base_path"]):
